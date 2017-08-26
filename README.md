@@ -2,6 +2,8 @@
 
 Aplicación en node.js con API RESTful para el shared-server de FiUber.
 
+Leer los issues para una lista de tareas que realizar.
+
 ## Para correr el servidor
 
 Primero descargar todas las dependencias con `npm install`. Las dependencias descargadas se guardarán en la carpeta node_modules (incluida en el .gitignore).
