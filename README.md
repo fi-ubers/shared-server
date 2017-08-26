@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/fi-ubers/shared-server.svg?branch=master)](https://travis-ci.org/fi-ubers/shared-server)
+
 # shared-server
 
 Aplicación en node.js con API RESTful para el shared-server de FiUber.
