@@ -1,0 +1,29 @@
+{
+  "name": "shared-server",
+  "version": "1.0.0",
+  "description": "\"A Node.js RESTful API shared-server\"",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fi-ubers/shared-server.git"
+  },
+  "keywords": [
+    "shared-server",
+    "REST",
+    "nodejs"
+  ],
+  "author": "fi-ubers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fi-ubers/shared-server/issues"
+  },
+  "homepage": "https://github.com/fi-ubers/shared-server#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4"
+  }
+}
