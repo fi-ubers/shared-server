@@ -33,3 +33,5 @@ Para poder probar los distintos endpoints de la API se puede utilizar un navegad
 `curl -X _tipo_ -d _data_ http://someURL:somePort/someEndpoint`
 
 Donde _tipo_ es POST, GET, etc; _data_ son los datos a mandar en la request (un string representando un .json o '' para no enviar nada).
+
+-- Testing pull request
