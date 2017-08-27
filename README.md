@@ -14,7 +14,7 @@ Los paquetes necesarios para correr se especifican en el tag _dependencies_ del 
 
 ### Levantar el servidor localmente
 
-Para levantar localmente el servidor simplemente se puede usar `node index.js`. Para conectarse al servidor local usar _localhost_:5000 (o el puerto que se defina en index.js).
+Para levantar localmente el servidor simplemente se puede usar `node ./src/index.js`. Para conectarse al servidor local usar _localhost_:5000 (o el puerto que se defina en index.js).
 
 ### Levantar el servidor en Heroku
 
@@ -34,4 +34,3 @@ Para poder probar los distintos endpoints de la API se puede utilizar un navegad
 
 Donde _tipo_ es POST, GET, etc; _data_ son los datos a mandar en la request (un string representando un .json o '' para no enviar nada).
 
--- Testing pull request
