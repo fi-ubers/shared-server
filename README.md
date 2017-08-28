@@ -14,7 +14,7 @@ Los paquetes necesarios para correr se especifican en el tag _dependencies_ del 
 
 ### Levantar el servidor localmente
 
-Para levantar localmente el servidor simplemente se puede usar `node ./src/index.js`. Para conectarse al servidor local usar _localhost_:5000 (o el puerto que se defina en index.js).
+Para levantar localmente el servidor simplemente se puede usar `node ./src/index.js` o `npm start`. Para conectarse al servidor local usar _localhost_:5000 (o el puerto que se defina en index.js).
 
 ### Levantar el servidor en Heroku
 
