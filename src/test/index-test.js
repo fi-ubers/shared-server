@@ -1,10 +1,19 @@
-//var test = require('./../index.js')
-var assert = require('assert');
+var test = require('./../index.js')
+var expect = require('chai').expect;
+var request = require('request');
 
-describe('Array', function() {
-	describe('#indexOf()', function() {
-		it('should return -1 when the value is not present', function() {
-			assert.equal(-1, [1, 2, 3].indexOf(4));
+var port = test.app.get('port');
+
+describe('Content tests', function() {
+	it('Content equal to Hello World in main page', function() {
+		request('http://localhost:' + port + '/', function(error, response, body) {
+			expect(body).to.equal('Hello World');
+		});
+	});
+
+	it('Content equal to Goodbye in endpoint /goodbye', function() {
+		request('http://localhost:' + port + '/goodbye', function(error, response, body) {
+			expect(body).to.equal('Goodbye');
 		});
 	});
 });
