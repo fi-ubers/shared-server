@@ -9,6 +9,8 @@ Aplicación en node.js con API RESTful para el shared-server de FiUber.
 
 Leer los issues para una lista de tareas que realizar.
 
+Connect to... [https://fiuber-shared-server.herokuapp.com/](https://fiuber-shared-server.herokuapp.com/)
+
 ## Para correr el servidor
 
 Primero descargar todas las dependencias con `npm install`. Las dependencias descargadas se guardarán en la carpeta node_modules (incluida en el .gitignore).
