@@ -1,0 +1,7 @@
+{
+"name":"fiuber-shared-server",
+"description":"A shared server implemented with NodeJS and responsible for managing app servers.",
+"repository":"https://github.com/fi-ubers/shared-server",
+"website":"https://fiuber-shared-server.com/",
+"logo":"https://avatars2.githubusercontent.com/u/31289277?v=4&s=200"
+}
