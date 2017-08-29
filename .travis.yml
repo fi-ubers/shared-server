@@ -13,4 +13,4 @@ deploy:
   app: fiuber-shared-server
   on:
     repo: fi-ubers/shared-server
-    branch: heroku-deploy-travis
+    branch: master
