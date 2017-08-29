@@ -1,12 +1,14 @@
 language: node_js
 node_js:
-  - "6"
+- '6'
 before_install: sudo apt-get update -qq
-# Install dependencies
 install: npm install
-#before_script:
-# Run tests  
 script: npm test
 after_success:
-  - npm run coveralls
-#deploy:
+- npm run coveralls
+deploy:
+deploy:
+  provider: heroku
+  app: fiuber-shared-server
+  api_key:
+    secure: RdLnMzJYZVqoXw07Vc+tT9JVt2x/L0LvtPUNlgvXiNHxWo/O0WwyQ/4ZLFVDJZJVE83y9OdHhlkxTvU7kDklwKBpGUuP7jQliWgHMmZlJKyeIYPkqyEssIfhrz27zsaK/QUmGn+XRGE8KlM++pEx651S8JcMXkLKE/fI7JuRdvtYgYNWaXM0Ccc+pG3mIXinuBiKx1m/GEme5ruG2JNzcNV64t1KfjO9d0R5Td7Vd0jy82S6jsku/m0H8RWOYB6c1lqIKGX2bUkUiDNy/vYUBTc+EbacSNS2zz0HQ+4VqZWh0rVSlLM2n3KHJCMpQSq9fIQWDLem49WaeyhS3btjpwdZ8inZiNj5De+mvcrmWPBer5kQbPaJ6ZQ8JgueKsn6CTh4RYzE9+4EJYO12FEV0c+HtrJvYloHyhZ88CQiPG+Eq92Fa4+ru6lfcfIkq9lN332v/Bmf/9GTfSeY7xoTG1DF8pIq8eD5ejkbpXMmksUYXswDD91r4Aa1pJQUnZBxHWTJUmwN6QzHsdjbuJJBZJ6tjSRqzxbqFLMsOLIMKbeZxTK+oJO5pwqCapKTjtZIqZyi/enegBCu6NwsoCdKgtFd+ClCI3i+kTtfPsclmvZUf/4SIViBbe1T5biK5mXuJmLKtaR/Wo24X7hZKEipPX9MSTFs8EtC66pxt4CdFM4=
