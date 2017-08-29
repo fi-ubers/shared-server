@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/fi-ubers/shared-server.svg?branch=master)](https://travis-ci.org/fi-ubers/shared-server)
 [![Coverage Status](https://coveralls.io/repos/github/fi-ubers/shared-server/badge.svg?branch=master)](https://coveralls.io/github/fi-ubers/shared-server?branch=master)
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 # shared-server
