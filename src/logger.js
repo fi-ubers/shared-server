@@ -2,6 +2,7 @@ var winston = require('winston');
 require('winston-daily-rotate-file');
 var fs = require('fs');
 var logDir = 'logs';
+var level = process.env.LOG_LEVEL || 'debug';
 
 // Create 'logDir' directory if it does not exist
 if (!fs.existsSync(logDir)) {
@@ -11,16 +12,16 @@ if (!fs.existsSync(logDir)) {
 var tsFormat = () => (new Date()).toLocaleTimeString();
 
 // Using own Logger
-var logger = new (winston.Logger)({
+const logger = new (winston.Logger)({
 	transports: [
 		new (winston.transports.Console)({
 			colorize: true,
 			timestamp: tsFormat,
-			level: 'info'
+			level: level
 		}),
 		new (winston.transports.DailyRotateFile)({
 			filename: logDir + '/-test.log',
-			level: 'info',
+			level: level,
 			json: true,
 			timestamp: tsFormat,
 			handleExceptions: true,
