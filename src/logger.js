@@ -12,14 +12,14 @@ if (!fs.existsSync(logDir)) {
 var tsFormat = () => (new Date()).toLocaleTimeString();
 
 // Using own Logger
-const logger = new (winston.Logger)({
+const logger = new (winston.Logger) ({
 	transports: [
-		new (winston.transports.Console)({
+		new (winston.transports.Console) ({
 			colorize: true,
 			timestamp: tsFormat,
 			level: level
 		}),
-		new (winston.transports.DailyRotateFile)({
+		new (winston.transports.DailyRotateFile) ({
 			filename: logDir + '/-test.log',
 			level: level,
 			json: true,
@@ -28,10 +28,17 @@ const logger = new (winston.Logger)({
 			datePattern: 'yyyy-MM-dd',
 			prepend: true
 		})
-	]
+	],
+	exitOnError: false
 });
 
 module.exports = logger;
+
+logger.stream = {
+	write: function(message, encoding) {
+		logger.info(message);	
+	}
+};
 
 // Logging examples
 //logger.log('info', 'Hello log files!');
