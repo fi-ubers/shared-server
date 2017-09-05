@@ -24,6 +24,20 @@ app.get("/goodbye", function(req, res) {
 	res.send("Goodbye");
 });
 
+pg.defaults.ssl = true;
+app.get('/db', function (request, response) {
+	pg.connect(process.env.DATABASE_URL, function(err, client) {
+	  if (err) throw err;
+	  logger.info('Connected to postgres! Getting schemas...');
+
+	  client
+	    .query('SELECT table_schema,table_name FROM information_schema.tables;')
+	    .on('row', function(row) {
+	     logger.info(JSON.stringify(row));
+	    });
+	});
+});
+
 app.post("/goodbye", function(req, res) {
 	logger.info("POST at /goodbye");
 	return res.send(req.body);
