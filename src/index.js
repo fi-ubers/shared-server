@@ -11,27 +11,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Output stream for writing morgan's log lines
 app.use(morgan ('combined', { 'stream': logger.stream }));
-/*
-// Defining endpoints
+
+// Defining endpoint
 app.get("/", function(req, res) {
 	logger.info("GET at /");
-	res.send("Hello World");
+	res.send("Welcome!");
 });
-
-app.get("/goodbye", function(req, res) {
-	logger.info("GET at /goodbye");
-	res.send("Goodbye");
-});
-
-app.post("/goodbye", function(req, res) {
-	logger.info("POST at /goodbye");
-	return res.send(req.body);
-});
-*/
 
 // Routes
 var routes = require('./routes/api');
-app.use(routes);
+app.use('/api', routes);
 
 // Start server
 var server = app.listen(app.get('port'), function () {
