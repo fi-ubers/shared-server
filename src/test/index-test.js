@@ -1,4 +1,4 @@
-var test = require('./../index.js')
+var test = require('./../index')
 var expect = require('chai').expect;
 var request = require('request');
 

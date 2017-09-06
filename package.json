@@ -7,7 +7,8 @@
     "start": "node ./src/index.js",
     "test": "./node_modules/mocha/bin/mocha ./src/test/*",
     "cover": "istanbul cover _mocha ./src/test/*",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "jsdoc": "./node_modules/.bin/jsdoc -r ./src"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "chai": "^4.1.1",
     "express": "^4.15.4",
     "morgan": "^1.8.2",
+    "pg": "^7.3.0",
     "request": "^2.81.0",
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6"
@@ -36,6 +38,7 @@
   "devDependencies": {
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
+    "jsdoc": "^3.5.4",
     "mocha": "^3.5.0",
     "mocha-lcov-reporter": "^1.3.0"
   }
