@@ -94,7 +94,7 @@ router.delete('/users/:userId/cars/:carId', function(req, res) {
 
 router.get('/users/:userId/cars/:carId', function(req, res) {
 	//logger.info("GET at /users/" + :userId +"/cars" + :carId);
-	res.send("Obtain car information");
+	res.send("Obtain car " + req.params.carId + " information of user " + req.params.userId);
 });
 
 router.put('/users/:userId/cars/:carId', function(req, res) {
@@ -104,7 +104,7 @@ router.put('/users/:userId/cars/:carId', function(req, res) {
 
 router.get('/users/:userId/transactions', function(req, res) {
 	//logger.info("GET at /users/" + :userId "/transactions");
-	res.send("List of transactions of a user");
+	res.send("List of transactions of user " + req.params.userId);
 });
 
 router.post('/users/:userId/transactions', function(req, res) {
@@ -114,7 +114,7 @@ router.post('/users/:userId/transactions', function(req, res) {
 
 router.get('/users/:userId/trips', function(req, res) {
 	//logger.info("GET at /users/" + :userId "/trips");
-	res.send("List of user trips");
+	res.send("List of user " + req.params.userId + " trips");
 });
 
 
@@ -145,7 +145,7 @@ router.post('/trips/estimate', function(req, res) {
 
 router.get('/trips/:tripId', function(req, res) {
 	//logger.info("GET at /trips" + :tripId);
-	res.send("Obtain trip information");
+	res.send("Obtain trip " + req.params.userId + " information");
 });
 
 
@@ -191,12 +191,12 @@ router.delete('/servers/:serverId', function(req, res) {
 
 router.get('/rules', function(req, res) {
 	//logger.info("GET at /rules");
-	res.send("Listado de reglas");
+	res.send("List of rules");
 });
 
 router.post('/rules', function(req, res) {
 	//logger.info("POST at /rules");
-	res.send("List of rules");
+	res.send("Register a rule");
 });
 
 router.post('/rules/run', function(req, res) {
