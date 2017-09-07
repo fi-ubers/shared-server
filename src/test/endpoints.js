@@ -61,7 +61,7 @@ describe('Content tests', function() {
 	
 	it('Content in endpoint /api/users/1/cars/4', function() {
 		request('http://localhost:' + port + '/api/users/1/cars/4', function(error, response, body) {
-			expect(body).to.equal('Obtain car 4 information of user 1');
+			expect(body).to.equal('Obtain car 4 information - user 1');
 		});
 	});
 	
@@ -130,5 +130,7 @@ describe('Content tests', function() {
 			expect(body).to.equal('Rule in the commit state');
 		});
 	});
+	
+	
 	
 });

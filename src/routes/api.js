@@ -1,245 +1,130 @@
 var express = require('express');
 var router = express.Router();
-var controller = require('./../controllers/index');
+var logger = require('./../logger');
+
+// Controllers
+var idxController = require('./../controllers/indexController');
+var businessUserController = require('./../controllers/businessUsersController');
+var userController = require('./../controllers/usersController');
+var tripController = require('./../controllers/tripsController');
+var serverController = require('./../controllers/serversController');
+var ruleController = require('./../controllers/rulesController');
 
 /* Test-endpoints */
-router.get('/', controller.sayHello);
-router.get('/goodbye', controller.sayGoodbye);
+router.get('/', idxController.sayHello);
+router.get('/goodbye', idxController.sayGoodbye);
 
 
 /* Defining /business-users endpoints */
 
-router.get('/business-users', function(req, res) {
-	//logger.info("GET at /business-users");
-	res.send("Business users list");
-});
+router.get('/business-users', businessUserController.list);
 
-router.post('/business-users', function(req, res) {
-	//logger.info("POST at /business-users");
-	res.send("Register a business user");
-});
+router.post('/business-users', businessUserController.register);
 
-router.get('/business-users/me', function(req, res) {
-	//logger.info("GET at /business-users/me");
-	res.send("Obtain information of the connected business user");
-});
+router.get('/business-users/me', businessUserController.myInformation);
 
-router.put('/business-users/me', function(req, res) {
-	//logger.info("PUT at /business-users/me");
-	res.send("Update user connected business information");
-});
+router.put('/business-users/me', businessUserController.updateMyInfo);
 
-router.delete('/business-users/:userId', function(req, res) {
-	//logger.info("DELETE at /business-users/" + :userId);
-	res.send("Delete business user");
-});
+router.delete('/business-users/:userId', businessUserController.deleteUser);
 
-router.get('/business-users/:userId', function(req, res) {
-	//logger.info("GET at /business-users/" + :userId);
-	res.send("Obtain information of a business user");
-});
+router.get('/business-users/:userId', businessUserController.userInformation);
 
-router.put('/business-users/:userId', function(req, res) {
-	//logger.info("PUT at /business-users/" + :userId);
-	res.send("Update information of a business user");
-});
+router.put('/business-users/:userId', businessUserController.updateUserInfo);
 
 
 /* Defining /users endpoints */
 
-router.get('/users', function(req, res) {
-	//logger.info("GET at /users");
-	res.send("User list");
-});
+router.get('/users', userController.list);
 
-router.post('/users', function(req, res) {
-	//logger.info("POST at /users");
-	res.send("Register user");
-});
+router.post('/users', userController.register);
 
-router.post('/users/validate', function(req, res) {
-	//logger.info("POST at /users/validate");
-	res.send("Validate app user");
-});
+router.post('/users/validate', userController.validate);
 
-router.delete('/users/:userId', function(req, res) {
-	//logger.info("DELETE at /users/" + :userId);
-	res.send("Delete user " + req.params.userId);
-});
+router.delete('/users/:userId', userController.deleteUser);
 
-router.get('/users/:userId', function(req, res) {
-	//logger.info("GET at /users/" + :userId);
-	res.send("Obtain user information");
-});
+router.get('/users/:userId', userController.information);
 
-router.put('/users/:userId', function(req, res) {
-	//logger.info("PUT at /users/" + :userId);
-	res.send("Update user information");
-});
+router.put('/users/:userId', userController.updateInfo);
 
-router.get('/users/:id/cars', function(req, res) {
-	//logger.info("GET at /users/" + :userId +"/cars");
-	res.send("List of user cars");
-});
+router.get('/users/:id/cars', userController.userCarsList);
 
-router.post('/users/:userId/cars', function(req, res) {
-	//logger.info("POST at /users/" + :userId +"/cars");
-	res.send("Register user car");
-});
+router.post('/users/:userId/cars', userController.registerUserCar);
 
-router.delete('/users/:userId/cars/:carId', function(req, res) {
-	//logger.info("DELETE at /users/" + :userId +"/cars" + :carId);
-	res.send("Delete car");
-});
+router.delete('/users/:userId/cars/:carId', userController.deleteUserCar);
 
-router.get('/users/:userId/cars/:carId', function(req, res) {
-	//logger.info("GET at /users/" + :userId +"/cars" + :carId);
-	res.send("Obtain car " + req.params.carId + " information of user " + req.params.userId);
-});
+router.get('/users/:userId/cars/:carId', userController.userCarInfo);
 
-router.put('/users/:userId/cars/:carId', function(req, res) {
-	//logger.info("PUT at /users/" + :userId +"/cars" + :carId);
-	res.send("Update car information");
-});
+router.put('/users/:userId/cars/:carId', userController.updateCarInfo);
 
-router.get('/users/:userId/transactions', function(req, res) {
-	//logger.info("GET at /users/" + :userId "/transactions");
-	res.send("List of transactions of user " + req.params.userId);
-});
+router.get('/users/:userId/transactions', userController.transactions);
 
-router.post('/users/:userId/transactions', function(req, res) {
-	//logger.info("POST at /users/" + :userId "/transactions");
-	res.send("The user makes a payment");
-});
+router.post('/users/:userId/transactions', userController.makePayment);
 
-router.get('/users/:userId/trips', function(req, res) {
-	//logger.info("GET at /users/" + :userId "/trips");
-	res.send("List of user " + req.params.userId + " trips");
-});
+router.get('/users/:userId/trips', userController.trips);
 
 
 /* Defining /paymethods endpoint */
 
 router.get('/paymethods', function(req, res) {
-	//logger.info("GET at /paymethods");
+	logger.info("GET at /paymethods");
 	res.send("Payment methods supported by the server");
 });
 
 
 /* Defining /trips endpoints */
 
-router.get('/trips', function(req, res) {
-	//logger.info("GET at /trips");
-	res.send("List of trips");
-});
+router.get('/trips', tripController.list);
 
-router.post('/trips', function(req, res) {
-	//logger.info("POST at /trips");
-	res.send("Register a trip");
-});
+router.post('/trips', tripController.register);
 
-router.post('/trips/estimate', function(req, res) {
-	//logger.info("POST at /trips/estimate");
-	res.send("Estimate the value of a trip");
-});
+router.post('/trips/estimate', tripController.estimateValue);
 
-router.get('/trips/:tripId', function(req, res) {
-	//logger.info("GET at /trips" + :tripId);
-	res.send("Obtain trip " + req.params.userId + " information");
-});
+router.get('/trips/:tripId', tripController.information);
 
 
 /* Defining /servers endpoints */
 
-router.get('/servers', function(req, res) {
-	//logger.info("GET at /servers");
-	res.send("Application servers list");
-});
+router.get('/servers', serverController.list);
 
-router.post('/servers', function(req, res) {
-	//logger.info("POST at /servers");
-	res.send("Register an application server");
-});
+router.post('/servers', serverController.register);
 
-router.post('/servers/ping', function(req, res) {
-	//logger.info("POST at /servers/ping");
-	res.send("Notify server life");
-});
+router.post('/servers/ping', serverController.ping);
 
-router.get('/servers/:serverId', function(req, res) {
-	//logger.info("GET at /servers/" + :serverId);
-	res.send("Obtain information of a server");
-});
+router.get('/servers/:serverId', serverController.serverInfo);
 
-router.put('/servers/:serverId', function(req, res) {
-	//logger.info("PUT at /");
-	res.send("Update information of a server");
-});
+router.put('/servers/:serverId', serverController.updateServerInfo);
 
-router.post('/servers/:serverId', function(req, res) {
-	//logger.info("POST at /servers/" + :serverId);
-	res.send("Reset a server token");
-});
+router.post('/servers/:serverId', serverController.resetServerToken);
 
-router.delete('/servers/:serverId', function(req, res) {
-	//logger.info("DELETE at /servers/" + :serverId);
-	res.send("Delete server");
-});
+router.delete('/servers/:serverId', serverController.deleteServer);
 
 
 /* Defining /rules endpoints */
 
-router.get('/rules', function(req, res) {
-	//logger.info("GET at /rules");
-	res.send("List of rules");
-});
+router.get('/rules', ruleController.list);
 
-router.post('/rules', function(req, res) {
-	//logger.info("POST at /rules");
-	res.send("Register a rule");
-});
+router.post('/rules', ruleController.register);
 
-router.post('/rules/run', function(req, res) {
-	//logger.info("POST at /rules/run");
-	res.send("Execute a set of rules");
-});
+router.post('/rules/run', ruleController.executeRules);
 
-router.delete('/rules/:ruleId', function(req, res) {
-	//logger.info("DELETE at /rules" + :ruleId);
-	res.send("Delete rule");
-});
+router.delete('/rules/:ruleId', ruleController.deleteRule);
 
-router.get('/rules/:ruleId', function(req, res) {
-	//logger.info("GET at /rules" + :ruleId);
-	res.send("Get info of a rule");
-});
+router.get('/rules/:ruleId', ruleController.ruleInfo);
 
-router.put('/rules/:ruleId', function(req, res) {
-	//logger.info("PUT at /rules" + :ruleId);
-	res.send("Modify a rule");
-});
+router.put('/rules/:ruleId', ruleController.modifyRule);
 
-router.post('/rules/:ruleId/run', function(req, res) {
-	//logger.info("POST at /rules" + :ruleId + "/run");
-	res.send("Run the rule individually");
-});
+router.post('/rules/:ruleId/run', ruleController.run);
 
-router.get('/rules/:ruleId/commits', function(req, res) {
-	//logger.info("GET at /rules" + :ruleId + "/commits");
-	res.send("List of commits of a rule");
-});
+router.get('/rules/:ruleId/commits', ruleController.commits);
 
-router.get('/rules/:ruleId/commits/:commitId', function(req, res) {
-	//logger.info("GET at /rules" + :ruleId + "/commits" + :commitId);
-	res.send("Rule in the commit state");
-});
+router.get('/rules/:ruleId/commits/:commitId', ruleController.commitState);
 
 
 /* Defining /token endpoint */
 
 router.post('/token', function(req, res) {
-	//logger.info("POST at /");
-	res.send("Generate business user token");
+	//logger.info("POST at /token");
+	// Generate business user token
 });
 
 
