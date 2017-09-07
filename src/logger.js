@@ -20,7 +20,7 @@ const logger = new (winston.Logger) ({
 			level: level
 		}),
 		new (winston.transports.DailyRotateFile) ({
-			filename: logDir + '/-test.log',
+			filename: logDir + '/-log.log',
 			level: level,
 			json: false,
 			timestamp: tsFormat,
