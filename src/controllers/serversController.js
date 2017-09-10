@@ -1,9 +1,14 @@
 var logger = require('./../logger');
+var knex = require('../db/knex');
 
 module.exports = {
 	list : function(req, res) {
+		// Returns all the information about the indicated application servers
 		logger.info("GET at /servers");
-		res.send("Application servers list");
+		//res.send("Application servers list");
+		knex.select()
+			.from('app_servers')
+			.then(servers => res.send(servers));
 	},
 	
 	register : function(req, res) {

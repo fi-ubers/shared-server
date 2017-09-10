@@ -28,12 +28,15 @@
     "body-parser": "^1.17.2",
     "chai": "^4.1.1",
     "express": "^4.15.4",
+    "knex": "^0.13.0",
     "morgan": "^1.8.2",
+    "pg": "^5.2.1",
     "request": "^2.81.0",
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6"
   },
   "devDependencies": {
+    "chai-http": "^3.0.0",
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
