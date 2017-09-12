@@ -1,19 +1,20 @@
 var express = require('express');
-var router = express.Router();
 var logger = require('./../logger');
-
+var router = express.Router();
 
 // Controllers
-var idxController = require('./../controllers/indexController');
+var indexController = require('./../controllers/indexController');
 var businessUserController = require('./../controllers/businessUsersController');
 var userController = require('./../controllers/usersController');
 var tripController = require('./../controllers/tripsController');
 var serverController = require('./../controllers/serversController');
 var ruleController = require('./../controllers/rulesController');
+var paymethodsController = require('./../controllers/paymethodsController');
+var tokenController = require('./../controllers/tokenController');
 
 /* Test-endpoints */
-router.get('/', idxController.sayHello);
-router.get('/goodbye', idxController.sayGoodbye);
+router.get('/', indexController.sayHello);
+router.get('/goodbye', indexController.sayGoodbye);
 
 
 /* Defining /business-users endpoints */
@@ -66,10 +67,7 @@ router.get('/users/:userId/trips', userController.trips);
 
 /* Defining /paymethods endpoint */
 
-router.get('/paymethods', function(req, res) {
-	logger.info("GET at /paymethods");
-	res.send("Payment methods supported by the server");
-});
+router.get('/paymethods', paymethodsController.paymethods);
 
 
 /* Defining /trips endpoints */
@@ -123,10 +121,7 @@ router.get('/rules/:ruleId/commits/:commitId', ruleController.commitState);
 
 /* Defining /token endpoint */
 
-router.post('/token', function(req, res) {
-	//logger.info("POST at /token");
-	// Generate business user token
-});
+router.post('/token', tokenController.generateToken);
 
 
 // Return router
