@@ -1,19 +1,70 @@
 var logger = require('./../logger');
 var knex = require('../db/knex');
+var pjson = require('../../package.json');
 
 module.exports = {
-	list : function(req, res) {
+	listServers : function(req, res) {
 		// Returns all the information about the indicated application servers
 		logger.info("GET at /servers");
-		//res.send("Application servers list");
 		knex.select()
 			.from('app_servers')
-			.then(servers => res.send(servers));
+			.then(function(servers) {
+				logger.info("Showing aplication servers list");
+				res.status(200).send({
+					metadata: {
+						count: servers.length,
+						total: servers.length,
+						version: pjson.version
+					},
+					servers: servers
+				})
+			})
+			.catch(function(error) {
+				logger.error("Unexpected error: GET /api/servers");
+				res.status(500).send({
+					code: 500,
+					message: "Unexpected error: " + error
+				})
+			})
 	},
 	
-	register : function(req, res) {
-		//logger.info("POST at /servers");
+	registerServer : function(req, res) {
 		// Register an application server
+		logger.info("POST at /servers");
+		var createdBy = req.body.createdBy;
+		var createdTime = req.body.createdTime;
+		var name = req.body.name;
+		if (!createdBy || !createdTime || !name) {
+			logger.error("Missing parameters: POST /api/servers");
+			res.status(400).send({
+				code: 400,
+				message: "Missing parameters: " + error
+			})
+		} else {
+			knex('app_servers')
+				.insert([{createdBy: createdBy, createdTime: createdTime, name: name}], '*')
+				.then(function(server) {
+					logger.info("Registering aplication server");
+					res.status(201).send({
+						metadata: {
+							version: pjson.version
+						},
+						server: server,
+						token: {
+						}
+					})
+				})
+				.catch(function(error) {
+					logger.error("Unexpected error: POST /api/servers");
+					res.status(500).send({
+						code: 500,
+						message: "Unexpected error: " + error
+					})
+				
+				})
+				
+		}
+		
 	},
 	
 	ping : function(req, res) {
@@ -22,8 +73,35 @@ module.exports = {
 	},
 	
 	serverInfo : function(req, res) {
-		logger.info("GET at /servers/" + req.params.serverId);
-		res.send("Obtain information of a server");
+		// Obtain information of a server
+		var serverId = req.params.serverId;
+		logger.info("GET at /servers/" + serverId);
+		knex('app_servers')
+			.where('id', serverId)
+			.then(function(server) {
+				if (server.length !== 0) {
+					logger.info("Obtain information of server " + serverId);
+					res.status(200).send({
+						metadata: {
+							version: pjson.version
+						},
+						server: server
+					})
+				} else {
+					logger.error("Non-existent server: GET /api/servers/" + serverId);
+					res.status(404).send({
+						code: 404,
+						message: "Non-existent server"
+					})	
+				}
+			})
+			.catch(function(error) {
+				logger.error("Unexpected error: GET /api/servers/" + serverId);
+				res.status(500).send({
+					code: 500,
+					message: "Unexpected error: " + error
+				})
+			})
 	},
 	
 	updateServerInfo : function(req, res) {

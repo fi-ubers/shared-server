@@ -83,9 +83,9 @@ router.get('/trips/:tripId', tripController.information);
 
 /* Defining /servers endpoints */
 
-router.get('/servers', serverController.list);
+router.get('/servers', serverController.listServers);
 
-router.post('/servers', serverController.register);
+router.post('/servers', serverController.registerServer);
 
 router.post('/servers/ping', serverController.ping);
 
