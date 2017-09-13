@@ -80,7 +80,7 @@ module.exports = {
 			.where('id', serverId)
 			.then(function(server) {
 				if (server.length !== 0) {
-					logger.info("Obtain information of server " + serverId);
+					logger.info("Obtaining information of server " + serverId);
 					res.status(200).send({
 						metadata: {
 							version: pjson.version
@@ -105,8 +105,50 @@ module.exports = {
 	},
 	
 	updateServerInfo : function(req, res) {
-		//logger.info("PUT at /");
 		// Update information of a server
+		var serverId = req.params.serverId;
+		var serverName = req.body.name;
+		var serverRef = req.body._ref;
+		logger.info("PUT at /servers/" + serverId);
+		if (!serverName || !serverRef) {
+			logger.error("Missing parameters: PUT /api/servers/" + serverId);
+			res.status(400).send({
+				code: 400,
+				message: "Missing parameters"
+			})
+		} else {
+			knex.select().from('app_servers')
+				.where('id', serverId)
+				.then(function(server) {
+					if (server) {
+						logger.info("Updating information of server " + serverId);
+						return knex.select().from('app_servers').where('id', serverId).update({'name': serverName}).returning('*');
+							
+					} else {
+						logger.error("Non-existent server: PUT /api/servers/" + serverId);
+						res.status(404).send({
+							code: 404,
+							message: "Non-existent server"
+						})	
+					}
+				})
+				.then(function(newServer) {
+					res.status(200).send({
+						metadata: {
+							version: pjson.version
+						},
+						server: newServer
+					})
+				})
+				.catch(function(error) {
+					logger.error("Unexpected error: PUT /api/servers/" + serverId);
+					res.status(500).send({
+						code: 500,
+						message: "Unexpected error: " + error
+					})
+				})
+		}	
+		
 	},
 	
 	resetServerToken : function(req, res) {
