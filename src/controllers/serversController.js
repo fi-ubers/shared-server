@@ -42,7 +42,7 @@ module.exports = {
 			logger.error("Missing parameters: POST /api/servers");
 			res.status(400).send({
 				code: 400,
-				message: "Missing parameters: " + error
+				message: "Missing parameters"
 			})
 		} else {
 			knex(table_name)
