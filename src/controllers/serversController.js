@@ -1,6 +1,8 @@
 var logger = require('./../logger');
 var knex = require('../db/knex');
 var pjson = require('../../package.json');
+var jwt = require('jsonwebtoken');
+var moment = require('moment');
 var table_name = 'app_servers';
 
 module.exports = {
@@ -46,6 +48,8 @@ module.exports = {
 			knex(table_name)
 				.insert([{createdBy: createdBy, createdTime: createdTime, name: name}], '*')
 				.then(function(server) {
+					var expiresIn = moment().add(5, 'days').valueOf();
+					var token = jwt.sign({id: server.id}, 'shhhh', {expiresIn: expiresIn});
 					logger.info("Registering aplication server");
 					res.status(201).send({
 						metadata: {
@@ -53,6 +57,8 @@ module.exports = {
 						},
 						server: server,
 						token: {
+							expiresAt: expiresIn,
+							token: token
 						}
 					})
 				})
