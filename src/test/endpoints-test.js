@@ -94,19 +94,7 @@ describe('Content tests', function() {
 			expect(body).to.equal('Obtain trip 14 information');
 		});
 	});
-	
-	it('Content in endpoint /api/servers', function() {
-		request('http://localhost:' + port + '/api/servers', function(error, response, body) {
-			expect(body).to.equal('Application servers list');
-		});
-	});
-	
-	it('Content in endpoint /api/servers/3', function() {
-		request('http://localhost:' + port + '/api/servers/3', function(error, response, body) {
-			expect(body).to.equal('Obtain information of a server');
-		});
-	});
-	
+
 	it('Content in endpoint /api/rules', function() {
 		request('http://localhost:' + port + '/api/rules', function(error, response, body) {
 			expect(body).to.equal('List of rules');
