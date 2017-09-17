@@ -42,3 +42,4 @@ Donde _tipo_ es POST, GET, etc; _data_ son los datos a mandar en la request (un 
 ## Para generar la documentación del código fuente
 
 Para generar automáticamente la documentación, simplemente se debe escribir `npm run jsdoc`. Luego de eso, en el directorio docs/ se creará una carpeta 'documentation'. Allí se podrá acceder a index.html para leer la documentación del server.
+
