@@ -3,32 +3,30 @@ var bodyParser = require("body-parser");
 var morgan = require('morgan');
 var pg = require('pg');
 var logger = require('./logger');
+var routes = require('./routes/api');
+
 var app = express();
- 
 app.set('port', (process.env.PORT || 5000));
 exports.app = app;
+
+// Configure app to use bodyParser
+// to get the data from a POST
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Output stream for writing morgan's log lines
 app.use(morgan ('combined', { 'stream': logger.stream }));
 
-// Defining endpoints
+// Defining endpoint
 app.get("/", function(req, res) {
 	logger.info("GET at /");
-	res.send("Hello World");
+	res.send("Welcome!");
 });
 
-app.get("/goodbye", function(req, res) {
-	logger.info("GET at /goodbye");
-	res.send("Goodbye");
-});
+// Routes
+app.use('/api', routes);
 
-app.post("/goodbye", function(req, res) {
-	logger.info("POST at /goodbye");
-	return res.send(req.body);
-});
-
+// Start server
 var server = app.listen(app.get('port'), function () {
 	logger.info("Listening on port %s...", app.get('port'));
 });

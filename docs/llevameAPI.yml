@@ -1,0 +1,1874 @@
+swagger: '2.0'
+info:
+  description: API para el shared server de Llevame
+  title: Llevame - Shared Server API
+  version: 1.0.0
+host: llevame.7552.fi.uba.ar
+schemes:
+  - http
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  BusinessToken:
+    type: apiKey
+    in: query
+    name: token
+  ApplicationToken:
+    type: apiKey
+    in: query
+    name: token
+tags:
+  - name: app
+    description: |
+      Llamados que puede realizar los Application Server
+  - name: admin
+    description: |
+      Llamados que puede realizar los usuarios de negocio con perfil adminstrador
+  - name: manager
+    description: |
+      Llamados que puede realizar los usuarios de negocio con perfil gerente
+  - name: user
+    description: |
+      Llamados que puede realizar los usuarios de negocio con perfil usuario
+paths:
+  /business-users:
+    get:
+      tags:
+        - admin
+      security:
+        - BusinessToken: []
+      description: |
+          Devuelve toda la información acerca de los usuarios de negocio indicados
+      responses:
+        200:
+          description: "Todos los usuarios indicados"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              businessUser:
+                items:
+                  $ref: '#/definitions/BusinessUser'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Listado de usuarios de negocio"
+    post:
+      tags:
+        - admin
+      security:
+        - BusinessToken: []
+      description: "Dar de alta un usuario de negocio"
+      parameters:
+        - description: "Datos para dar de alta un usuario."
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/BusinessUserCreate"
+      responses:
+        201:
+          description: "Alta correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              businessUser:
+                $ref: '#/definitions/BusinessUser'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Dar de alta un usuario de negocio"
+  /business-users/me:
+    get:
+      tags:
+        - user
+      security:
+        - BusinessToken: []
+      description: "Devuelve toda la información del usuario de negocio"
+      responses:
+        200:
+          description: "Información del usuario"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              businessUser:
+                $ref: "#/definitions/BusinessUser"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "user inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información del usuario de negocio conectado"
+    put:
+      tags:
+        - user
+      security:
+        - BusinessToken: []
+      description: |
+        Modificación de los datos del usuario de negocio conectado.
+        Se ignoran el campo de `roles`
+      parameters:
+        - description: Datos para modificar al usuario
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/BusinessUserCreate"
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              businessUser:
+                $ref: "#/definitions/BusinessUser"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        409:
+          description: Conflicto en el update (esta mal el valor de `_ref`)
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualización de información del usuario de negocio conectado"
+  /business-users/{userId}:
+    parameters:
+      - description: "Identificador del usuario"
+        in: path
+        name: userId
+        required: true
+        type: string
+    delete:
+      tags:
+        - admin
+      security:
+        - BusinessToken: []
+      description: |
+        Endpoint para dar de baja un usuario de negocio
+      responses:
+        204:
+          description: "Baja correcta"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Eliminar un usuario de negocio"
+    get:
+      tags:
+        - user
+      security:
+        - BusinessToken: []
+      description: "Devuelve toda la información del usuario de negocio"
+      responses:
+        200:
+          description: "Información del usuario"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              businessUser:
+                $ref: "#/definitions/BusinessUser"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "user inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un usuario de negocio"
+    put:
+      tags:
+        - admin
+      security:
+        - BusinessToken: []
+      description: "Modificación de los datos de un usuario de negocio"
+      parameters:
+        - description: Datos para modificar al usuario
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/BusinessUserCreate"
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              businessUser:
+                $ref: "#/definitions/BusinessUser"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        409:
+          description: Conflicto en el update (esta mal el valor de `_ref`)
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualización de información de un usuario de negocio"
+  /users:
+    get:
+      tags:
+        - app
+        - user
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: |
+          El endpoint */users* devuelve toda la información acerca
+          de todos los users indicados.
+      responses:
+        200:
+          description: "Todos los users indicados"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              users:
+                items:
+                  $ref: '#/definitions/ApplicationUser'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Users - Listado de usuarios"
+    post:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: "Endpoint para dar de alta un usuario"
+      parameters:
+        - description: "Datos para dar de alta un usuario"
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/ApplicationUserCreate"
+      responses:
+        201:
+          description: "Alta correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              user:
+                $ref: '#/definitions/ApplicationUser'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Dar de alta un usuario"
+  /users/validate:
+    post:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: "Validar las credenciales de un usuario de aplicación"
+      parameters:
+        - description: "Credenciales"
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/ApplicationUserCredentials"
+      responses:
+        200:
+          description: "Validación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              user:
+                $ref: '#/definitions/ApplicationUser'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes) o validación fallida"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Validar usuario de aplicación"
+  /users/{userId}:
+    parameters:
+      - description: "Identificador del usuario"
+        in: path
+        name: userId
+        required: true
+        type: string
+    delete:
+      tags:
+        - app
+        - manager
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: "Endpoint para dar de baja un usuario"
+      responses:
+        204:
+          description: "Baja correcta"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Eliminar un usuario de la aplicación"
+    get:
+      tags:
+        - app
+        - user
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: "Devuelve toda la información del usuario"
+      responses:
+        200:
+          description: "Información del usuario"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              user:
+                $ref: "#/definitions/ApplicationUser"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "user inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un usuario de aplicación"
+    put:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: "Modificación de los datos de un usuario"
+      parameters:
+        - description: Datos para modificar al usuario
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/ApplicationUserCreate"
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              user:
+                $ref: "#/definitions/ApplicationUser"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        409:
+          description: Conflicto en el update (esta mal el valor de `_ref`)
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualización de información de un usuario"
+  /users/{userId}/cars:
+    parameters:
+      - description: "Identificador del usuario"
+        in: path
+        name: userId
+        required: true
+        type: string
+    get:
+      tags:
+        - app
+        - user
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: |
+          Devuelve toda la información acerca de todos los autos del usuario.
+      responses:
+        200:
+          description: Autos del usuario
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              cars:
+                items:
+                  $ref: '#/definitions/Car'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: Listado de autos de un usuario
+    post:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: "Endpoint para dar de alta un auto de un usuario"
+      parameters:
+        - description: |
+            Datos del auto, se ignorarán los campos de `id`, `_ref` y `owner`
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/Car"
+      responses:
+        201:
+          description: "Alta correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              car:
+                $ref: '#/definitions/Car'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Dar de alta un auto de usuario"
+  /users/{userId}/cars/{carId}:
+    parameters:
+      - description: "Identificador del usuario"
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: "Identificador del auto"
+        in: path
+        name: carId
+        required: true
+        type: string
+    delete:
+      tags:
+        - app
+        - manager
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: "Endpoint para dar de baja un auto"
+      responses:
+        204:
+          description: "Baja correcta"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Eliminar el auto"
+    get:
+      tags:
+        - app
+        - user
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: "Devuelve toda la información del Auto"
+      responses:
+        200:
+          description: "Información del Auto"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              car:
+                $ref: "#/definitions/Car"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "Auto inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un auto"
+    put:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: "Modificación de los datos de un auto"
+      parameters:
+        - description: Datos nuevos del auto
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/Car"
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              car:
+                $ref: "#/definitions/Car"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        409:
+          description: Conflicto en el update (esta mal el valor de `_ref`)
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualizar información de un auto"
+  /users/{userId}/transactions:
+    parameters:
+      - description: "Identificador del usuario"
+        in: path
+        name: userId
+        required: true
+        type: string
+    get:
+      tags:
+        - app
+        - user
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: |
+          Devuelve todas las transacciones de un usuario.
+          El signo de las mismas será en _metódología egoista_ (del lado del usuario), es decir,
+          una transacción con signo negativo significa que el usuario gastó y con signo positivo significa que pago o cobró.
+          Un pasajero al hacer un viaje debe crearse la transacción con signo negativo, al realizar el cobro (vía api de cobros), se registrará una transacción positiva.
+      responses:
+        200:
+          description: Transacciones del usuario
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              transactions:
+                items:
+                  $ref: '#/definitions/Transaction'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: Listado de transacciones de un usuario
+    post:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: |
+        Realiza un pago por parte del usuario. Como se esta cobrando al finalizar el viaje, este endpoint se debería usar solo si el pago falló, así se puede normalizar el saldo del usuario.
+      responses:
+        200:
+          description: Transacción realizada correctamente
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              transaction:
+                $ref: '#/definitions/Transaction'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: Realizar un pago por parte de un usuario
+  /users/{userId}/trips:
+    parameters:
+      - description: "Identificador del usuario"
+        in: path
+        name: userId
+        required: true
+        type: string
+    get:
+      tags:
+        - app
+        - user
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: |
+          Devuelve toda la información acerca de todos los viajes del usuario.
+      responses:
+        200:
+          description: Viajes del usuario
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              trips:
+                items:
+                  $ref: '#/definitions/Trip'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: Listado de viajes de un usuario
+  /paymethods:
+    get:
+      tags:
+        - app
+        - user
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: |
+          Devuelve todos los métodos de pago soportados por el servidor
+      responses:
+        200:
+          description: "Métodos de pago soportados"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              paymethods:
+                items:
+                  $ref: '#/definitions/PayMethodDefinition'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Users - Listado de usuarios"
+  /trips:
+    get:
+      tags:
+        - user
+      security:
+        - BusinessToken: []
+      description: |
+          Devuelve toda la información acerca de los viajes
+      responses:
+        200:
+          description: "Todos los viajes indicados"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              trips:
+                items:
+                  $ref: "#/definitions/Trip"
+                type: array
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Artists - Listado de artistas"
+    post:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: "Dar de alta un viaje"
+      parameters:
+        - description: |
+            Datos para dar de alta un viaje. Se ignorarán los campos de `id`, `applicationOwner` y `cost`.
+          in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              trip:
+                $ref: '#/definitions/Trip'
+              paymethod:
+                $ref: '#/definitions/PayMethod'
+      responses:
+        201:
+          description: "Alta correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              trip:
+                $ref: "#/definitions/Trip"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Dar de alta un viaje"
+  /trips/estimate:
+    post:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: Estimar el valor de un viaje
+      parameters:
+        - description: |
+            Ya que se esta estimando, se espera que los datos del viaje estén bastante incompletos.
+            Como mínimo se debería contar con `start`, `end` y `passenger` para poder hacer la estimación
+            (vale aclarar que el campo de `timestamp` de `start` deberá estar presente, pero el de `end` no).
+            Recordar que es una estimación, el valor del viaje se calculará al finalizar.
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/Trip"
+      responses:
+        200:
+          description: "Validación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              cost:
+                $ref: '#/definitions/Cost'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        402:
+          description: |
+            El pasajero debe normalizar su situación de pago.
+            No se le debe permitir realizar el pago.
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Validar usuario de aplicación"
+  /trips/{tripId}:
+    parameters:
+      - description: "Identificador del viaje"
+        in: path
+        name: tripId
+        required: true
+        type: string
+    get:
+      tags:
+        - app
+        - user
+      security:
+        - ApplicationToken: []
+        - BusinessToken: []
+      description: "Devuelve toda la información del viaje"
+      responses:
+        200:
+          description: "Información del viaje"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              trip:
+                $ref: "#/definitions/Trip"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "Viaje inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un viaje"
+  /servers:
+    get:
+      tags:
+        - user
+      security:
+        - BusinessToken: []
+      description: |
+          Devuelve toda la información acerca de todos los application servers indicados.
+      responses:
+        200:
+          description: "Todos los application servers indicados"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              servers:
+                items:
+                  $ref: '#/definitions/Server'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Listado de application servers"
+    post:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: |
+        Endpoint para dar de alta un servidor. Se ignorarán los campos de id, _ref y lastConnection
+      parameters:
+        - description: "Datos para dar de alta un servidor"
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/Server"
+      responses:
+        201:
+          description: "Alta correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: '#/definitions/CreateServerResponse'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Dar de un application server"
+  /servers/ping:
+    post:
+      tags:
+        - app
+      security:
+        - ApplicationToken: []
+      description: |
+        Endpoint que utiliza un servidor para dar señales de vida.
+        Esto tambien se usa para renovar el token de acceso.
+        El token devuelto podría ser el mismo que el enviado, pero si difieren, el anterior debería ser invalidado.
+      responses:
+        200:
+          description: "Operación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              ping:
+                $ref: '#/definitions/CreateServerResponse'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Notificar vida de servidor"
+  /servers/{serverId}:
+    parameters:
+      - description: "Identificador del servidor"
+        in: path
+        name: serverId
+        required: true
+        type: string
+    get:
+      tags:
+        - user
+      security:
+        - BusinessToken: []
+      description: "Devuelve toda la información del servidor"
+      responses:
+        200:
+          description: "Información del servidor"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              server:
+                $ref: "#/definitions/Server"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "Servidor inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un servidor"
+    put:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: |
+        Modificación de los datos de un servidor. Se ignorarán los campos de `id`, `createdBy`, `createdTime` y `lastConnection`
+      parameters:
+        - description: Datos para modificar a del servidor
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/Server"
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: "#/definitions/Server"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        409:
+          description: Conflicto en el update (esta mal el valor de `_ref`)
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualización de información de un servidor"
+    post:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: |
+        Endpoint para resetear el token. Debe invalidar el anterior.
+      responses:
+        201:
+          description: "Nuevo token"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: '#/definitions/CreateServerResponse'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Resetear un token de un servidor"
+    delete:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: "Endpoint para dar de baja un servidor"
+      responses:
+        204:
+          description: "Baja correcta"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Eliminar un servidor"
+  /rules:
+    get:
+      tags:
+        - user
+      security:
+        - BusinessToken: []
+      description: |
+          Devuelve toda la información acerca de todos las reglas indicados.
+      responses:
+        200:
+          description: "Todos las reglas indicados"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              rules:
+                items:
+                  $ref: '#/definitions/Rule'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Listado de reglas"
+    post:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: |
+        Endpoint para crear una regla. Se ignorarán los campos de id, _ref y lastCommit
+      parameters:
+        - description: "Datos para crear una regla"
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/Rule"
+      responses:
+        201:
+          description: "Alta correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              rule:
+                $ref: '#/definitions/Rule'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Crear una regla"
+  /rules/run:
+    post:
+      tags:
+        - admin
+      security:
+        - BusinessToken: []
+      description: "Ejecuta la regla individualmente para los datos suministrados"
+      parameters:
+        - description: "Hechos"
+          in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              rules:
+                items:
+                  $ref: '#/definitions/Id'
+              facts:
+                items:
+                  $ref: '#/definitions/Fact'
+      responses:
+        200:
+          description: "Ejecución correcta del set de reglas"
+          schema:
+            description: Todos los hechos
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              facts:
+                items:
+                  $ref: '#/definitions/Fact'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes) o validación fallida"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Ejecutar un set de reglas"
+  /rules/{ruleId}:
+    parameters:
+      - description: "Identificador de la regla"
+        in: path
+        name: ruleId
+        required: true
+        type: string
+    delete:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: "Eliminar una regla"
+      responses:
+        204:
+          description: "Baja correcta"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Eliminar una regla"
+    get:
+      tags:
+        - user
+      security:
+        - BusinessToken: []
+      description: "Devuelve toda la información de la regla"
+      responses:
+        200:
+          description: "Información de la regla"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              rule:
+                $ref: "#/definitions/Rule"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        404:
+          description: "user inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de una regla"
+    put:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: |
+        Modificación de una regla. Ignorará los campos de `id` y `lastCommit`.
+        Cada modificación generará un nuevo commit.
+      parameters:
+        - description: Nueva regla
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/Rule"
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              rule:
+                $ref: "#/definitions/Rule"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "No existe el recurso solicitado"
+          schema:
+            $ref: "#/definitions/Error"
+        409:
+          description: Conflicto en el update (esta mal el valor de `_ref`)
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Modificar una regla"
+  /rules/{ruleId}/run:
+    parameters:
+      - description: "Identificador de la regla"
+        in: path
+        name: ruleId
+        required: true
+        type: string
+    post:
+      tags:
+        - admin
+      security:
+        - BusinessToken: []
+      description: "Ejecuta la regla individualmente para los datos suministrados"
+      parameters:
+        - description: "Hechos"
+          in: body
+          name: body
+          required: true
+          schema:
+            items:
+              $ref: '#/definitions/Fact'
+      responses:
+        200:
+          description: "Ejecución correcta de la regla"
+          schema:
+            description: Todos los hechos
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              facts:
+                items:
+                  $ref: '#/definitions/Fact'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes) o validación fallida"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Ejecutar individualmente una regla"
+  /rules/{ruleId}/commits:
+    parameters:
+      - description: "Identificador de la regla"
+        in: path
+        name: ruleId
+        required: true
+        type: string
+    get:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: |
+          Devuelve todos los commits de una regla
+      responses:
+        200:
+          description: Commits de la regla
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              commits:
+                items:
+                  $ref: '#/definitions/Commit'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: Listado de commits de una regla
+  /rules/{ruleId}/commits/{commitId}:
+    parameters:
+      - description: "Identificador de la regla"
+        in: path
+        name: ruleId
+        required: true
+        type: string
+      - description: "Identificador del commit"
+        in: path
+        name: commitId
+        required: true
+        type: string
+    get:
+      tags:
+        - manager
+      security:
+        - BusinessToken: []
+      description: |
+          Devuelve la regla en el estado del commit
+      responses:
+        200:
+          description: |
+            Regla en el estado del commit, el valor de `lastCommit` será este commit.
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              rule:
+                items:
+                  $ref: '#/definitions/Rule'
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: Regla en el estado del commit
+  /token:
+    post:
+      tags:
+        - user
+        - manager
+      description: "Endpoint para generar un token para utilizar en los servicios del sistema (login)"
+      parameters:
+        - description: "Datos para generar token"
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessUserCredentials'
+      responses:
+        201:
+          description: "Token generado correctamente"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              token:
+                $ref: "#/definitions/Token"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Unauthorized
+          schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Generar token de usuario de negocio"
+definitions:
+  Version:
+    type: string
+    description: Versión de la api
+  Id:
+    type: string
+    description: |
+      Se guarda como un string, pero podría ser un número
+      es dependiente de la implementación.
+  Ref:
+    type: string
+    description: |
+      Hash que es utilizado para prevenir colosiones.
+      Cuando se crea un elemento, se debe pasar un valor de undefined (o no debe estar).
+      Al actualizar, el servidor chequeará que este valor sea igual al guardado, de no coincidir,
+      significa que otro actualizó el recurso, por ende, la actualización debe fallar.
+  Cost:
+    properties:
+      currency:
+        type: string
+        description: Moneda de acuerdo a ISO 4217
+      value:
+        type: number
+        description: Valor
+  Timestamp:
+    type: number
+    description: |
+      Tiempo en epoch
+  Transaction:
+    properties:
+      id:
+        $ref: '#/definitions/Id'
+      trip:
+        $ref: '#/definitions/Id'
+      timestamp:
+        $ref: '#/definitions/Timestamp'
+      cost:
+        $ref: '#/definitions/Cost'
+      description:
+        type: string
+      data:
+        type: object
+        description: (opcional) Diccionario para guardar datos relacionados con la transacción
+  Location:
+    description: |
+      Las coordenadas utilizan la especificación de [GeoJSON](https://geojson.org/geojson-spec.html#coordinate-reference-system-objects)
+      donde `lon` es el primer número, mientras `lat` el segundo
+    properties:
+      lat:
+        type: number
+      lon:
+        type: number
+  Address:
+    properties:
+      street:
+        description: Dirección en texto (opcional)
+        type: string
+      location:
+        $ref: "#/definitions/Location"
+  Step:
+    properties:
+      location:
+        $ref: '#/definitions/Location'
+      timestamp:
+        $ref: '#/definitions/Timestamp'
+  Endpoint:
+    properties:
+      address:
+        $ref: '#/definitions/Address'
+      timestamp:
+        $ref: '#/definitions/Timestamp'
+  Trip:
+    type: object
+    properties:
+      id:
+        $ref: '#/definitions/Id'
+      applicationOwner:
+        $ref: '#/definitions/Id'
+      driver:
+        $ref: '#/definitions/Id'
+      passenger:
+        $ref: '#/definitions/Id'
+      start:
+        $ref: "#/definitions/Endpoint"
+      end:
+        $ref: "#/definitions/Endpoint"
+      totalTime:
+        description: |
+          Tiempo de espera (segundos) total del viaje
+        type: number
+      waitTime:
+        description: |
+          Tiempo de espera (segundos) a que llegue el conductor
+        type: number
+      travelTime:
+        description: |
+          Tiempo de espera (segundos) de viaje
+        type: number
+      distance:
+        description: Distancia en metros (si esta disponible)
+        type: number
+      route:
+        items:
+          $ref: '#/definitions/Step'
+      cost:
+        $ref: '#/definitions/Cost'
+  Error:
+    properties:
+      code:
+        format: int32
+        type: integer
+      message:
+        type: string
+    type: object
+  EntityMetadata:
+    properties:
+      version:
+        $ref: '#/definitions/Version'
+  CollectionMetadata:
+    properties:
+      count:
+        description: "Cantidad de elementos en la respuesta"
+        type: integer
+      total:
+        description: Cantidad de elementos existentes
+        type: integer
+      next:
+        description: Link a la siguiente página (si existe)
+        type: string
+      prev:
+        description: Link a la anterior página (si existe)
+        type: string
+      first:
+        description: Link a la primera página (si existe)
+        type: string
+      last:
+        description: Link a la última página (si existe)
+        type: string
+      version:
+        $ref: '#/definitions/Version'
+    type: object
+  CarProperties:
+    properties:
+      name:
+        description: Nombre del atributo o propiedad del auto
+        type: string
+      value:
+        description: Valor del mismo
+        type: string
+  Car:
+    properties:
+      id:
+        $ref: '#/definitions/Id'
+      _ref:
+        $ref: '#/definitions/Ref'
+      owner:
+        $ref: '#/definitions/Id'
+      properties:
+        items:
+          $ref: '#/definitions/CarProperties'
+  ApplicationUser:
+    properties:
+      id:
+        $ref: '#/definitions/Id'
+      _ref:
+        $ref: '#/definitions/Ref'
+      applicationOwner:
+        $ref: '#/definitions/Id'
+      type:
+        $ref: '#/definitions/ApplicationUserType'
+      cars:
+        items:
+          $ref: '#/definitions/Car'
+      username:
+        description: Nombre del usuario en la aplicación
+        type: string
+      name:
+        description: Nombre del usuario
+        type: string
+      surname:
+        description: Apellido del usuario
+        type: string
+      country:
+        description: Pais  del usuario
+        type: string
+      email:
+        description: Email  del usuario
+        type: string
+      birthdate:
+        description: Fecha de cumpleaños del usuario
+        type: string
+      images:
+        description: "Imagenes relacionadas al usuario"
+        items:
+          type: string
+      balance:
+        description: |
+          Saldo en todas las monedas del usuario.
+          Es un array, por que se encontrará una entidad `Cost` por cada tipo de moneda que haya usado.
+        items:
+          $ref: '#/definitions/Cost'
+  ApplicationUserType:
+    description: |
+      Especifica si es pasajero `passenger` o chofer `driver`
+    type: string
+  ApplicationUserCreate:
+    type: object
+    properties:
+      _ref:
+        $ref: '#/definitions/Ref'
+      type:
+        $ref: '#/definitions/ApplicationUserType'
+      username:
+        description: Nombre del usuario en la aplicación
+        type: string
+      password:
+        description: Contraseña del usuario en la aplicación
+        type: string
+        format: password
+      fb:
+        type: object
+        description: Información de facebook (opcional)
+        properties:
+          userId:
+            type: string
+            description: Id de usuario de facebook
+          authToken:
+            type: string
+            description: Token de autenticación de facebook
+      firstName:
+        description: Nombre del usuario
+        type: string
+      lastName:
+        description: Apellido del usuario
+        type: string
+      country:
+        description: Pais  del usuario
+        type: string
+      email:
+        description: Email  del usuario
+        type: string
+      birthdate:
+        description: Fecha de cumpleaños  del usuario
+        type: string
+      images:
+        description: "Imagenes relacionadas al usuario"
+        items:
+          type: string
+        type: array
+  ApplicationUserCredentials:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        description: Debe estar presente la contraseña o el token de fb.
+        type: string
+        format: password
+      facebookAuthToken:
+        type: string
+        description: Token de autenticación de facebook. Debe estar presente la contraseña o el token de fb.
+  CreateServerResponse:
+    properties:
+      server:
+        $ref: '#/definitions/Server'
+      token:
+        $ref: '#/definitions/Token'
+  Server:
+    properties:
+      id:
+        $ref: '#/definitions/Id'
+      _ref:
+        $ref: '#/definitions/Ref'
+      createdBy:
+        $ref: '#/definitions/Id'
+      createdTime:
+        $ref: '#/definitions/Timestamp'
+      name:
+        type: string
+        description: Nombre del application server
+      lastConnection:
+        $ref: '#/definitions/Timestamp'
+  BusinessUserCredentials:
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+        format: password
+  Role:
+    type: string
+    description: |
+      Rol de usuario de negocios puede ser
+        - `admin`
+        - `user`
+        - `manager`
+  BusinessUserCreate:
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+        format: password
+      name:
+        type: string
+      surname:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/Role'
+  BusinessUser:
+    description: Usuario de negocio
+    properties:
+      id:
+        $ref: '#/definitions/Id'
+      _ref:
+        $ref: '#/definitions/Ref'
+      username:
+        type: string
+      password:
+        type: string
+        format: password
+      name:
+        type: string
+      surname:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/Role'
+  Commit:
+    properties:
+      author:
+        $ref: '#/definitions/BusinessUser'
+      message:
+        type: string
+      timestamp:
+        $ref: '#/definitions/Timestamp'
+  RuleLanguage:
+    type: string
+    description: |
+      La implementación del motor de inferencia que se use soportará distintos idiomas / lenguajes, este campo
+      representa el idioma / lenguaje de la regla. Entre algunos podría ser
+        - `nools/javascript`
+        - `nools/dsl`
+        - `node-rules/javascript`
+        - `jrl/javascript`
+  Rule:
+    properties:
+      id:
+        $ref: '#/definitions/Id'
+      _ref:
+        $ref: '#/definitions/Ref'
+      language:
+        $ref: '#/definitions/RuleLanguage'
+      lastCommit:
+        $ref: '#/definitions/Commit'
+      blob:
+        type: string
+      active:
+        type: boolean
+        description: Flag que indica si la regla se usará para calcular el precio del viaje
+  FactLanguage:
+    type: string
+    description: |
+      La implementación del motor de inferencia que se use soportará distintos idiomas / lenguajes, este campo
+      representa el idioma / lenguaje del hecho. Además, la implementación de shared server, decidirá como representar
+      dichos hechos.
+  Fact:
+    properties:
+      language:
+        $ref: '#/definitions/FactLanguage'
+      blob:
+        type: string
+  PayMethodName:
+    type: string
+    description: Nombre / Identificador del método de pago
+  PayMethodDefinition:
+    properties:
+      name:
+        $ref: '#/definitions/PayMethodName'
+      parameters:
+        type: object
+        description: |
+          Diccionario cuyas claves son los nombres de los parametros y los valores el tipo de dato del parámetro.
+  PayMethod:
+    properties:
+      paymethod:
+        $ref: '#/definitions/PayMethodName'
+      parameters:
+        type: object
+        description: |
+          Diccionario cuyas claves son los nombres de los parametros y los valores el valor correspondiente a ese parámetro
+  Token:
+    properties:
+      expiresAt:
+        $ref: '#/definitions/Timestamp'
+      token:
+        type: string
+        description: Token de autenticación
+
