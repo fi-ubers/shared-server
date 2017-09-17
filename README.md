@@ -39,3 +39,6 @@ Para poder probar los distintos endpoints de la API se puede utilizar un navegad
 
 Donde _tipo_ es POST, GET, etc; _data_ son los datos a mandar en la request (un string representando un .json o '' para no enviar nada).
 
+## Para generar la documentación del código fuente
+
+Para generar automáticamente la documentación, simplemente se debe escribir `npm run jsdoc`. Luego de eso, en el directorio docs/ se creará una carpeta 'documentation'. Allí se podrá acceder a index.html para leer la documentación del server.
