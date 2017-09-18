@@ -1,9 +1,10 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var morgan = require('morgan');
-var pg = require('pg');
 var logger = require('./logger');
 var routes = require('./routes/api');
+var db = require('./db/knex');
+require('dotenv').config();
 
 var app = express();
 app.set('port', (process.env.PORT || 5000));

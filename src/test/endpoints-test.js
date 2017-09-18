@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'test';
+
 var test = require('./../index.js')
 var expect = require('chai').expect;
 var request = require('request');
