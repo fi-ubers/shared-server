@@ -3,7 +3,7 @@
 module.exports = {
   test: {
     client: 'postgresql',
-    connection: 'postgres://postgres:postgres@localhost:5432/shared_server_test',
+    connection: 'postgres://postgres@localhost:5432/shared_server_test',
     migrations: {
       directory: __dirname + '/migrations'
     },
