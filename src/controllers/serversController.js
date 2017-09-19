@@ -55,7 +55,7 @@ module.exports = {
 						metadata: {
 							version: pjson.version
 						},
-						server: server,
+						server: server[0],
 						token: {
 							expiresAt: expiresIn,
 							token: token
@@ -94,7 +94,7 @@ module.exports = {
 						metadata: {
 							version: pjson.version
 						},
-						server: server
+						server: server[0]
 					})
 				} else {
 					logger.error("Non-existent server: GET /api/servers/" + serverId);
@@ -147,12 +147,14 @@ module.exports = {
 					}
 				})
 				.then(function(newServer) {
-					res.status(200).send({
-						metadata: {
-							version: pjson.version
-						},
-						server: newServer
-					})
+					if (newServer) {
+						res.status(200).send({
+							metadata: {
+								version: pjson.version
+							},
+							server: newServer[0]
+						})
+					}
 				})
 				.catch(function(error) {
 					logger.error("Unexpected error: PUT /api/servers/" + serverId);
