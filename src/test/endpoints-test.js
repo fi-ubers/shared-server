@@ -1,10 +1,10 @@
 process.env.NODE_ENV = 'test';
 
-var test = require('./../index.js')
+var server = require('./../index');
 var expect = require('chai').expect;
 var request = require('request');
 
-var port = test.app.get('port');
+var port = server.get('port');
 
 describe('Content tests', function() {
 	it('Content equal to "Welcome!" in main page', function() {
