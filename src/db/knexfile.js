@@ -3,7 +3,13 @@
 module.exports = {
   test: {
     client: 'postgresql',
-    connection: 'postgres://postgres:postgres@localhost:5432/shared_server_test',
+    connection: 'postgres://postgres@localhost:5432/shared_server_test',
+    migrations: {
+      directory: __dirname + '/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/seeds/test'
+    }
   },
 
   development: {
@@ -11,14 +17,20 @@ module.exports = {
     connection: 'postgres://postgres:postgres@localhost:5432/shared_server',
     migrations: {
       directory: __dirname + '/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/seeds/development'
     }
   },
 
   production: {
     client: 'postgresql',
-    connection: 'postgres://udivnwonhaaoem:5c055f1fa9f8d5f9273904625f1126865902047ae46a4bb0841200bd6d3c3d72@ec2-107-20-193-89.compute-1.amazonaws.com:5432/dfdidieplcj3ne?ssl=true',
+    connection: process.env.DATABASE_URL + '?ssl=true',
     migrations: {
       directory: __dirname + '/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/seeds/production'
     }
   }
 

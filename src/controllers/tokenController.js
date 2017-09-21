@@ -19,7 +19,7 @@ module.exports = {
 				})
 			}
 			var expiresIn = moment().add(5, 'days').valueOf();
-			var token = jwt.sign({username: username}, 'shhhh', {expiresIn: expiresIn});
+			var token = jwt.sign({username: username}, process.env.SECRET_KEY, {expiresIn: expiresIn});
 			res.status(201).send({
 				metadata: {
 					version: pjson.version,
