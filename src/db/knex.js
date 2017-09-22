@@ -5,7 +5,7 @@ var logger = require('./../logger');
 
 module.exports = knex;
 
-if (environment != 'test') {
+if (process.env.NODE_ENV != 'test') {
 	logger.debug("Migrating");
 	knex.migrate.latest([config]);
 }
