@@ -1,4 +1,5 @@
 // Update with your config settings.
+var dev_database = process.env.DEV_DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/shared_server';
 
 module.exports = {
   test: {
@@ -14,7 +15,7 @@ module.exports = {
 
   development: {
     client: 'postgresql',
-    connection: 'postgres://postgres:postgres@localhost:5432/shared_server',
+    connection: dev_database,
     migrations: {
       directory: __dirname + '/migrations'
     },
