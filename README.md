@@ -39,6 +39,15 @@ Para poder probar los distintos endpoints de la API se puede utilizar un navegad
 
 Donde _tipo_ es POST, GET, etc; _data_ son los datos a mandar en la request (un string representando un .json o '' para no enviar nada).
 
+## Para correr el servidor usando docker
+
+Si se quiere utilizar docker primero debe instalarse [Docker](https://docs.docker.com/engine/installation/) y [Docker compose](https://docs.docker.com/compose/install/). Además se debe configurar para [correrlo sin sudo](https://docs.docker.com/engine/installation/linux/linux-postinstall/).
+
+Para correr el servidor, haciendo build de las imágenes antes de que empiecen los containers, usar `docker-compose up --build shared-server` (ver [docker-compose up](https://docs.docker.com/compose/reference/up/) para más información).
+
+Si se quiere correr el servidor en segundo plano usar `docker-compose up -d --build shared-server`. Para detenerlo usar `docker-compose stop` y para iniciarlo nuevamente `docker-compose start`. Si se quiere detener y eliminar el container usar `docker-compose down`.
+
+
 ## Para generar la documentación del código fuente
 
 Para generar automáticamente la documentación, simplemente se debe escribir `npm run jsdoc`. Luego de eso, en el directorio docs/ se creará una carpeta 'documentation'. Allí se podrá acceder a index.html para leer la documentación del server.
