@@ -1,4 +1,4 @@
-FROM insecurity/node-32bit-x87:latest
+FROM node:6
 
 # Create app directory
 WORKDIR /src/app
