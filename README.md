@@ -45,8 +45,9 @@ Si se quiere utilizar docker primero debe instalarse [Docker](https://docs.docke
 
 Para correr el servidor, haciendo build de las imágenes antes de que empiecen los containers, usar `docker-compose up --build shared-server` (ver [docker-compose up](https://docs.docker.com/compose/reference/up/) para más información).
 
-Si se quiere correr el servidor en segundo plano usar `docker-compose up -d --build shared-server`. Para detenerlo usar `docker-compose stop` y para iniciarlo nuevamente `docker-compose start`. Si se quiere detener y eliminar el container usar `docker-compose down`.
+Si se quiere correr el servidor en segundo plano usar `docker-compose up -d --build shared-server`. Para detenerlo usar `docker-compose stop` y para iniciarlo nuevamente, `docker-compose start`. Si se quiere detener y eliminar el container usar `docker-compose down`.
 
+Como comandos útiles: para ver únicamente los containers en ejecución usar el comando `docker ps`, mientras que `docker ps -a` muestra todos los containers y `docker images -a` muestra todas las imágenes. Para eliminar todos los containers e imágenes usar `docker rm $(docker ps -a -q)` y `docker rmi $(docker images -q)` respectivamente.
 
 ## Para generar la documentación del código fuente
 
