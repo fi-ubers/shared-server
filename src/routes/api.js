@@ -12,6 +12,10 @@ var ruleController = require('./../controllers/rulesController');
 var paymethodsController = require('./../controllers/paymethodsController');
 var tokenController = require('./../controllers/tokenController');
 
+// Middlewares
+var verifyToken = require('./../middlewares/verifyToken');
+var authCheck = require('./../middlewares/authCheck');
+
 /* Test-endpoints */
 router.get('/', indexController.sayHello);
 router.get('/goodbye', indexController.sayGoodbye);
@@ -83,7 +87,7 @@ router.get('/trips/:tripId', tripController.information);
 
 /* Defining /servers endpoints */
 
-router.get('/servers', serverController.listServers);
+router.get('/servers', verifyToken.businessVerify, authCheck('user'), serverController.listServers);
 
 router.post('/servers', serverController.registerServer);
 

@@ -49,7 +49,9 @@ module.exports = {
 				.insert([{createdBy: createdBy, createdTime: createdTime, name: name}], '*')
 				.then(function(server) {
 					var expiresIn = moment().add(5, 'days').valueOf();
-					var token = jwt.sign({id: server.id}, process.env.SECRET_KEY, {expiresIn: expiresIn});
+					var token = jwt.sign({id: server.id}, 
+							process.env.APP_KEY, 
+							{expiresIn: expiresIn});
 					logger.info("Registering aplication server");
 					res.status(201).send({
 						metadata: {
