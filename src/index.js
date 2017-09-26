@@ -26,6 +26,24 @@ app.get("/", function(req, res) {
 // Routes
 app.use('/api', routes);
 
+
+// Catch 404 and forward to error handler
+app.use(function(req, res, next) {
+	var err = new Error('Not found');
+	err.status = 404;
+	next(err);
+});
+
+
+// Error handler
+app.use(function(err, req, res, next) {
+	res.status(err.status || 500);
+	res.json({
+		code: err.status,
+		message: err.message
+	});
+});
+
 // Start server
 var server = app.listen(app.get('port'), function () {
 	logger.info("Listening on port %s...", app.get('port'));
