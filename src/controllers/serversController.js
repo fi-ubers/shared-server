@@ -46,10 +46,11 @@ module.exports = {
 			})
 		} else {
 			knex(table_name)
-				.insert([{createdBy: createdBy, createdTime: createdTime, name: name}], '*')
+				.insert([{createdBy: createdBy, createdTime: createdTime, name: name}])
+				.returning('*')
 				.then(function(server) {
 					var expiresIn = moment().add(5, 'days').valueOf();
-					var token = jwt.sign({id: server.id}, 
+					var token = jwt.sign({id: server[0].id}, 
 							process.env.APP_KEY, 
 							{expiresIn: expiresIn});
 					logger.info("Registering aplication server");
@@ -78,8 +79,40 @@ module.exports = {
 	},
 	
 	ping : function(req, res) {
-		//logger.info("POST at /servers/ping");
 		// Notify server life
+		logger.info("POST at /servers/ping " + req.user.id);
+		knex(table_name)
+			.where('id', req.user.id)
+			.first('*')
+			.then(function(server) {
+				var token = req.query.token;
+				var expiresIn = req.user.exp;
+				var now = moment().unix();
+				if (now > expiresIn) {
+					logger.info("Token has expired: refreshing token");
+					expiresIn = moment().add(5, 'days').valueOf();
+					token = jwt.sign({id: server.id}, 
+							process.env.APP_KEY, 
+							{expiresIn: expiresIn});
+				}
+				res.status(200).send({
+						metadata: {
+							version: pjson.version
+						},
+						ping: server,
+						token: {
+							expiresAt: expiresIn,
+							token: token
+						}
+					})
+			})
+			.catch(function(error) {
+				logger.error("Unexpected error: POST /api/servers/ping");
+				res.status(500).send({
+					code: 500,
+					message: "Unexpected error: " + error
+				})
+			})
 	},
 	
 	serverInfo : function(req, res) {

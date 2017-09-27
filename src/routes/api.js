@@ -89,17 +89,17 @@ router.get('/trips/:tripId', tripController.information);
 
 router.get('/servers', verifyToken.businessVerify, authCheck('user'), serverController.listServers);
 
-router.post('/servers', serverController.registerServer);
+router.post('/servers', verifyToken.businessVerify, authCheck('manager'), serverController.registerServer);
 
-router.post('/servers/ping', serverController.ping);
+router.post('/servers/ping', verifyToken.appVerify, verifyToken.checkExpirationError, serverController.ping);
 
-router.get('/servers/:serverId', serverController.serverInfo);
+router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), serverController.serverInfo);
 
-router.put('/servers/:serverId', serverController.updateServerInfo);
+router.put('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), serverController.updateServerInfo);
 
-router.post('/servers/:serverId', serverController.resetServerToken);
+router.post('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), serverController.resetServerToken);
 
-router.delete('/servers/:serverId', serverController.deleteServer);
+router.delete('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), serverController.deleteServer);
 
 
 /* Defining /rules endpoints */

@@ -11,7 +11,6 @@ function hasRole(roles, role) {
 module.exports = function(role) {
 	return function(req, res, next) {
 		if (hasRole(req.user.roles, role)) {
-		//if (role == 'manager') {
 			next();
 		} else {
 			logger.error("Unauthorized role");
