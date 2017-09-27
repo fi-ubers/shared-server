@@ -36,6 +36,10 @@ exports.up = function(knex, Promise) {
 	  		table.string('birthdate');
 	  		table.specificType('images', 'text[]');
 	  		table.specificType('balance', 'json[]');
+	  }),
+	  
+	  knex.schema.createTableIfNotExists('blacklist', function(table) {
+	  		table.string('jti').primary();
 	  })
     ])
 };
@@ -44,6 +48,7 @@ exports.down = function(knex, Promise) {
     return Promise.all([
         knex.schema.dropTableIfExists('app_servers'),
         knex.schema.dropTableIfExists('business_users'),
-        knex.schema.dropTableIfExists('application_users')
+        knex.schema.dropTableIfExists('application_users'),
+        knex.schema.dropTableIfExists('blacklist')
     ])
 };

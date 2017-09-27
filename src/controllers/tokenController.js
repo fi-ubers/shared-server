@@ -3,6 +3,7 @@ var knex = require('../db/knex');
 var jwt = require('jsonwebtoken');
 var pjson = require('../../package.json');
 var moment = require('moment');
+var uuidv4 = require('uuid/v4');
 var table_name = 'business_users';
 
 module.exports = {
@@ -31,7 +32,8 @@ module.exports = {
 					var expires = moment().add(5, 'days');
 					var token = jwt.sign({
 							id: user.id,
-							roles: user.roles}, 
+							roles: user.roles,
+							jti: uuidv4()}, 
 							process.env.BUSINESS_USER_KEY, 
 							{expiresIn: expires.valueOf()});
 					res.status(201).send({

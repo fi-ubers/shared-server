@@ -3,6 +3,7 @@ var knex = require('../db/knex');
 var pjson = require('../../package.json');
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
+var uuidv4 = require('uuid/v4');
 var table_name = 'app_servers';
 
 module.exports = {
@@ -49,8 +50,10 @@ module.exports = {
 				.insert([{createdBy: createdBy, createdTime: createdTime, name: name}])
 				.returning('*')
 				.then(function(server) {
-					var expiresIn = moment().add(5, 'days').valueOf();
-					var token = jwt.sign({id: server[0].id}, 
+					var expiresIn = moment().add(5, 'days').unix();
+					var token = jwt.sign({
+							id: server[0].id,
+							jti: uuidv4()}, 
 							process.env.APP_KEY, 
 							{expiresIn: expiresIn});
 					logger.info("Registering aplication server");
@@ -80,7 +83,7 @@ module.exports = {
 	
 	ping : function(req, res) {
 		// Notify server life
-		logger.info("POST at /servers/ping " + req.user.id);
+		logger.info("POST at /servers/ping");
 		knex(table_name)
 			.where('id', req.user.id)
 			.first('*')
@@ -89,11 +92,19 @@ module.exports = {
 				var expiresIn = req.user.exp;
 				var now = moment().unix();
 				if (now > expiresIn) {
-					logger.info("Token has expired: refreshing token");
-					expiresIn = moment().add(5, 'days').valueOf();
-					token = jwt.sign({id: server.id}, 
-							process.env.APP_KEY, 
-							{expiresIn: expiresIn});
+					logger.info("Token has expired");
+					logger.info("Revoke previous token");
+					knex('blacklist')
+						.insert({jti: req.user.jti})
+						.then(function() {
+							logger.info("Refresh token");
+							expiresIn = moment().add(5, 'days').unix();
+							token = jwt.sign({
+									id: server.id,
+									jti: uuidv4()}, 
+									process.env.APP_KEY, 
+									{expiresIn: expiresIn});
+						});
 				}
 				res.status(200).send({
 						metadata: {
@@ -104,7 +115,8 @@ module.exports = {
 							expiresAt: expiresIn,
 							token: token
 						}
-					})
+				})
+				
 			})
 			.catch(function(error) {
 				logger.error("Unexpected error: POST /api/servers/ping");
@@ -203,8 +215,8 @@ module.exports = {
 	},
 	
 	resetServerToken : function(req, res) {
-		//logger.info("POST at /servers/" + req.params.serverId);
 		// Reset a server token
+		logger.info("POST at /servers/" + req.params.serverId);
 	},
 	
 	deleteServer : function(req, res) {

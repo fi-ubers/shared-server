@@ -23,9 +23,9 @@ module.exports = {
 	}),
 	
 	checkExpirationError: function (err, req, res, next) {
-    		if (err && err.message == 'jwt expired') {
+    		if (err.message == 'jwt expired') {
     			var token = req.query.token || req.headers.authorization.split(' ')[1];
-    			req.user = jwt.decode(token); 
+    			req.user = jwt.decode(token);
     			next();
     		} else {
     			res.status(err.status || 500);
@@ -34,19 +34,6 @@ module.exports = {
 				message: err.message
 			});
 		}
-	},
-	
-	refreshAppVerify: function(req, res, next) { 
-		try {
-			expressJwt({ 
-				secret: process.env.APP_KEY,
-				getToken: fromHeaderOrQuerystring
-			})
-		}
-		catch (err) {
-			if (err.message == 'jwt expired') {
-				res.send("trapped");
-			}
-		}
+
 	}
 }
