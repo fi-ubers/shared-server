@@ -1,0 +1,31 @@
+version: '2.1'
+
+services:
+  db:
+    container_name: db
+    image: postgres:9.6
+    ports:
+      - '5433:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=shared_server
+    healthcheck:
+      test: exit 0
+      
+  shared-server:
+    container_name: shared-server
+    build: .
+    volumes: 
+      - '.:/src/app'
+    ports:
+      - '5000:5000'
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://udivnwonhaaoem:5c055f1fa9f8d5f9273904625f1126865902047ae46a4bb0841200bd6d3c3d72@ec2-107-20-193-89.compute-1.amazonaws.com:5432/dfdidieplcj3ne
+      - DEV_DATABASE_URL=postgres://postgres:postgres@db:5432/shared_server
+      - SECRET_KEY=fiuber-shared-server-secret
+    links:
+      - db
