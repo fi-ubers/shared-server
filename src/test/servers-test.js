@@ -12,7 +12,7 @@ var data = require('./../db/seeds/test/shared_server');
 
 chai.use(chaiHttp);
 
-var expiration = moment().add(5, 'days').valueOf();
+var expiration = moment().add(5, 'days').unix();
 var managerJti = uuidv4();
 var userJti = uuidv4();
 var app1Jti = uuidv4();
@@ -136,23 +136,24 @@ describe('API servers routes', function() {
 				res.body.should.be.a('Object');
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('server');
-				res.body.should.have.property('token');
 				res.body.metadata.should.be.a('Object');
 				res.body.metadata.should.have.property('version');
-				res.body.server.should.be.a('Object');
-				res.body.token.should.be.a('Object');
-				res.body.server.should.have.property('id');
-				res.body.server.id.should.equal(3);
-				res.body.server.should.have.property('createdBy');
-				res.body.server.createdBy.should.equal('7');
-				res.body.server.should.have.property('createdTime');
-				res.body.server.createdTime.should.equal('2017-09-19T20:30:23.000Z');
-				res.body.server.should.have.property('name');
-				res.body.server.name.should.equal('TestServer');
-				res.body.server.should.have.property('_ref');
-				res.body.server.should.have.property('lastConnection');
-				res.body.token.should.have.property('expiresAt');
-				res.body.token.should.have.property('token');
+				res.body.server.should.have.property('server');
+				res.body.server.should.have.property('token');
+				res.body.server.server.should.be.a('Object');
+				res.body.server.token.should.be.a('Object');
+				res.body.server.server.should.have.property('id');
+				res.body.server.server.id.should.equal(3);
+				res.body.server.server.should.have.property('createdBy');
+				res.body.server.server.createdBy.should.equal('7');
+				res.body.server.server.should.have.property('createdTime');
+				res.body.server.server.createdTime.should.equal('2017-09-19T20:30:23.000Z');
+				res.body.server.server.should.have.property('name');
+				res.body.server.server.name.should.equal('TestServer');
+				res.body.server.server.should.have.property('_ref');
+				res.body.server.server.should.have.property('lastConnection');
+				res.body.server.token.should.have.property('expiresAt');
+				res.body.server.token.should.have.property('token');
 				done();
 			});
 		});
@@ -187,7 +188,7 @@ describe('API servers routes', function() {
 			.end(function(err, result) {
 				chai.request(server)
 				// POST /api/servers/ping needs existing applicationToken
-				.post('/api/servers/ping?token=' + result.body.token.token) 
+				.post('/api/servers/ping?token=' + result.body.server.token.token) 
 				.end(function(err, res) {
 					res.should.have.status(200);
 					res.should.be.json;
@@ -213,8 +214,7 @@ describe('API servers routes', function() {
 					res.body.ping.token.should.be.a('Object');
 					res.body.ping.token.should.have.property('expiresAt');
 					res.body.ping.token.should.have.property('token');
-					res.body.ping.token.expiresAt.should.equal(result.body.token.expiresAt);
-					res.body.ping.token.token.should.equal(result.body.token.token);
+					res.body.ping.token.token.should.equal(result.body.server.token.token);
 					done();
 				});
 				
@@ -251,7 +251,6 @@ describe('API servers routes', function() {
 				res.body.ping.token.should.be.a('Object');
 				res.body.ping.token.should.have.property('expiresAt');
 				res.body.ping.token.should.have.property('token');
-				res.body.ping.token.expiresAt.should.not.equal(0);
 				res.body.ping.token.token.should.not.equal(appTokenExp);
 				done();
 			});

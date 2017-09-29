@@ -4,9 +4,34 @@ var jwt = require('jsonwebtoken');
 var pjson = require('../../package.json');
 var moment = require('moment');
 var uuidv4 = require('uuid/v4');
-var table_name = 'business_users';
+var businessUsersTable = 'business_users';
+
+var expiration = moment().add(5, 'days').unix();
 
 module.exports = {
+	expiration : expiration,
+	
+	createBusinessToken : (function(businessUser) {
+		return jwt.sign({
+			id: businessUser.id,
+			roles: businessUser.roles,
+			jti: uuidv4(),
+			exp: expiration}, 
+			process.env.BUSINESS_USER_KEY);
+	}),
+	
+	createApplicationToken : (function(appServer) {
+		return jwt.sign({
+			id: appServer.id,
+			jti: uuidv4(),
+			exp: expiration}, 
+			process.env.APP_KEY);
+	}),
+	
+	decodeToken : (function(token) {
+		return jwt.decode(token);
+	}),
+
 	generateToken : (function(req, res) {
 		// Generate business user token
 		var username = req.body.username;
@@ -22,7 +47,7 @@ module.exports = {
 		}
 			
 		knex.select()
-			.from(table_name)
+			.from(businessUsersTable)
 			.where({username: username,
 				password: password
 			}).first('*')
