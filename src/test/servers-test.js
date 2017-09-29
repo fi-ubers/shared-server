@@ -8,12 +8,16 @@ var knex = require('./../db/knex');
 var jwt = require('jsonwebtoken');
 var uuidv4 = require('uuid/v4');
 var moment = require('moment');
+var data = require('./../db/seeds/test/shared_server');
 
 chai.use(chaiHttp);
 
+var expiration = moment().add(5, 'days').valueOf();
 var managerJti = uuidv4();
 var userJti = uuidv4();
-var expiration = moment().add(5, 'days').valueOf();
+var app1Jti = uuidv4();
+var app2Jti = uuidv4();
+
 var businessUser1 = {
 	id: 25,
 	roles: ['manager']
@@ -23,6 +27,18 @@ var businessUser2 = {
 	id: 16,
 	roles: ['user']
 };
+
+var appToken1 = jwt.sign({
+			id: 1,
+			jti: app1Jti,
+			exp: expiration}, 
+			process.env.APP_KEY);
+			
+var appToken2 = jwt.sign({
+			id: 2,
+			jti: app2Jti,
+			exp: expiration}, 
+			process.env.APP_KEY); 
 
 var managerToken = jwt.sign({
 			id: businessUser1.id,
@@ -37,7 +53,20 @@ var userToken = jwt.sign({
 			jti: userJti},
 			process.env.BUSINESS_USER_KEY,
 			{expiresIn: expiration});
+
+var appToken = jwt.sign({
+			id: 1,
+			jti: uuidv4(),
+			exp: expiration}, 
+			process.env.APP_KEY); 
 			
+var appTokenExp = jwt.sign({
+			id: 1,
+			jti: uuidv4(),
+			exp: 0}, 
+			process.env.APP_KEY); 
+
+
 describe('API servers routes', function() {
 	beforeEach(function(done) { 
 		knex.migrate.rollback()
@@ -143,6 +172,132 @@ describe('API servers routes', function() {
 				res.body.should.have.property('message');
 				done();
 			});
+		});
+	});
+	
+	describe('POST /api/servers/ping', function() {
+		it('Notify server life: without changing token', function(done) {
+			chai.request(server)
+			.post('/api/servers?token=' + managerToken)
+			.send({
+				createdBy: '7',
+				createdTime: '2017-09-19T20:30:23.000Z',
+				name: 'TestServer'
+			})
+			.end(function(err, result) {
+				chai.request(server)
+				// POST /api/servers/ping needs existing applicationToken
+				.post('/api/servers/ping?token=' + result.body.token.token) 
+				.end(function(err, res) {
+					res.should.have.status(200);
+					res.should.be.json;
+					res.body.should.be.a('Object');
+					res.body.should.have.property('metadata');
+					res.body.should.have.property('ping');
+					res.body.metadata.should.be.a('Object');
+					res.body.metadata.should.have.property('version');
+					res.body.ping.should.be.a('Object');
+					res.body.ping.should.have.property('server');
+					res.body.ping.server.should.be.a('Object');
+					res.body.ping.server.should.have.property('id');
+					res.body.ping.server.id.should.equal(3);
+					res.body.ping.server.should.have.property('_ref');
+					res.body.ping.server.should.have.property('createdBy');
+					res.body.ping.server.createdBy.should.equal('7');
+					res.body.ping.server.should.have.property('createdTime');
+					res.body.ping.server.createdTime.should.equal('2017-09-19T20:30:23.000Z');
+					res.body.ping.server.should.have.property('name');
+					res.body.ping.server.name.should.equal('TestServer');
+					res.body.ping.server.should.have.property('lastConnection');
+					res.body.ping.should.have.property('token');
+					res.body.ping.token.should.be.a('Object');
+					res.body.ping.token.should.have.property('expiresAt');
+					res.body.ping.token.should.have.property('token');
+					res.body.ping.token.expiresAt.should.equal(result.body.token.expiresAt);
+					res.body.ping.token.token.should.equal(result.body.token.token);
+					done();
+				});
+				
+			});
+		}),
+		
+		it('Notify server life: changing token', function(done) {
+			chai.request(server)
+			// POST /api/servers/ping needs appToken from app server in database
+			.post('/api/servers/ping?token=' + appTokenExp) 
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('ping');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('version');
+				res.body.ping.should.be.a('Object');
+				res.body.should.have.property('ping');
+				res.body.ping.should.have.property('server');
+				res.body.ping.server.should.be.a('Object');
+				res.body.ping.server.should.have.property('id');
+				res.body.ping.server.id.should.equal(1);
+				res.body.ping.server.should.have.property('_ref');
+				res.body.ping.server.should.have.property('createdBy');
+				res.body.ping.server.createdBy.should.equal('4');
+				res.body.ping.server.should.have.property('createdTime');
+				res.body.ping.server.createdTime.should.equal('2017-09-18T18:30:23.000Z');
+				res.body.ping.server.should.have.property('name');
+				res.body.ping.server.name.should.equal('Fiuber');
+				res.body.ping.server.should.have.property('lastConnection');
+				res.body.ping.should.have.property('token');
+				res.body.ping.token.should.be.a('Object');
+				res.body.ping.token.should.have.property('expiresAt');
+				res.body.ping.token.should.have.property('token');
+				res.body.ping.token.expiresAt.should.not.equal(0);
+				res.body.ping.token.token.should.not.equal(appTokenExp);
+				done();
+			});
+			
+		});
+		
+		it('Notify server life: revoke expired token', function(done) {
+			chai.request(server)
+			// POST /api/servers/ping needs appToken from app server in database
+			.post('/api/servers/ping?token=' + appTokenExp) 
+			.end(function(err, res) {
+				res.should.have.status(200);
+				// AppToken was invalidated
+				chai.request(server)
+				.post('/api/servers/ping?token=' + appTokenExp)
+				.end(function(err, res) {
+					res.should.have.status(401);
+					res.should.be.json;
+					res.body.should.have.property('code');
+					res.body.code.should.equal(401);
+					res.body.should.have.property('message');
+					res.body.message.should.equal('The token was revoked');
+					done();	
+				});
+			});
+			
+		});
+		
+		it('Notify server life: do not revoke not-expired token', function(done) {
+			chai.request(server)
+			// POST /api/servers/ping needs appToken from app server in database
+			.post('/api/servers/ping?token=' + appToken) 
+			.end(function(err, res) {
+				res.should.have.status(200);
+				// AppToken was invalidated
+				chai.request(server)
+				.post('/api/servers/ping?token=' + appToken)
+				.end(function(err, res) {
+					res.should.not.have.status(401);
+					res.should.have.status(200);
+					res.should.be.json;
+					res.body.ping.token.token.should.equal(appToken);
+					done();	
+				});
+			});
+			
 		});
 	});
 	
@@ -252,6 +407,69 @@ describe('API servers routes', function() {
 		});
 	});
 	
+	
+	describe('POST /api/servers/:id', function() {
+		it('Reset a server token: revoke previous token', function(done) {
+			chai.request(server)
+			.post('/api/servers/1?token=' + managerToken)
+			.end(function(err, res) {
+				res.should.have.status(201);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('server');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('version');
+				res.body.server.should.be.a('Object');
+				res.body.server.should.have.property('server');
+				res.body.server.server.should.be.a('Object');
+				res.body.server.server.should.have.property('id');
+				res.body.server.server.id.should.equal(1);
+				res.body.server.server.should.have.property('_ref');
+				res.body.server.server.should.have.property('createdBy');
+				res.body.server.server.createdBy.should.equal('4');
+				res.body.server.server.should.have.property('createdTime');
+				res.body.server.server.createdTime.should.equal('2017-09-18T18:30:23.000Z');
+				res.body.server.server.should.have.property('name');
+				res.body.server.server.name.should.equal('Fiuber');
+				res.body.server.server.should.have.property('lastConnection');
+				res.body.server.should.have.property('token');
+				res.body.server.token.should.be.a('Object');
+				res.body.server.token.should.have.property('expiresAt');
+				res.body.server.token.should.have.property('token');
+				res.body.server.token.token.should.not.equal(appToken1);
+				chai.request(server)
+				.post('/api/servers/ping?token=' + appToken1)
+				.end(function(err, res) {
+					res.should.have.status(401);
+					res.should.be.json;
+					res.body.should.have.property('code');
+					res.body.code.should.equal(401);
+					res.body.should.have.property('message');
+					res.body.message.should.equal('The token was revoked');
+					done();	
+				});			
+			});
+		}),
+		
+		it('Reset a server token: new token can be used', function(done) {
+			chai.request(server)
+			.post('/api/servers/1?token=' + managerToken)
+			.end(function(err, res) {
+				res.should.have.status(201);
+				chai.request(server)
+				.post('/api/servers/ping?token=' + res.body.server.token.token)
+				.end(function(err, res) {
+					res.should.not.have.status(401);
+					res.should.be.json;
+					res.should.have.status(200);
+					done();	
+				});			
+			});
+		});
+	});
+	
+	
 	describe('DELETE /api/servers/:id', function() {
 		it('Delete application server by id with code 204', function(done) {
 			chai.request(server)
@@ -286,3 +504,6 @@ describe('API servers routes', function() {
 	});
 	
 });
+
+exports.appToken1 = appToken1;
+exports.appToken2 = appToken2;

@@ -55,9 +55,9 @@ module.exports = {
 					logger.info("Creating app server token");
 					var token = jwt.sign({
 							id: server[0].id,
-							jti: uuidv4()}, 
-							process.env.APP_KEY, 
-							{expiresIn: expiresIn});
+							jti: uuidv4(),
+							exp: expiresIn}, 
+							process.env.APP_KEY); 
 					knex(tokenTable)
 						.insert({id: server[0].id, token: token})
 						.then(function() {
@@ -108,9 +108,9 @@ module.exports = {
 							var expires = moment().add(5, 'days').unix();
 							var newToken = jwt.sign({
 									id: id,
-									jti: uuidv4()}, 
-									process.env.APP_KEY, 
-									{expiresIn: expires});
+									jti: uuidv4(),
+									exp: expiresIn}, 
+									process.env.APP_KEY);
 							knex(tokenTable)
 								.where('id', id)
 								.update({'token': newToken})
@@ -119,10 +119,12 @@ module.exports = {
 										metadata: {
 											version: pjson.version
 										},
-										ping: server,
-										token: {
-											expiresAt: expires,
-											token: newToken
+										ping: {
+											server,
+											token: {
+												expiresAt: expires,
+												token: newToken
+											}
 										}
 									})
 								});
@@ -132,10 +134,12 @@ module.exports = {
 							metadata: {
 								version: pjson.version
 							},
-							ping: server,
-							token: {
-								expiresAt: expiresIn,
-								token: token
+							ping: {
+								server,
+								token: {
+									expiresAt: expiresIn,
+									token: token
+								}
 							}
 					})
 				}
@@ -242,11 +246,11 @@ module.exports = {
 		
 		logger.info("POST at /servers/" + serverId);
 		knex(tokenTable)
-			.where(id, serverId)
+			.where('id', serverId)
 			.first('*')
-			.then(function(token) {
-				if (token) {
-					var decoded = jwt.decode(token);
+			.then(function(server) {
+				if (server) {
+					var decoded = jwt.decode(server.token);
 					logger.info("Revoke previous token");
 					knex('blacklist')
 						.insert({jti: decoded.jti})
@@ -270,17 +274,19 @@ module.exports = {
 												metadata: {
 													version: pjson.version
 												},
-												server: server,
-												token: {
-													expiresAt: expires,
-													token: newToken
+												server: {
+													server,
+													token: {
+														expiresAt: expires,
+														token: newToken
+													}
 												}
 											})
 										});
 								});
 						});
 				} else {
-					logger.error("Non-existent server: PUT /api/servers/" + serverId);
+					logger.error("Non-existent server: POST /api/servers/" + serverId);
 					res.status(404).send({
 						code: 404,
 						message: "Non-existent server"
@@ -288,7 +294,7 @@ module.exports = {
 				}
 			})
 			.catch(function(error) {
-				logger.error("Unexpected error: PUT /api/servers/" + serverId);
+				logger.error("Unexpected error: POST /api/servers/" + serverId);
 				res.status(500).send({
 					code: 500,
 					message: "Unexpected error: " + error

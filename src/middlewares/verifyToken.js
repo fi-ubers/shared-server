@@ -22,7 +22,7 @@ module.exports = {
 	
 	checkExpirationError: function (err, req, res, next) {
     		if (err.message == 'jwt expired') {
-    			var token = req.query.token || req.headers.authorization.split(' ')[1];
+    			var token = req.query.token;
     			req.user = jwt.decode(token);
     			next();
     		} else {

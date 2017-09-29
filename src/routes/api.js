@@ -15,7 +15,7 @@ var tokenController = require('./../controllers/tokenController');
 // Middlewares
 var verifyToken = require('./../middlewares/verifyToken');
 var authCheck = require('./../middlewares/authCheck');
-var revokedToken = require('./../middlewares/revokedTokens');
+var revokedTokenCheck = require('./../middlewares/revokedTokenCheck');
 
 /* Test-endpoints */
 router.get('/', indexController.sayHello);
@@ -92,7 +92,7 @@ router.get('/servers', verifyToken.businessVerify, authCheck('user'), serverCont
 
 router.post('/servers', verifyToken.businessVerify, authCheck('manager'), serverController.registerServer);
 
-router.post('/servers/ping', verifyToken.appVerify, verifyToken.checkExpirationError, revokedToken, serverController.ping);
+router.post('/servers/ping', verifyToken.appVerify, verifyToken.checkExpirationError, revokedTokenCheck, serverController.ping);
 
 router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), serverController.serverInfo);
 

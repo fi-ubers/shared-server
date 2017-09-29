@@ -33,9 +33,9 @@ module.exports = {
 					var token = jwt.sign({
 							id: user.id,
 							roles: user.roles,
-							jti: uuidv4()}, 
-							process.env.BUSINESS_USER_KEY, 
-							{expiresIn: expires.valueOf()});
+							jti: uuidv4(),
+							exp: expires.valueOf()}, 
+							process.env.BUSINESS_USER_KEY);
 					res.status(201).send({
 						metadata: {
 							version: pjson.version,
