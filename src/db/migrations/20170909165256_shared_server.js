@@ -40,6 +40,11 @@ exports.up = function(knex, Promise) {
 	  
 	  knex.schema.createTableIfNotExists('blacklist', function(table) {
 	  		table.string('jti').primary();
+	  }),
+	  
+	  knex.schema.createTableIfNotExists('app_tokens', function(table) {
+	  		table.integer('id').primary();
+	  		table.string('token');
 	  })
     ])
 };
@@ -49,6 +54,7 @@ exports.down = function(knex, Promise) {
         knex.schema.dropTableIfExists('app_servers'),
         knex.schema.dropTableIfExists('business_users'),
         knex.schema.dropTableIfExists('application_users'),
-        knex.schema.dropTableIfExists('blacklist')
+        knex.schema.dropTableIfExists('blacklist'),
+        knex.schema.dropTableIfExists('app_tokens')
     ])
 };

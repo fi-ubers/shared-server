@@ -5,9 +5,39 @@ var should = chai.should();
 var chaiHttp = require('chai-http');
 var server = require('./../index');
 var knex = require('./../db/knex');
+var jwt = require('jsonwebtoken');
+var uuidv4 = require('uuid/v4');
+var moment = require('moment');
 
 chai.use(chaiHttp);
 
+var managerJti = uuidv4();
+var userJti = uuidv4();
+var expiration = moment().add(5, 'days').valueOf();
+var businessUser1 = {
+	id: 25,
+	roles: ['manager']
+};
+
+var businessUser2 = {
+	id: 16,
+	roles: ['user']
+};
+
+var managerToken = jwt.sign({
+			id: businessUser1.id,
+			roles: businessUser1.roles,
+			jti: managerJti},
+			process.env.BUSINESS_USER_KEY,
+			{expiresIn: expiration});
+			
+var userToken = jwt.sign({
+			id: businessUser2.id,
+			roles: businessUser2.roles,
+			jti: userJti},
+			process.env.BUSINESS_USER_KEY,
+			{expiresIn: expiration});
+			
 describe('API servers routes', function() {
 	beforeEach(function(done) { 
 		knex.migrate.rollback()
@@ -32,7 +62,7 @@ describe('API servers routes', function() {
 	describe('GET /api/servers', function() {
 		it('Get application servers', function(done) {
 			chai.request(server)
-			.get('/api/servers')
+			.get('/api/servers?token=' + userToken)
 			.end(function(err, res) {
 				res.should.have.status(200);
 				res.should.be.json;
@@ -65,7 +95,7 @@ describe('API servers routes', function() {
 	describe('POST /api/servers', function() {
 		it('Register application server with code 201', function(done) {
 			chai.request(server)
-			.post('/api/servers')
+			.post('/api/servers?token=' + managerToken)
 			.send({
 				createdBy: '7',
 				createdTime: '2017-09-19T20:30:23.000Z',
@@ -97,10 +127,10 @@ describe('API servers routes', function() {
 				done();
 			});
 		});
-	
+		
 		it('Register application server with code 400', function(done) {
 			chai.request(server)
-			.post('/api/servers')
+			.post('/api/servers?token=' + managerToken)
 			.send({
 				createdBy: '10',
 				name: 'TestServer'
@@ -119,7 +149,7 @@ describe('API servers routes', function() {
 	describe('GET /api/servers/:id', function() {
 		it('Get application server by id with code 200', function(done) {
 			chai.request(server)
-			.get('/api/servers/1')
+			.get('/api/servers/1?token=' + userToken)
 			.end(function(err, res) {
 				res.should.have.status(200);
 				res.should.be.json;
@@ -145,7 +175,7 @@ describe('API servers routes', function() {
 	
 		it('Get application server by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/servers/3')
+			.get('/api/servers/3?token=' + userToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -160,7 +190,7 @@ describe('API servers routes', function() {
 	describe('PUT /api/servers/:id', function() {
 		it('Update application server by id with code 200', function(done) {
 			chai.request(server)
-			.put('/api/servers/1')
+			.put('/api/servers/1?token=' + managerToken)
 			.send({
 				name: 'TestServer',
 				_ref: 'test'
@@ -190,7 +220,7 @@ describe('API servers routes', function() {
 	
 		it('Update application server by id with code 400', function(done) {
 			chai.request(server)
-			.put('/api/servers/1')
+			.put('/api/servers/1?token=' + managerToken)
 			.send({
 				name: 'TestServer'
 			})
@@ -206,7 +236,7 @@ describe('API servers routes', function() {
 	
 		it('Update application server by id with code 404', function(done) {
 			chai.request(server)
-			.put('/api/servers/5')
+			.put('/api/servers/5?token=' + managerToken)
 			.send({
 				name: 'TestServer',
 				_ref: 'test'
@@ -225,11 +255,11 @@ describe('API servers routes', function() {
 	describe('DELETE /api/servers/:id', function() {
 		it('Delete application server by id with code 204', function(done) {
 			chai.request(server)
-			.delete('/api/servers/2')
+			.delete('/api/servers/2?token=' + managerToken)
 			.end(function(err, res) {
 				res.should.have.status(204);
 				chai.request(server)
-				.get('/api/servers/2')
+				.get('/api/servers/2?token=' + userToken)
 				.end(function(err, res) {
 					res.should.have.status(404);
 					res.should.be.json;
@@ -243,7 +273,7 @@ describe('API servers routes', function() {
 		
 		it('Delete application server by id with code 404', function(done) {
 			chai.request(server)
-			.delete('/api/servers/6')
+			.delete('/api/servers/6?token=' + managerToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -254,4 +284,5 @@ describe('API servers routes', function() {
 			});
 		});
 	});
+	
 });

@@ -4,14 +4,15 @@ var pjson = require('../../package.json');
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
 var uuidv4 = require('uuid/v4');
-var table_name = 'app_servers';
+var appTable = 'app_servers';
+var tokenTable = 'app_tokens';
 
 module.exports = {
 	listServers : function(req, res) {
 		// Returns all the information about the indicated application servers
 		logger.info("GET at /servers");
 		knex.select()
-			.from('app_servers')
+			.from(appTable)
 			.then(function(servers) {
 				logger.info("Showing aplication servers list");
 				res.status(200).send({
@@ -46,27 +47,32 @@ module.exports = {
 				message: "Missing parameters"
 			})
 		} else {
-			knex(table_name)
+			knex(appTable)
 				.insert([{createdBy: createdBy, createdTime: createdTime, name: name}])
 				.returning('*')
 				.then(function(server) {
 					var expiresIn = moment().add(5, 'days').unix();
+					logger.info("Creating app server token");
 					var token = jwt.sign({
 							id: server[0].id,
 							jti: uuidv4()}, 
 							process.env.APP_KEY, 
 							{expiresIn: expiresIn});
-					logger.info("Registering aplication server");
-					res.status(201).send({
-						metadata: {
-							version: pjson.version
-						},
-						server: server[0],
-						token: {
-							expiresAt: expiresIn,
-							token: token
-						}
-					})
+					knex(tokenTable)
+						.insert({id: server[0].id, token: token})
+						.then(function() {
+							logger.info("Registering aplication server");
+							res.status(201).send({
+								metadata: {
+									version: pjson.version
+								},
+								server: server[0],
+								token: {
+									expiresAt: expiresIn,
+									token: token
+								}
+							})
+						})
 				})
 				.catch(function(error) {
 					logger.error("Unexpected error: POST /api/servers");
@@ -84,8 +90,9 @@ module.exports = {
 	ping : function(req, res) {
 		// Notify server life
 		logger.info("POST at /servers/ping");
-		knex(table_name)
-			.where('id', req.user.id)
+		var id = req.user.id;
+		knex(appTable)
+			.where('id', id)
 			.first('*')
 			.then(function(server) {
 				var token = req.query.token;
@@ -98,25 +105,40 @@ module.exports = {
 						.insert({jti: req.user.jti})
 						.then(function() {
 							logger.info("Refresh token");
-							expiresIn = moment().add(5, 'days').unix();
-							token = jwt.sign({
-									id: server.id,
+							var expires = moment().add(5, 'days').unix();
+							var newToken = jwt.sign({
+									id: id,
 									jti: uuidv4()}, 
 									process.env.APP_KEY, 
-									{expiresIn: expiresIn});
+									{expiresIn: expires});
+							knex(tokenTable)
+								.where('id', id)
+								.update({'token': newToken})
+								.then(function() {
+									res.status(200).send({
+										metadata: {
+											version: pjson.version
+										},
+										ping: server,
+										token: {
+											expiresAt: expires,
+											token: newToken
+										}
+									})
+								});
 						});
+				} else {
+					res.status(200).send({
+							metadata: {
+								version: pjson.version
+							},
+							ping: server,
+							token: {
+								expiresAt: expiresIn,
+								token: token
+							}
+					})
 				}
-				res.status(200).send({
-						metadata: {
-							version: pjson.version
-						},
-						ping: server,
-						token: {
-							expiresAt: expiresIn,
-							token: token
-						}
-				})
-				
 			})
 			.catch(function(error) {
 				logger.error("Unexpected error: POST /api/servers/ping");
@@ -132,7 +154,7 @@ module.exports = {
 		var serverId = req.params.serverId;
 		
 		logger.info("GET at /servers/" + serverId);
-		knex(table_name)
+		knex(appTable)
 			.where('id', serverId)
 			.then(function(server) {
 				if (server.length !== 0) {
@@ -174,13 +196,13 @@ module.exports = {
 				message: "Missing parameters"
 			})
 		} else {
-			knex.select().from(table_name)
+			knex.select().from(appTable)
 				.where('id', serverId)
 				.then(function(server) {
 					if (server.length !== 0) {
 						logger.info("Updating information of server " + serverId);
 						return knex.select()
-							.from(table_name)
+							.from(appTable)
 							.where('id', serverId)
 							.update({'name': serverName})
 							.returning('*');
@@ -216,7 +238,62 @@ module.exports = {
 	
 	resetServerToken : function(req, res) {
 		// Reset a server token
-		logger.info("POST at /servers/" + req.params.serverId);
+		var serverId = req.params.serverId;
+		
+		logger.info("POST at /servers/" + serverId);
+		knex(tokenTable)
+			.where(id, serverId)
+			.first('*')
+			.then(function(token) {
+				if (token) {
+					var decoded = jwt.decode(token);
+					logger.info("Revoke previous token");
+					knex('blacklist')
+						.insert({jti: decoded.jti})
+						.then(function() {
+							logger.info("Reset token");
+							var expires = moment().add(5, 'days').unix();
+							var newToken = jwt.sign({
+									id: serverId,
+									jti: uuidv4()}, 
+									process.env.APP_KEY, 
+									{expiresIn: expires});
+							knex(tokenTable)
+								.where('id', serverId)
+								.update({'token': newToken})
+								.then(function() {
+									knex(appTable)
+										.where('id', serverId)
+										.first('*')
+										.then(function(server) {
+											res.status(201).send({
+												metadata: {
+													version: pjson.version
+												},
+												server: server,
+												token: {
+													expiresAt: expires,
+													token: newToken
+												}
+											})
+										});
+								});
+						});
+				} else {
+					logger.error("Non-existent server: PUT /api/servers/" + serverId);
+					res.status(404).send({
+						code: 404,
+						message: "Non-existent server"
+					})
+				}
+			})
+			.catch(function(error) {
+				logger.error("Unexpected error: PUT /api/servers/" + serverId);
+				res.status(500).send({
+					code: 500,
+					message: "Unexpected error: " + error
+				})
+			});
 	},
 	
 	deleteServer : function(req, res) {
@@ -225,13 +302,13 @@ module.exports = {
 		
 		logger.info("DELETE at /servers/" + req.params.serverId);
 		knex.select()
-			.from(table_name)
+			.from(appTable)
 			.where('id', serverId)
 			.then(function(server) {
 				if (server.length !== 0) {
 					logger.info("Deleting server " + serverId);
 					knex.select()
-						.from(table_name)
+						.from(appTable)
 						.where('id', serverId)
 						.del()
 						.then( function() { 
