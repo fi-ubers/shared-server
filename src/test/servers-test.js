@@ -1,15 +1,14 @@
 process.env.NODE_ENV = 'test';
 
 var chai = require('chai');
-var should = chai.should();
 var chaiHttp = require('chai-http');
 var server = require('./../index');
 var knex = require('./../db/knex');
 var jwt = require('jsonwebtoken');
 var uuidv4 = require('uuid/v4');
 var moment = require('moment');
-var data = require('./../db/seeds/test/shared_server');
 
+chai.should();
 chai.use(chaiHttp);
 
 var expiration = moment().add(5, 'days').unix();

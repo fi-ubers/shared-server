@@ -1,6 +1,4 @@
-var logger = require('./../logger');
 var knex = require('../db/knex');
-var pjson = require('../../package.json');
 
 module.exports = {
 	selectAll : (function(table) {

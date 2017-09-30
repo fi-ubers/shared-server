@@ -35,7 +35,7 @@ const logger = new (winston.Logger) ({
 module.exports = logger;
 
 logger.stream = {
-	write: function(message, encoding) {
+	write: function(message, encoding) { //eslint-disable-line no-unused-vars
 		logger.info(message);	
 	}
 };

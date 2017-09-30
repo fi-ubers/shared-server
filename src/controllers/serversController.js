@@ -1,5 +1,4 @@
 var logger = require('./../logger');
-var knex = require('../db/knex');
 var moment = require('moment');
 var appTable = 'app_servers';
 var tokenTable = 'app_tokens';
