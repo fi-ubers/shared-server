@@ -88,19 +88,19 @@ router.get('/trips/:tripId', tripController.information);
 
 /* Defining /servers endpoints */
 
-router.get('/servers', verifyToken.businessVerify, authCheck('user'), serverController.listServers);
+router.get('/servers', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.listServers);
 
-router.post('/servers', verifyToken.businessVerify, authCheck('manager'), serverController.registerServer);
+router.post('/servers', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.registerServer);
 
 router.post('/servers/ping', verifyToken.appVerify, verifyToken.checkExpirationError, revokedTokenCheck, serverController.ping);
 
-router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), serverController.serverInfo);
+router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.serverInfo);
 
-router.put('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), serverController.updateServerInfo);
+router.put('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.updateServerInfo);
 
-router.post('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), serverController.resetServerToken);
+router.post('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.resetServerToken);
 
-router.delete('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), serverController.deleteServer);
+router.delete('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.deleteServer);
 
 
 /* Defining /rules endpoints */
