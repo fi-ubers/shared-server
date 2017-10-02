@@ -25,24 +25,6 @@ describe('Content tests', function() {
 		});
 	});
 	
-	it('Content equal to "Business users list" in endpoint /api/business-users', function() {
-		request('http://localhost:' + port + '/api/business-users', function(error, response, body) {
-			expect(body).to.equal('Business users list');
-		});
-	});
-	
-	it('Content in endpoint /api/business-users/me', function() {
-		request('http://localhost:' + port + '/api/business-users/me', function(error, response, body) {
-			expect(body).to.equal('Obtain information of the connected business user');
-		});
-	});
-	
-	it('Content in endpoint /api/business-users/4', function() {
-		request('http://localhost:' + port + '/api/business-users/4', function(error, response, body) {
-			expect(body).to.equal('Obtain information of a business user');
-		});
-	});
-	
 	it('Content in endpoint /api/users', function() {
 		request('http://localhost:' + port + '/api/users', function(error, response, body) {
 			expect(body).to.equal('User list');

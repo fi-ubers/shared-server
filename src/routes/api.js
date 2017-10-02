@@ -24,19 +24,19 @@ router.get('/goodbye', indexController.sayGoodbye);
 
 /* Defining /business-users endpoints */
 
-router.get('/business-users', businessUserController.list);
+router.get('/business-users', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.list);
 
-router.post('/business-users', businessUserController.register);
+router.post('/business-users', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.register);
 
-router.get('/business-users/me', businessUserController.myInformation);
+router.get('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.myInformation);
 
-router.put('/business-users/me', businessUserController.updateMyInfo);
+router.put('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.updateMyInfo);
 
-router.delete('/business-users/:userId', businessUserController.deleteUser);
+router.delete('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.deleteUser);
 
-router.get('/business-users/:userId', businessUserController.userInformation);
+router.get('/business-users/:userId', verifyToken.businessVerify, authCheck('user'), businessUserController.userInformation);
 
-router.put('/business-users/:userId', businessUserController.updateUserInfo);
+router.put('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), businessUserController.updateUserInfo);
 
 
 /* Defining /users endpoints */

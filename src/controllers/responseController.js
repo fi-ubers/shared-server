@@ -49,5 +49,25 @@ module.exports = {
 			},
 			server: server
 		})
-	})
+	}),
+	
+	sendBusinessUsers : (function(res, count, total, businessUsersList) {
+		res.status(200).send({
+			metadata: {
+				count: count,
+				total: total,
+				version: pjson.version
+			},
+			businessUser: businessUsersList
+		})
+	}),
+	
+	sendBusinessUser : (function(res, code, businessUser) {
+		res.status(code).send({
+			metadata: {
+				version: pjson.version
+			},
+			businessUser: businessUser
+		})
+	}),
 }

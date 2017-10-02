@@ -48,7 +48,6 @@ module.exports = {
 			.catch(function(error) {
 				errorController.unexpectedError(res, error, "POST /api/servers/");
 			})
-			
 		}
 		
 	},
@@ -124,9 +123,9 @@ module.exports = {
 					errorController.nonExistentResource(res, "server", "PUT /api/servers/" + serverId);	
 				}
 			})
-			.then(function(newServer) {
-				if (newServer) {
-					responseController.sendServer(res, newServer[0]);
+			.then(function(updatedServer) {
+				if (updatedServer) {
+					responseController.sendServer(res, updatedServer[0]);
 				}
 			})
 			.catch(function(error) {
@@ -179,7 +178,7 @@ module.exports = {
 				queryController.deleteWhere(appTable, {id: serverId})
 				.then( function() { 
 					logger.debug("Correct removal: server " + serverId);
-					res.status(204).send()
+					res.status(204).send();
 				});
 							
 			} else {
