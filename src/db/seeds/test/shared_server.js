@@ -1,5 +1,5 @@
 // Seed file
-
+var uuidv4 = require('uuid/v4');
 var data = require('./../../../test/servers-test');
 
 exports.seed = function(knex, Promise) {
@@ -9,6 +9,7 @@ exports.seed = function(knex, Promise) {
         .then(function () {
           // Inserts seed entries
           return knex('app_servers').insert({
+            _ref: uuidv4(),
             createdBy: 4, 
             createdTime: '2017-09-18T18:30:23.000Z',
             name: 'Fiuber',
@@ -16,6 +17,7 @@ exports.seed = function(knex, Promise) {
           });
         }).then(function() {
             return knex('app_servers').insert({
+              _ref: uuidv4(),
               createdBy: 2, 
               createdTime: '2017-09-15T10:40:14.000Z',
               name: 'AppJ',

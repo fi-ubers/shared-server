@@ -1,6 +1,7 @@
 var logger = require('./../logger');
 var knex = require('../db/knex');
 var moment = require('moment');
+var uuidv4 = require('uuid/v4');
 var appTable = 'app_servers';
 var tokenTable = 'app_tokens';
 
@@ -33,7 +34,7 @@ module.exports = {
 		if (!createdBy || !createdTime || !name) {
 			errorController.missingParameters(res, "POST /api/servers");
 		} else {
-			queryController.insert(appTable, {createdBy: createdBy, createdTime: createdTime, name: name})
+			queryController.insert(appTable, {_ref: uuidv4(), createdBy: createdBy, createdTime: createdTime, name: name})
 			.then(function(server) {
 				logger.info("Creating app server token");
 				var token = tokenController.createApplicationToken({id: server[0].id});
@@ -111,17 +112,18 @@ module.exports = {
 		var receivedRef = req.body._ref;
 		
 		logger.info("PUT at /servers/" + serverId);
-		if (!serverName || !serverRef) {
+		if (!serverName || !receivedRef) {
 			errorController.missingParameters(res, "PUT /api/servers/");
 		} else {
 			queryController.selectOneWhere(appTable, {id: serverId})
 			.then(function(server) {
 				if (server) {
 					if (server._ref != receivedRef) {
+						logger.debug("Refs:  " +server._ref + "    " + receivedRef);
 						errorController.updateConflict(res, "PUT /api/servers/");
 					} else {
 						logger.info("Updating information of server " + serverId);
-						return queryController.updateWhere(appTable, {id: serverId}, {name: serverName});
+						return queryController.updateWhere(appTable, {id: serverId}, {_ref: uuidv4(), name: serverName});
 					}	
 				} else {
 					errorController.nonExistentResource(res, "server", "PUT /api/servers/" + serverId);	

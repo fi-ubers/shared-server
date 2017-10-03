@@ -344,31 +344,35 @@ describe('API servers routes', function() {
 	describe('PUT /api/servers/:id', function() {
 		it('Update application server by id with code 200', function(done) {
 			chai.request(server)
-			.put('/api/servers/1?token=' + managerToken)
-			.send({
-				name: 'TestServer',
-				_ref: 'test'
-			})
+			.get('/api/servers/1?token=' + userToken)
 			.end(function(err, res) {
-				res.should.have.status(200);
-				res.should.be.json;
-				res.body.should.be.a('Object');
-				res.body.should.have.property('metadata');
-				res.body.should.have.property('server');
-				res.body.metadata.should.be.a('Object');
-				res.body.metadata.should.have.property('version');
-				res.body.server.should.be.a('Object');
-				res.body.server.should.have.property('id');
-				res.body.server.id.should.equal(1);
-				res.body.server.should.have.property('createdBy');
-				res.body.server.createdBy.should.equal('4');
-				res.body.server.should.have.property('createdTime');
-				res.body.server.createdTime.should.equal('2017-09-18T18:30:23.000Z');
-				res.body.server.should.have.property('name');
-				res.body.server.name.should.equal('TestServer');
-				res.body.server.should.have.property('_ref');
-				res.body.server.should.have.property('lastConnection');
-				done();
+				chai.request(server)
+				.put('/api/servers/1?token=' + managerToken)
+				.send({
+					name: 'TestServer',
+					_ref: res.body.server._ref
+				})
+				.end(function(err, res) {
+					res.should.have.status(200);
+					res.should.be.json;
+					res.body.should.be.a('Object');
+					res.body.should.have.property('metadata');
+					res.body.should.have.property('server');
+					res.body.metadata.should.be.a('Object');
+					res.body.metadata.should.have.property('version');
+					res.body.server.should.be.a('Object');
+					res.body.server.should.have.property('id');
+					res.body.server.id.should.equal(1);
+					res.body.server.should.have.property('createdBy');
+					res.body.server.createdBy.should.equal('4');
+					res.body.server.should.have.property('createdTime');
+					res.body.server.createdTime.should.equal('2017-09-18T18:30:23.000Z');
+					res.body.server.should.have.property('name');
+					res.body.server.name.should.equal('TestServer');
+					res.body.server.should.have.property('_ref');
+					res.body.server.should.have.property('lastConnection');
+					done();
+				});
 			});
 		});
 	
@@ -402,6 +406,50 @@ describe('API servers routes', function() {
 				res.body.code.should.equal(404);
 				res.body.should.have.property('message');
 				done();
+			});
+		});
+		
+		it('Update application server by id with code 409', function(done) {
+			chai.request(server)
+			.put('/api/servers/1?token=' + managerToken)
+			.send({
+				name: 'TestServer',
+				_ref: 'test'
+			})
+			.end(function(err, res) {
+				res.should.have.status(409);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(409);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+		
+		it('Update application server by id with code 200 and then 409', function(done) {
+			chai.request(server)
+			.get('/api/servers/2?token=' + userToken)
+			.end(function(err, res1) {
+				chai.request(server)
+				.put('/api/servers/2?token=' + managerToken)
+				.send({
+					name: 'TestServer',
+					_ref: res1.body.server._ref
+				})
+				.end(function(err, res2) {
+					res2.should.have.status(200);
+					res2.should.be.json;
+					chai.request(server)
+					.put('/api/servers/2?token=' + managerToken)
+					.send({
+						name: 'TestServerAgain',
+						_ref: res1.body.server._ref // Try to update with previous _ref
+					})
+					.end(function(err, res) {
+						res.should.have.status(409);
+						done();
+					});
+				});
 			});
 		});
 	});
