@@ -119,7 +119,6 @@ module.exports = {
 			.then(function(server) {
 				if (server) {
 					if (server._ref != receivedRef) {
-						logger.debug("Refs:  " +server._ref + "    " + receivedRef);
 						errorController.updateConflict(res, "PUT /api/servers/");
 					} else {
 						logger.info("Updating information of server " + serverId);
