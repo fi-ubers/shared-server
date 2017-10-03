@@ -108,7 +108,7 @@ module.exports = {
 		// Update information of a server
 		var serverId = req.params.serverId;
 		var serverName = req.body.name;
-		var serverRef = req.body._ref;
+		var receivedRef = req.body._ref;
 		
 		logger.info("PUT at /servers/" + serverId);
 		if (!serverName || !serverRef) {
@@ -117,8 +117,12 @@ module.exports = {
 			queryController.selectOneWhere(appTable, {id: serverId})
 			.then(function(server) {
 				if (server) {
-					logger.info("Updating information of server " + serverId);
-					return queryController.updateWhere(appTable, {id: serverId}, {name: serverName});	
+					if (server._ref != receivedRef) {
+						errorController.updateConflict(res, "PUT /api/servers/");
+					} else {
+						logger.info("Updating information of server " + serverId);
+						return queryController.updateWhere(appTable, {id: serverId}, {name: serverName});
+					}	
 				} else {
 					errorController.nonExistentResource(res, "server", "PUT /api/servers/" + serverId);	
 				}
