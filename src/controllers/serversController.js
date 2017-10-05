@@ -57,9 +57,11 @@ module.exports = {
 		// Notify server life
 		logger.info("POST at /servers/ping");
 		var id = req.user.id;
-	
-		queryController.selectOneWhere(appTable, {id: id})
-		.then(function(server) {
+		
+		queryController.updateWhere(appTable, {id: id}, {lastConnection: knex.fn.now()})
+		//queryController.selectOneWhere(appTable, {id: id})
+		.then(function(servers) {
+			var server = servers[0];
 			var token = req.query.token;
 			var expiresIn = req.user.exp;
 			var now = moment().unix();
