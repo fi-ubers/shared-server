@@ -34,9 +34,9 @@ router.put('/business-users/me', verifyToken.businessVerify, authCheck('user'), 
 
 router.delete('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.deleteUser);
 
-router.get('/business-users/:userId', verifyToken.businessVerify, authCheck('user'), businessUserController.userInformation);
+router.get('/business-users/:userId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.userInformation);
 
-router.put('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), businessUserController.updateUserInfo);
+router.put('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.updateUserInfo);
 
 
 /* Defining /users endpoints */

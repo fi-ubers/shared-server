@@ -59,7 +59,7 @@ describe('API business-users routes', function() {
 			done();
 		});
 	});
-	/*
+	
 	describe('GET /api/business-users', function() {
 		it('Get business users', function(done) {
 			chai.request(server)
@@ -563,7 +563,7 @@ describe('API business-users routes', function() {
 				done();
 			});
 		});
-	});*/
+	});
 	
 	describe('PUT /api/servers/:id', function() {
 		it('Update business user by id with code 200', function(done) {
