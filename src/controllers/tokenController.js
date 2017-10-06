@@ -4,21 +4,27 @@ var jwt = require('jsonwebtoken');
 var pjson = require('../../package.json');
 var moment = require('moment');
 var uuidv4 = require('uuid/v4');
-var businessUsersTable = 'business_users';
 
+var errorController = require('./errorController');
+var queryController = require('./queryController');
+var responseController = require('./responseController');
+
+var businessUsersTable = 'business_users';
 var expiration = moment().add(5, 'days').unix();
 
+var createBusinessToken = function(businessUser) {
+	return jwt.sign({
+		id: businessUser.id,
+		roles: businessUser.roles,
+		jti: uuidv4(),
+		exp: expiration}, 
+		process.env.BUSINESS_USER_KEY);
+};
+
 module.exports = {
-	expiration : expiration,
+	expiration: expiration,
 	
-	createBusinessToken : (function(businessUser) {
-		return jwt.sign({
-			id: businessUser.id,
-			roles: businessUser.roles,
-			jti: uuidv4(),
-			exp: expiration}, 
-			process.env.BUSINESS_USER_KEY);
-	}),
+	createBusinessToken : createBusinessToken,
 	
 	createApplicationToken : (function(appServer) {
 		return jwt.sign({
@@ -39,51 +45,24 @@ module.exports = {
 		
 		logger.info("POST at /token");
 		if (!username || !password) {
-			logger.error("Missing parameters: POST /token");
-			res.status(400).send({
-				code: 400,
-				message: "Missing parameters"
-			})
-		}
-			
-		knex.select()
-			.from(businessUsersTable)
-			.where({username: username,
-				password: password
-			}).first('*')
+			errorController.missingParameters(res, 'POST /api/token');
+		} else {
+			queryController.selectOneWhere(businessUsersTable, {username: username, password: password})
 			.then(function(user) {
 				if (user) {
 					logger.info("Creating token for user " + user.id);
-					var expires = moment().add(5, 'days');
-					var token = jwt.sign({
-							id: user.id,
-							roles: user.roles,
-							jti: uuidv4(),
-							exp: expires.valueOf()}, 
-							process.env.BUSINESS_USER_KEY);
-					res.status(201).send({
-						metadata: {
-							version: pjson.version,
-						},
-						token: {
-							expiresAt: expires.format('YYYY-MM-DD HH:mm:ss'),
-							token:token
-						}
-					})
+					
+					var token = createBusinessToken({id: user.id, roles: user.roles});
+					responseController.sendToken(res, {expiresAt: expiration, token: token});
 						
 				} else {
 					logger.error("Unauthorized: POST /api/token/");
-					res.status(401).send({
-						code: 401,
-						message: "Unauthorized"
-					})	
+					errorController.unauthorized(res, 'POST /api/token/');	
 				}
 			}).catch(function(error) {
 				logger.error("Unexpected error: POST /token");
-				res.status(500).send({
-					code: 500,
-					message: "Unexpected error: " + error
-				})
+				errorController.unexpectedError(res, error, 'POST /api/token/');
 			})
+		}
 	}) 
 }

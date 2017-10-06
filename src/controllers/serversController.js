@@ -31,7 +31,7 @@ module.exports = {
 		var name = req.body.name;
 		
 		logger.info("POST at /servers");
-		if (!createdBy || !createdTime || !name) {
+		if (!createdBy || !createdTime || !name) { 
 			errorController.missingParameters(res, "POST /api/servers");
 		} else {
 			queryController.insert(appTable, {_ref: uuidv4(), createdBy: createdBy, createdTime: createdTime, name: name})
@@ -59,7 +59,6 @@ module.exports = {
 		var id = req.user.id;
 		
 		queryController.updateWhere(appTable, {id: id}, {lastConnection: knex.fn.now()})
-		//queryController.selectOneWhere(appTable, {id: id})
 		.then(function(servers) {
 			var server = servers[0];
 			var token = req.query.token;

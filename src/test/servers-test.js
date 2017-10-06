@@ -8,7 +8,6 @@ var knex = require('./../db/knex');
 var jwt = require('jsonwebtoken');
 var uuidv4 = require('uuid/v4');
 var moment = require('moment');
-var data = require('./../db/seeds/test/shared_server');
 
 chai.use(chaiHttp);
 
@@ -210,6 +209,7 @@ describe('API servers routes', function() {
 					res.body.ping.server.should.have.property('name');
 					res.body.ping.server.name.should.equal('TestServer');
 					res.body.ping.server.should.have.property('lastConnection');
+					res.body.ping.server.lastConnection.should.not.equal(null);
 					res.body.ping.should.have.property('token');
 					res.body.ping.token.should.be.a('Object');
 					res.body.ping.token.should.have.property('expiresAt');
@@ -549,7 +549,6 @@ describe('API servers routes', function() {
 			});
 		});
 	});
-	
 });
 
 exports.appToken1 = appToken1;
