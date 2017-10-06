@@ -19,5 +19,10 @@ module.exports = {
 	updateConflict : (function(res, request) {
 		logger.error("Conflict in the update: wrong _ref value at " + request);
 		res.status(409).send({code: 409, message: "Conflict in the update: wrong _ref value"});
+	}),
+	
+	unauthorized : (function(res, request) {
+		logger.error("Unauthorized: " + request);
+		res.status(401).send({code: 401, message: "Unauthorized"});
 	})
 }

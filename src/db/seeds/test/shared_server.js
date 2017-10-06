@@ -36,6 +36,36 @@ exports.seed = function(knex, Promise) {
               id: 2, 
               token: data.appToken2,
           });
+        }),
+        
+     knex('business_users').del()
+        .then(function () {
+          return knex('business_users').insert({
+            _ref: uuidv4(),
+            username: 'fiuberkpo',
+            password: 'soyunapassword',
+            name: 'Pedro',
+            surname: 'Fernandez',
+            roles: ['user']
+          });
+        }).then(function() {
+            return knex('business_users').insert({
+              _ref: uuidv4(),
+              username: 'cookie_monster',
+              password: '1234',
+              name: 'John',
+              surname: 'Smith',
+              roles: ['admin', 'manager']
+          });
+        }).then(function() {
+            return knex('business_users').insert({
+              _ref: uuidv4(),
+              username: 'emma23',
+              password: 'ilovedogs',
+              name: 'Emma',
+              surname: 'Duval',
+              roles: ['manager', 'user']
+          });
         })
         
     ])

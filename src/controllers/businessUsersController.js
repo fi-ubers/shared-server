@@ -1,4 +1,5 @@
 var logger = require('./../logger');
+var uuidv4 = require('uuid/v4');
 var businessUsersTable = 'business_users';
 
 var queryController = require('./queryController');
@@ -22,7 +23,7 @@ module.exports = {
 	},
 	
 	register : function(req, res) {
-		// Register a business user
+		// Register business user
 		var username = req.body.username;
 		var password = req.body.password;
 		var name = req.body.name;
@@ -34,7 +35,8 @@ module.exports = {
 			errorController.missingParameters(res, "POST /api/business-users");
 		} else {
 			logger.info("Registering business user");
-			queryController.insert(businessUsersTable, {username: username, 
+			queryController.insert(businessUsersTable, {_ref: uuidv4(),
+								username: username, 
 								password: password, 
 								name: name,
 								surname: surname,
@@ -67,26 +69,32 @@ module.exports = {
 	},
 	
 	updateMyInfo : function(req, res) {
-		// Update user connected business information
+		// Update connected user business information
 		var id = req.user.id;
+		var receivedRef = req.body._ref;
 		var username = req.body.username;
 		var password = req.body.password;
 		var name = req.body.name;
 		var surname = req.body.surname;
-		var roles = req.body.roles;
-		
+
 		logger.info("PUT at /business-users/me");
-		if (!username || !password || !name || !surname) {
+		if (!receivedRef || !username || !password || !name || !surname) {
 			errorController.missingParameters(res, "PUT /api/business-users/me");
 		} else {
 			queryController.selectOneWhere(businessUsersTable, {id: id})
 			.then(function(user) {
 				if (user) {
-					logger.info("Updating information of business user " + id);
-					return queryController.updateWhere(businessUsersTable, {id: id}, {username: username, 
+					if (user._ref != receivedRef) {
+						errorController.updateConflict(res, "PUT /api/business-users/me");
+					} else {
+						logger.info("Updating information of business user " + id);
+						return queryController.updateWhere(businessUsersTable, {id: id}, {
+													_ref: uuidv4(),
+													username: username, 
 													password: password, 
 													name: name,
-													surname: surname});	
+													surname: surname});
+					}	
 				} else {
 					errorController.nonExistentResource(res, "user", "PUT /api/business-users/me with id: " + id);	
 				}
@@ -146,20 +154,32 @@ module.exports = {
 	updateUserInfo : function(req, res) {
 		// Update information of a business user
 		var userId =  req.params.userId;
+		var receivedRef = req.body._ref;
+		var username = req.body.username;
+		var password = req.body.password;
+		var name = req.body.name;
+		var surname = req.body.surname;
+		var roles = req.body.roles;
 		
 		logger.info("PUT at /business-users/" + userId);
-		if (!username || !password || !name || !surname || !roles) {
+		if (!receivedRef || !username || !password || !name || !surname || !roles) {
 			errorController.missingParameters(res, "PUT /api/business-users/" + userId);
 		} else {
 			queryController.selectOneWhere(businessUsersTable, {id: userId})
 			.then(function(user) {
 				if (user) {
-					logger.info("Updating information of business user " + userId);
-					return queryController.updateWhere(businessUsersTable, {id: userId}, {username: username, 
+					if (user._ref != receivedRef) {
+						errorController.updateConflict(res, "PUT /api/business-users/me");
+					} else {
+						logger.info("Updating information of business user " + userId);
+						return queryController.updateWhere(businessUsersTable, {id: userId}, {
+													_ref: uuidv4(),
+													username: username, 
 													password: password, 
 													name: name,
 													surname: surname,
-													roles: roles});	
+													roles: roles});
+					}
 				} else {
 					errorController.nonExistentResource(res, "user", "PUT /api/business-users/" + userId);	
 				}

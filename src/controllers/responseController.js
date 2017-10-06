@@ -70,4 +70,13 @@ module.exports = {
 			businessUser: businessUser
 		})
 	}),
+	
+	sendToken : (function(res, token) {
+		res.status(201).send({
+			metadata: {
+				version: pjson.version
+			},
+			token: token
+		})
+	})
 }
