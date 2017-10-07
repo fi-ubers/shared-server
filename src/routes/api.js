@@ -12,6 +12,11 @@ var ruleController = require('./../controllers/rulesController');
 var paymethodsController = require('./../controllers/paymethodsController');
 var tokenController = require('./../controllers/tokenController');
 
+// Middlewares
+var verifyToken = require('./../middlewares/verifyToken');
+var authCheck = require('./../middlewares/authCheck');
+var revokedTokenCheck = require('./../middlewares/revokedTokenCheck');
+
 /* Test-endpoints */
 router.get('/', indexController.sayHello);
 router.get('/goodbye', indexController.sayGoodbye);
@@ -19,19 +24,19 @@ router.get('/goodbye', indexController.sayGoodbye);
 
 /* Defining /business-users endpoints */
 
-router.get('/business-users', businessUserController.list);
+router.get('/business-users', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.list);
 
-router.post('/business-users', businessUserController.register);
+router.post('/business-users', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.register);
 
-router.get('/business-users/me', businessUserController.myInformation);
+router.get('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.myInformation);
 
-router.put('/business-users/me', businessUserController.updateMyInfo);
+router.put('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.updateMyInfo);
 
-router.delete('/business-users/:userId', businessUserController.deleteUser);
+router.delete('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.deleteUser);
 
-router.get('/business-users/:userId', businessUserController.userInformation);
+router.get('/business-users/:userId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.userInformation);
 
-router.put('/business-users/:userId', businessUserController.updateUserInfo);
+router.put('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.updateUserInfo);
 
 
 /* Defining /users endpoints */
@@ -83,19 +88,19 @@ router.get('/trips/:tripId', tripController.information);
 
 /* Defining /servers endpoints */
 
-router.get('/servers', serverController.listServers);
+router.get('/servers', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.listServers);
 
-router.post('/servers', serverController.registerServer);
+router.post('/servers', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.registerServer);
 
-router.post('/servers/ping', serverController.ping);
+router.post('/servers/ping', verifyToken.appVerify, verifyToken.checkExpirationError, revokedTokenCheck, serverController.ping);
 
-router.get('/servers/:serverId', serverController.serverInfo);
+router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.serverInfo);
 
-router.put('/servers/:serverId', serverController.updateServerInfo);
+router.put('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.updateServerInfo);
 
-router.post('/servers/:serverId', serverController.resetServerToken);
+router.post('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.resetServerToken);
 
-router.delete('/servers/:serverId', serverController.deleteServer);
+router.delete('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.deleteServer);
 
 
 /* Defining /rules endpoints */

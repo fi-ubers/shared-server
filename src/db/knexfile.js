@@ -6,7 +6,7 @@ module.exports = {
     client: 'postgresql',
     connection: 'postgres://postgres@localhost:5432/shared_server_test',
     migrations: {
-      directory: __dirname + '/migrations'
+      directory: __dirname + '/migrations/test'
     },
     seeds: {
       directory: __dirname + '/seeds/test'

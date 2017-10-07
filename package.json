@@ -8,7 +8,9 @@
     "test": "./node_modules/mocha/bin/mocha --timeout 15000 ./src/test/*",
     "cover": "istanbul cover _mocha ./src/test/*",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-    "jsdoc": "./node_modules/.bin/jsdoc -r -d ./docs/documentation ./src"
+    "jsdoc": "./node_modules/.bin/jsdoc -r -d ./docs/documentation ./src",
+    "create-shared-server-migration": "knex --knexfile=./src/db/knexfile.js  migrate:make shared_server",
+    "knex-migrate": "knex --knexfile ./src/db/knexfile.js migrate:latest"
   },
   "repository": {
     "type": "git",
@@ -31,12 +33,14 @@
     "chai": "^4.1.1",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
+    "express-jwt": "^5.3.0",
     "jsonwebtoken": "^8.0.1",
     "knex": "^0.13.0",
     "moment": "^2.18.1",
     "morgan": "^1.8.2",
     "pg": "^5.2.1",
     "request": "^2.81.0",
+    "uuid": "^3.1.0",
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6"
   },
