@@ -86,7 +86,7 @@ describe('API servers routes', function() {
 			done();
 		});
 	});
-	/*
+	
 	describe('GET /api/servers', function() {
 		it('Get application servers', function(done) {
 			chai.request(server)
@@ -547,7 +547,7 @@ describe('API servers routes', function() {
 				done();
 			});
 		});
-	});*/
+	});
 });
 
 exports.appToken1 = appToken1;

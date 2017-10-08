@@ -56,7 +56,6 @@ module.exports = {
 					responseController.sendToken(res, {expiresAt: expiration, token: token});
 						
 				} else {
-					logger.error("Unauthorized: POST /api/token/");
 					errorController.unauthorized(res, 'POST /api/token/');	
 				}
 			}).catch(function(error) {

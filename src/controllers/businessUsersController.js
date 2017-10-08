@@ -147,7 +147,7 @@ module.exports = {
 			}
 		})
 		.catch(function(error) {
-				errorController.unexpectedError(res, error, "GET /api/business-users/" + userId);
+			errorController.unexpectedError(res, error, "GET /api/business-users/" + userId);
 		});
 	},
 	
@@ -169,7 +169,7 @@ module.exports = {
 			.then(function(user) {
 				if (user) {
 					if (user._ref != receivedRef) {
-						errorController.updateConflict(res, "PUT /api/business-users/me");
+						errorController.updateConflict(res, "PUT /api/business-users/"  + userId);
 					} else {
 						logger.info("Updating information of business user " + userId);
 						return queryController.updateWhere(businessUsersTable, {id: userId}, {
