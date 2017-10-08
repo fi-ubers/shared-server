@@ -89,5 +89,14 @@ module.exports = {
 			},
 			users: usersList
 		})
+	}),
+	
+	sendUser : (function(res, code, user) {
+		res.status(code).send({
+			metadata: {
+				version: pjson.version
+			},
+			user: user
+		})
 	})
 }

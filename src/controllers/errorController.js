@@ -24,5 +24,10 @@ module.exports = {
 	unauthorized : (function(res, request) {
 		logger.error("Unauthorized: " + request);
 		res.status(401).send({code: 401, message: "Unauthorized"});
+	}),
+	
+	failedValidation : (function(res, request) {
+		logger.error("Failed validation: " + request);
+		res.status(400).send({code: 400, message: "Failed validation"});
 	})
 }

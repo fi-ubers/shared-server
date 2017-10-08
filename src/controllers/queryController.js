@@ -9,28 +9,41 @@ module.exports = {
 			.from(table);
 	}),
 	
+	selectSome : (function(table, columns) {
+		return knex
+			.column(columns)
+			.select()
+			.from(table);
+	}),
+	
 	insert : (function(table, data) {
 		return knex(table)
 			.insert(data)
 			.returning('*');
 	}),
 	
-	selectOneWhere : (function(table, conditions) {
+	selectOneWhere : (function(table, conditions, columns = '*') {
 		return knex(table)
 			.where(conditions)
-			.first('*');
+			.first(columns);
 	}),
 	
-	updateWhere : (function(table, conditions, changes) {
+	updateWhere : (function(table, conditions, changes, columns = '*') {
 		return knex(table)
 			.where(conditions)
 			.update(changes)
-			.returning('*');
+			.returning(columns);
 	}),
 	
 	deleteWhere : (function(table, conditions) {
 		return knex(table)
 			.where(conditions)
 			.del();
+	}),
+	
+	insertAndReturnSome : (function(table, data, columns) {
+		return knex(table)
+			.insert(data)
+			.returning(columns);
 	})
 }

@@ -43,15 +43,15 @@ router.put('/business-users/:userId', verifyToken.businessVerify, authCheck('adm
 
 router.get('/users', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.listUsers);
 
-router.post('/users', userController.register);
+router.post('/users', verifyToken.appVerify, revokedTokenCheck, userController.register);
 
-router.post('/users/validate', userController.validate);
+router.post('/users/validate', verifyToken.appVerify, revokedTokenCheck, userController.validate);
 
-router.delete('/users/:userId', userController.deleteUser);
+router.delete('/users/:userId', verifyToken.businessVerify, authCheck('manager'), verifyToken.checkSignatureError, revokedTokenCheck, userController.deleteUser);
 
-router.get('/users/:userId', userController.information);
+router.get('/users/:userId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.information);
 
-router.put('/users/:userId', userController.updateInfo);
+router.put('/users/:userId', verifyToken.appVerify, revokedTokenCheck, userController.updateInfo);
 
 router.get('/users/:id/cars', userController.userCarsList);
 
