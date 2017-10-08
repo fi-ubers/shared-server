@@ -86,7 +86,7 @@ describe('API servers routes', function() {
 			done();
 		});
 	});
-	
+	/*
 	describe('GET /api/servers', function() {
 		it('Get application servers', function(done) {
 			chai.request(server)
@@ -285,7 +285,6 @@ describe('API servers routes', function() {
 			.post('/api/servers/ping?token=' + appToken) 
 			.end(function(err, res) {
 				res.should.have.status(200);
-				// AppToken was invalidated
 				chai.request(server)
 				.post('/api/servers/ping?token=' + appToken)
 				.end(function(err, res) {
@@ -548,7 +547,7 @@ describe('API servers routes', function() {
 				done();
 			});
 		});
-	});
+	});*/
 });
 
 exports.appToken1 = appToken1;

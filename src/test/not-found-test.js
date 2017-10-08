@@ -7,8 +7,8 @@ var server = require('./../index');
 
 chai.use(chaiHttp);
 
-describe('GET /api/servers', function() {
-	it('Get application servers', function(done) {
+describe('GET /api/somePath', function() {
+	it('Get not-found path', function(done) {
 		chai.request(server)
 		.get('/api/somePath')
 		.end(function(err, res) {

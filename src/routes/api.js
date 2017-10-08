@@ -41,7 +41,7 @@ router.put('/business-users/:userId', verifyToken.businessVerify, authCheck('adm
 
 /* Defining /users endpoints */
 
-router.get('/users', userController.list);
+router.get('/users', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.listUsers);
 
 router.post('/users', userController.register);
 

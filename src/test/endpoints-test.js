@@ -25,42 +25,6 @@ describe('Content tests', function() {
 		});
 	});
 	
-	it('Content in endpoint /api/users', function() {
-		request('http://localhost:' + port + '/api/users', function(error, response, body) {
-			expect(body).to.equal('User list');
-		});
-	});
-	
-	it('Content in endpoint /api/users/1', function() {
-		request('http://localhost:' + port + '/api/users/1', function(error, response, body) {
-			expect(body).to.equal('Obtain user information');
-		});
-	});
-	
-	it('Content in endpoint /api/users/1/cars', function() {
-		request('http://localhost:' + port + '/api/users/1/cars', function(error, response, body) {
-			expect(body).to.equal('List of user cars');
-		});
-	});
-	
-	it('Content in endpoint /api/users/1/cars/4', function() {
-		request('http://localhost:' + port + '/api/users/1/cars/4', function(error, response, body) {
-			expect(body).to.equal('Obtain car 4 information - user 1');
-		});
-	});
-	
-	it('Content in endpoint /api/users/1/transactions', function() {
-		request('http://localhost:' + port + '/api/users/1/transactions', function(error, response, body) {
-			expect(body).to.equal('List of transactions of user 1');
-		});
-	});
-	
-	it('Content in endpoint /api/users/1/trips', function() {
-		request('http://localhost:' + port + '/api/users/1/trips', function(error, response, body) {
-			expect(body).to.equal('List of user 1 trips');
-		});
-	});
-	
 	it('Content in endpoint /api/paymethods', function() {
 		request('http://localhost:' + port + '/api/paymethods', function(error, response, body) {
 			expect(body).to.equal('Payment methods supported by the server');

@@ -33,5 +33,25 @@ module.exports = {
 			});
 		}
 
+	},
+	
+	checkSignatureError: function (err, req, res, next) {
+    		if (err) {
+    			if (err.message == 'invalid signature') {
+    				jwt.verify(req.query.token, process.env.APP_KEY, function(err, decoded) {
+    					if (err) {
+    						err.status = 401;
+    						next(err);
+    					} else {
+    						req.user = decoded;
+    						next();
+    					}
+    				});
+    			} else {
+    				next(err);
+    			}
+		} else {
+			next();
+		}
 	}
 }
