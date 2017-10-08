@@ -16,7 +16,7 @@ module.exports = {
 		logger.info("GET at /servers");
 		queryController.selectAll(appTable)
 		.then(function(servers) {
-			logger.info("Showing aplication servers list");
+			logger.info("Showing application servers list");
 			responseController.sendServers(res, servers.length, servers.length, servers);
 		})
 		.catch(function(error) {
@@ -41,7 +41,7 @@ module.exports = {
 				
 				queryController.insert(tokenTable, {id: server[0].id, token: token})
 				.then(function() {
-					logger.info("Registering aplication server");
+					logger.info("Registering application server");
 					
 					responseController.sendServerCreation(res, server[0], tokenController.expiration, token);
 				})

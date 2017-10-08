@@ -10,7 +10,7 @@
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "jsdoc": "./node_modules/.bin/jsdoc -r -d ./docs/documentation ./src",
     "create-shared-server-migration": "knex --knexfile=./src/db/knexfile.js  migrate:make shared_server",
-    "knex-migrate": "knex --knexfile ./src/db/knexfile.js migrate:latest"
+    "knex-dev-migrate": "knex --knexfile ./src/db/knexfile.js migrate:latest --env development"
   },
   "repository": {
     "type": "git",

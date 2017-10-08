@@ -78,5 +78,16 @@ module.exports = {
 			},
 			token: token
 		})
+	}),
+	
+	sendUsers : (function(res, count, total, usersList) {
+		res.status(200).send({
+			metadata: {
+				count: count,
+				total: total,
+				version: pjson.version
+			},
+			users: usersList
+		})
 	})
 }

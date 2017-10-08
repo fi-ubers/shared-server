@@ -1,9 +1,22 @@
 var logger = require('./../logger');
+var userTable = 'application_users';
+
+var errorController = require('./errorController');
+var queryController = require('./queryController');
+var responseController = require('./responseController');
 
 module.exports = {
-	list : function(req, res) {
+	listUsers : function(req, res) {
+		// Returns all the information about the indicated users
 		logger.info("GET at /users");
-		res.send("User list");
+		queryController.selectAll(userTable)
+		.then(function(users) {
+			logger.info("Showing users list");
+			responseController.sendUsers(res, users.length, users.length, users);
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, "GET /api/users/");
+		})
 	},
 	
 	register : function(req, res) {
