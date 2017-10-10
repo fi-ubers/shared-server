@@ -2,6 +2,7 @@ var logger = require('./../logger');
 var uuidv4 = require('uuid/v4');
 var userTable = 'application_users';
 var carTable = 'cars';
+var transactionTable = 'transactions';
 var visibleUserFields = ['id', '_ref', 'applicationOwner', 'type', 'cars', 'username', 'name', 'surname', 'country', 'email', 'birthdate', 'images', 'balance'];
 
 var errorController = require('./errorController');
@@ -309,8 +310,19 @@ module.exports = {
 	},
 	
 	transactions :  function(req, res) {
-		//logger.info("GET at /users/" + req.params.userId + "/transactions");
-		//res.send("List of transactions of user " + req.params.userId);
+		// Returns all the transactions corresponding to the user
+		var userId = req.params.userId;
+		var request = "GET at /api/users/" + userId + "/transactions";
+		
+		logger.info(request);
+		queryController.selectAllWhere(transactionTable, {id: userId})
+		.then(function(transactions) {
+			logger.info("Showing transactions list");
+			responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		})
 	},
 	
 	makePayment : function(req, res) {

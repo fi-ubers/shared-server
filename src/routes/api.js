@@ -61,9 +61,9 @@ router.delete('/users/:userId/cars/:carId', verifyToken.businessVerify, authChec
 
 router.get('/users/:userId/cars/:carId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.userCarInfo);
 
-router.put('/users/:userId/cars/:carId', userController.updateCarInfo);
+router.put('/users/:userId/cars/:carId', verifyToken.appVerify, revokedTokenCheck, userController.updateCarInfo);
 
-router.get('/users/:userId/transactions', userController.transactions);
+router.get('/users/:userId/transactions', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.transactions);
 
 router.post('/users/:userId/transactions', userController.makePayment);
 

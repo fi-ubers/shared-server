@@ -51,6 +51,7 @@ var invalidToken = jwt.sign({
 			jti: uuidv4(),
 			exp: expiration}, 
 			'someKey');
+			
 
 describe('API users routes', function() {
 	beforeEach(function(done) { 
@@ -72,7 +73,7 @@ describe('API users routes', function() {
 			done();
 		});
 	});
-	
+
 	describe('GET /api/users', function() {
 		it('Get users with BusinessToken', function(done) {
 			chai.request(server)
@@ -921,6 +922,62 @@ describe('API users routes', function() {
 						done();
 					});
 				});
+			});
+		});
+	});
+	
+	describe('GET /api/users/:id/transactions', function() {
+		it('Get user transactions by userId with code 200', function(done) {
+			chai.request(server)
+			.get('/api/users/1/transactions?token=' + userToken)
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('transactions');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('count');
+				res.body.metadata.should.have.property('total');
+				res.body.metadata.should.have.property('version');
+				res.body.transactions.should.be.a('array');
+				res.body.transactions.length.should.equal(2);
+				res.body.transactions[0].should.have.property('id');
+				res.body.transactions[0].id.should.equal(1);
+				res.body.transactions[0].should.have.property('trip');
+				res.body.transactions[0].trip.should.equal('5');
+				res.body.transactions[0].should.have.property('timestamp');
+				res.body.transactions[0].timestamp.should.equal('2017-10-08T11:47:41.000Z');
+				res.body.transactions[0].should.have.property('cost');
+				res.body.transactions[0].cost.should.deep.equal({ currency: 'ARS', value: '110' });
+				res.body.transactions[0].should.have.property('description');
+				res.body.transactions[0].description.should.equal('Another interesting description');
+				res.body.transactions[0].should.have.property('data');
+				res.body.transactions[1].should.have.property('id');
+				res.body.transactions[1].id.should.equal(1);
+				res.body.transactions[1].should.have.property('trip');
+				res.body.transactions[1].trip.should.equal('10');
+				res.body.transactions[1].should.have.property('timestamp');
+				res.body.transactions[1].timestamp.should.equal('2017-10-09T18:11:23.000Z');
+				res.body.transactions[1].should.have.property('cost');
+				res.body.transactions[1].cost.should.deep.equal({ currency: 'ARS', value: '145' });
+				res.body.transactions[1].should.have.property('description');
+				res.body.transactions[1].description.should.equal('Another incredible description');
+				res.body.transactions[1].should.have.property('data');
+				done();
+			});
+		});
+	
+		it('Get user by id with code 404', function(done) {
+			chai.request(server)
+			.get('/api/users/5/transaction?token=' + appToken)
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
+				res.body.should.have.property('message');
+				done();
 			});
 		});
 	});

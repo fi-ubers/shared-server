@@ -118,5 +118,16 @@ module.exports = {
 			},
 			car: car
 		})
+	}),
+	
+	sendTransactions : (function(res, count, total, transactionsList) {
+		res.status(200).send({
+			metadata: {
+				count: count,
+				total: total,
+				version: pjson.version
+			},
+			transactions: transactionsList
+		})
 	})
 }
