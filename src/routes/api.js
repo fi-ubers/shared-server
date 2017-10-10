@@ -53,13 +53,13 @@ router.get('/users/:userId', verifyToken.businessVerify, authCheck('user'), veri
 
 router.put('/users/:userId', verifyToken.appVerify, revokedTokenCheck, userController.updateInfo);
 
-router.get('/users/:id/cars', userController.userCarsList);
+router.get('/users/:userId/cars', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.userCarsList);
 
-router.post('/users/:userId/cars', userController.registerUserCar);
+router.post('/users/:userId/cars', verifyToken.appVerify, revokedTokenCheck, userController.registerUserCar);
 
-router.delete('/users/:userId/cars/:carId', userController.deleteUserCar);
+router.delete('/users/:userId/cars/:carId', verifyToken.businessVerify, authCheck('manager'), verifyToken.checkSignatureError, revokedTokenCheck, userController.deleteUserCar);
 
-router.get('/users/:userId/cars/:carId', userController.userCarInfo);
+router.get('/users/:userId/cars/:carId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.userCarInfo);
 
 router.put('/users/:userId/cars/:carId', userController.updateCarInfo);
 

@@ -98,5 +98,25 @@ module.exports = {
 			},
 			user: user
 		})
+	}),
+	
+	sendCars : (function(res, count, total, carsList) {
+		res.status(200).send({
+			metadata: {
+				count: count,
+				total: total,
+				version: pjson.version
+			},
+			cars: carsList
+		})
+	}),
+	
+	sendCar : (function(res, code, car) {
+		res.status(code).send({
+			metadata: {
+				version: pjson.version
+			},
+			car: car
+		})
 	})
 }

@@ -425,7 +425,7 @@ describe('API users routes', function() {
 			});
 		});
 		
-		it('Delete business user by id with code 404', function(done) {
+		it('Delete user by id with code 404', function(done) {
 			chai.request(server)
 			.delete('/api/users/6?token=' + managerToken)
 			.end(function(err, res) {
@@ -648,6 +648,273 @@ describe('API users routes', function() {
 						email: 'robinscher@gmail.com',
 						birthdate: '23/07/1980',
 						images: ['imageLink', 'anotherImageLink']
+					})
+					.end(function(err, res) {
+						res.should.have.status(409);
+						done();
+					});
+				});
+			});
+		});
+	});
+	
+	describe('GET /api/users/:userId/cars', function() {
+		it('Get cars of user by id with code 200', function(done) {
+			chai.request(server)
+			.get('/api/users/5/cars?token=' + userToken)
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('cars');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('count');
+				res.body.metadata.should.have.property('total');
+				res.body.metadata.should.have.property('version');
+				res.body.cars.should.be.a('array');
+				res.body.cars.length.should.equal(2);
+				res.body.cars[0].should.have.property('id');
+				res.body.cars[0].id.should.equal(1);
+				res.body.cars[0].should.have.property('_ref');
+				res.body.cars[0].should.have.property('owner');
+				res.body.cars[0].owner.should.equal('5');
+				res.body.cars[0].should.have.property('properties');
+				res.body.cars[0].properties[0].should.have.property('name');
+				res.body.cars[0].properties[0].name.should.equal('Volkswagen Suran');
+				res.body.cars[0].properties[0].should.have.property('value');
+				res.body.cars[0].properties[0].value.should.equal('AA123BF');
+				res.body.cars[1].should.have.property('id');
+				res.body.cars[1].id.should.equal(2);
+				res.body.cars[1].should.have.property('_ref');
+				res.body.cars[1].should.have.property('owner');
+				res.body.cars[1].owner.should.equal('5');
+				res.body.cars[1].should.have.property('properties');
+				res.body.cars[1].properties[0].should.have.property('name');
+				res.body.cars[1].properties[0].name.should.equal('Fitito');
+				res.body.cars[1].properties[0].should.have.property('value');
+				res.body.cars[1].properties[0].value.should.equal('GOF226');
+				done();
+			});
+		});
+	});
+	
+	describe('POST /api/users/4/cars', function() {
+		it('Register user car by id with code 201', function(done) {
+			chai.request(server)
+			.post('/api/users/4/cars?token=' + appToken)
+			.send({
+				properties: [{ name: 'Ford Focus', value: 'GOA432' }]
+			})
+			.end(function(err, res) {
+				res.should.have.status(201);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('car');
+				res.body.car.should.have.property('id');
+				res.body.car.id.should.equal(4);
+				res.body.car.should.have.property('_ref');
+				res.body.car.should.have.property('owner');
+				res.body.car.owner.should.equal('4');
+				res.body.car.should.have.property('properties');
+				res.body.car.properties[0].name.should.equal('Ford Focus');
+				res.body.car.properties[0].value.should.equal('GOA432');
+				done();
+			});
+		});
+		
+		it('Register user car with code 400', function(done) {
+			chai.request(server)
+			.post('/api/users/4/cars?token=' + appToken)
+			.end(function(err, res) {
+				res.should.have.status(400);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(400);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+	});
+	
+	describe('DELETE /api/users/:userId/cars/:carId', function() {
+		it('Delete user car by id with code 204', function(done) {
+			chai.request(server)
+			.delete('/api/users/5/cars/1?token=' + appToken)
+			.end(function(err, res) {
+				res.should.have.status(204);
+				chai.request(server)
+				.get('/api/users/5/cars/1?token=' + appToken)
+				.end(function(err, res) {
+					res.should.have.status(404);
+					res.should.be.json;
+					res.body.should.have.property('code');
+					res.body.code.should.equal(404);
+					res.body.should.have.property('message');
+					done();	
+				});
+			});
+		});
+		
+		it('Delete user car by id with code 404', function(done) {
+			chai.request(server)
+			.delete('/api/users/1/cars/2?token=' + managerToken)
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+	});
+	
+	describe('GET /api/users/:userId/cars/:carId', function() {
+		it('Get user car by id with code 200', function(done) {
+			chai.request(server)
+			.get('/api/users/3/cars/3?token=' + userToken)
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('car');
+				res.body.car.should.have.property('id');
+				res.body.car.id.should.equal(3);
+				res.body.car.should.have.property('_ref');
+				res.body.car.should.have.property('owner');
+				res.body.car.owner.should.equal('3');
+				res.body.car.should.have.property('properties');
+				res.body.car.properties[0].name.should.equal('Chevrolet Spin');
+				res.body.car.properties[0].value.should.equal('NAF248');
+				done();
+			});
+		});
+	
+		it('Get user car by id with code 404', function(done) {
+			chai.request(server)
+			.get('/api/users/8/cars/3?token=' + appToken)
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+		
+		it('Get user car by id with code 404', function(done) {
+			chai.request(server)
+			.get('/api/users/5/cars/3?token=' + appToken)
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+	});
+	
+	describe('PUT /api/users/:userId/cars/:carId', function() {
+		it('Update user car by id with code 200', function(done) {
+			chai.request(server)
+			.get('/api/users/3/cars/3?token=' + appToken)
+			.end(function(err, result) {
+				chai.request(server)
+				.put('/api/users/3/cars/3?token=' + appToken)
+				.send({
+					_ref: result.body.car._ref,
+					properties: [{ name: 'Toyota Corolla', value: 'AA563BD' }]
+				})
+				.end(function(err, res) {
+					res.should.have.status(200);
+					res.should.be.json;
+					res.body.should.be.a('Object');
+					res.body.should.have.property('metadata');
+					res.body.should.have.property('car');
+					res.body.car.should.have.property('id');
+					res.body.car.id.should.equal(3);
+					res.body.car.should.have.property('_ref');
+					res.body.car.should.have.property('owner');
+					res.body.car.owner.should.equal('3');
+					res.body.car.should.have.property('properties');
+					res.body.car.properties[0].name.should.equal('Toyota Corolla');
+					res.body.car.properties[0].value.should.equal('AA563BD');	
+					done();
+				});
+			});
+		});
+
+		it('Update user car by id with code 400', function(done) {
+			chai.request(server)
+			.put('/api/users/3/cars/3?token=' + appToken)
+			.end(function(err, res) {
+				res.should.have.status(400);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(400);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+	
+		it('Update user car by id with code 404', function(done) {
+			chai.request(server)
+			.put('/api/users/3/cars/8?token=' + appToken)
+			.send({
+				_ref: 'test',
+				properties: [{ name: 'Toyota Corolla', value: 'AA563BD' }]
+			})
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+		
+		it('Update user car by id with code 409', function(done) {
+			chai.request(server)
+			.put('/api/users/3/cars/3?token=' + appToken)
+			.send({
+				_ref: 'test',
+				properties: [{ name: 'Toyota Corolla', value: 'AA563BD' }]
+			})
+			.end(function(err, res) {
+				res.should.have.status(409);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(409);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+		
+		it('Update user car by id with code 200 and then 409', function(done) {
+			chai.request(server)
+			.get('/api/users/3/cars/3?token=' + appToken)
+			.end(function(err, result) {
+				chai.request(server)
+				.put('/api/users/3/cars/3?token=' + appToken)
+				.send({
+					_ref: result.body.car._ref,
+					properties: [{ name: 'Toyota Corolla', value: 'AA563BD' }]
+				})
+				.end(function(err, res) {
+					res.should.have.status(200);
+					res.should.be.json;
+					chai.request(server)
+					.put('/api/users/3/cars/3?token=' + appToken)
+					.send({
+						_ref: result.body.car._ref, // Try to update with previous _ref
+						properties: [{ name: 'Toyota Corolla', value: 'AA563BD' }]
 					})
 					.end(function(err, res) {
 						res.should.have.status(409);

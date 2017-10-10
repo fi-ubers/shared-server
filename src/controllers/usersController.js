@@ -1,6 +1,7 @@
 var logger = require('./../logger');
 var uuidv4 = require('uuid/v4');
 var userTable = 'application_users';
+var carTable = 'cars';
 var visibleUserFields = ['id', '_ref', 'applicationOwner', 'type', 'cars', 'username', 'name', 'surname', 'country', 'email', 'birthdate', 'images', 'balance'];
 
 var errorController = require('./errorController');
@@ -175,7 +176,7 @@ module.exports = {
 													visibleUserFields);
 					}
 				} else {
-						errorController.nonExistentResource(res, "user", "PUT /api/users/" + userId);
+					errorController.nonExistentResource(res, "user", "PUT /api/users/" + userId);
 				}
 			})
 			.then(function(updatedUser) {
@@ -190,33 +191,126 @@ module.exports = {
 	},
 	
 	userCarsList : function(req, res) {
-		logger.info("GET at /users/" + req.params.userId + "/cars");
-		res.send("List of user cars");
+		// Returns all the information about the cars of the user
+		var userId = req.params.userId;
+		
+		logger.info("GET at /api/users/" + userId + "/cars");
+		queryController.selectAllWhere(carTable, {owner: userId})
+		.then(function(cars) {
+			logger.info("Showing cars list");
+			responseController.sendCars(res, cars.length, cars.length, cars);
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, "GET /api/users/" + userId + "/cars");
+		})
 	},
 	
 	registerUserCar : function(req, res) {
-		//logger.info("POST at /users/" + req.params.userId + "/cars");
-		// Register user car
+		// Register car of a user
+		var userId = req.params.userId;
+		var properties = req.body.properties;
+		
+		logger.info("POST at /api/users/" + userId + "/cars");
+		if (!properties) {
+			errorController.missingParameters(res, "POST /api/users/" + userId + "/cars");
+		} else {
+			logger.info("Registering user car");
+			queryController.insert(carTable, { _ref: uuidv4(),
+							 	owner: userId,
+							 	properties: properties})
+			.then(function(cars) {
+				responseController.sendCar(res, 201, cars[0]);	
+			})
+			.catch(function(error) {
+				errorController.unexpectedError(res, error, "POST /api/users/" + userId + "/cars");
+			})
+		}
 	},
 	
 	deleteUserCar : function(req, res) {
-		//logger.info("DELETE at /users/" + req.params.userId + "/cars" + req.params.carId);
-		// Delete car
+		// Delete user car
+		var userId = req.params.userId;
+		var carId = req.params.carId;
+		
+		logger.info("DELETE at /api/users/" + userId + "/cars/" + carId);
+		queryController.selectOneWhere(carTable, {id: carId, owner: userId})
+		.then(function(car) {
+			if (car) {
+				logger.info("Deleting car " + carId + " of user " + userId);
+				queryController.deleteWhere(carTable, {id: carId, owner: userId})
+				.then( function() { 
+					logger.debug("Correct removal: car " + carId + "of user " + userId);
+					res.status(204).send();
+				});
+			} else {
+				errorController.nonExistentResource(res, "car", "/api/users/" + userId + "/cars/" + carId);	
+			}
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, "DELETE /api/users/" + userId + "/cars/" + carId);
+		})
 	},
 	
 	userCarInfo : function(req, res) {
-		logger.info("GET at /users/" + req.params.userId + "/cars" + req.params.carId);
-		res.send("Obtain car " + req.params.carId + " information - user " + req.params.userId);
+		// Returns all the information about :carId of :userId
+		var userId = req.params.userId;
+		var carId = req.params.carId;
+		
+		logger.info("GET at /api/users/" + userId + "/cars/" + carId);
+		queryController.selectOneWhere(carTable, {id: carId, owner: userId})
+		.then(function(car) {
+			if (car) {
+				responseController.sendCar(res, 200, car);
+			} else {
+				errorController.nonExistentResource(res, "car", "GET /api/users/" + userId + "/cars/" + carId);
+			}
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, "GET /api/users/" + userId + "/cars/" + carId);
+		});
 	},
 	
 	updateCarInfo :  function(req, res) {
-		//logger.info("PUT at /users/" + req.params.userId +"/cars" + req.params.carId);
 		// Update car information
+		var userId = req.params.userId;
+		var carId = req.params.carId;
+		var receivedRef = req.body._ref;
+		var properties = req.body.properties;
+		var request = "PUT at /api/users/" + userId + "/cars/" + carId;
+		
+		logger.info(request);
+		if (!receivedRef || !properties) {
+			errorController.missingParameters(res, request);
+		} else {
+			queryController.selectOneWhere(carTable, {id: carId, owner: userId})
+			.then(function(car) {
+				if (car) {
+					if (car._ref != receivedRef) {
+						errorController.updateConflict(res, request);
+					} else {
+						logger.info("Updating information car " + carId + " of user " + userId);
+						return queryController.updateWhere(carTable, {id: carId, owner: userId}, {
+													_ref: uuidv4(),
+													properties: properties});
+					}
+				} else {
+					errorController.nonExistentResource(res, "car", request);
+				}
+			})
+			.then(function(updatedCar) {
+				if (updatedCar) {
+					responseController.sendCar(res, 200, updatedCar[0]);
+				}
+			})
+			.catch(function(error) {
+				errorController.unexpectedError(res, error, request);
+			})
+		}
 	},
 	
 	transactions :  function(req, res) {
-		logger.info("GET at /users/" + req.params.userId + "/transactions");
-		res.send("List of transactions of user " + req.params.userId);
+		//logger.info("GET at /users/" + req.params.userId + "/transactions");
+		//res.send("List of transactions of user " + req.params.userId);
 	},
 	
 	makePayment : function(req, res) {

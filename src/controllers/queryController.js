@@ -22,6 +22,12 @@ module.exports = {
 			.returning('*');
 	}),
 	
+	selectAllWhere : (function(table, conditions, columns = '*') {
+		return knex(table)
+			.where(conditions)
+			.returning(columns);
+	}),
+	
 	selectOneWhere : (function(table, conditions, columns = '*') {
 		return knex(table)
 			.where(conditions)

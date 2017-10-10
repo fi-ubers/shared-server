@@ -89,38 +89,59 @@ exports.seed = function(knex, Promise) {
         }).then(function() {
             return knex('application_users').insert({
               _ref: uuidv4(),
-            applicationOwner: '5',
-            type: 'passenger',
-            cars: [],
-            username: 'emi94',
-            password: 'p4ssw0rd',
-            fb: null,
-            name: 'Emilia',
-            surname: 'Lopez',
-            country: 'Argentina',
-            email: 'emilopez@gmail.com',
-            birthdate: '18/11/1994',
-            images: ['imageLink'],
-            balance: [{currency: 'ARS', value: 50}]
+              applicationOwner: '5',
+              type: 'passenger',
+              cars: [],
+              username: 'emi94',
+              password: 'p4ssw0rd',
+              fb: null,
+              name: 'Emilia',
+              surname: 'Lopez',
+              country: 'Argentina',
+              email: 'emilopez@gmail.com',
+              birthdate: '18/11/1994',
+              images: ['imageLink'],
+              balance: [{currency: 'ARS', value: 50}]
           });
         }).then(function() {
             return knex('application_users').insert({
               _ref: uuidv4(),
-            applicationOwner: '1',
-            type: 'driver',
-            cars: [{ id: 3, _ref: 'testRef', owner: '3', properties: {name: 'Chevrolet Spin', value: 'NAF248'}}],
-            username: 'iwilldriveu',
-            password: 'rightnow',
-            fb: null,
-            name: 'Marcos',
-            surname: 'Sarmiento',
-            country: 'Argentina',
-            email: 'marquisar@gmail.com',
-            birthdate: '10/03/1990',
-            images: ['imageLink', 'anotherImageLink'],
-            balance: []
+              applicationOwner: '1',
+              type: 'driver',
+              cars: [{ id: 3, _ref: 'testRef', owner: '3', properties: {name: 'Chevrolet Spin', value: 'NAF248'}}],
+              username: 'iwilldriveu',
+              password: 'rightnow',
+              fb: null,
+              name: 'Marcos',
+              surname: 'Sarmiento',
+              country: 'Argentina',
+              email: 'marquisar@gmail.com',
+              birthdate: '10/03/1990',
+              images: ['imageLink', 'anotherImageLink'],
+              balance: []
           });
-        })        
+        }),
+        
+      knex('cars').del()
+        .then(function () {
+          return knex('cars').insert({
+            _ref: uuidv4(),
+            owner: '5',
+            properties: [{ name: 'Volkswagen Suran', value: 'AA123BF' }]
+          });
+        }).then(function() {
+            return knex('cars').insert({
+              _ref: uuidv4(),
+              owner: '5',
+              properties: [{ name: 'Fitito', value: 'GOF226' }]
+          });
+        }).then(function() {
+            return knex('cars').insert({
+              _ref: uuidv4(),
+              owner: '3',
+              properties: [{ name: 'Chevrolet Spin', value: 'NAF248' }]
+          });
+        }),      
     ])
 };
 
