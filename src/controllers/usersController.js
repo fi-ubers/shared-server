@@ -9,9 +9,11 @@ var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');
 
+/** @module usersController */
 module.exports = {
+
+	/** Lists all the information about the users. */
 	listUsers : function(req, res) {
-		// Returns all the information about the indicated users
 		logger.info("GET at /api/users");
 		queryController.selectSome(userTable, visibleUserFields)
 		.then(function(users) {
@@ -23,8 +25,8 @@ module.exports = {
 		})
 	},
 	
+	/** Registers user. */
 	register : function(req, res) {
-		// Register user
 		var type = req.body.type;
 		var username = req.body.username;
 		var password = req.body.password;
@@ -64,8 +66,8 @@ module.exports = {
 		}
 	},
 	
+	/** Validates an application user by its credentials. */
 	validate : function(req, res) {
-		// Validate app user
 		var username = req.body.username;
 		var password = req.body.password;
 		var facebookAuthToken = req.body.facebookAuthToken;
@@ -93,8 +95,8 @@ module.exports = {
 		}
 	},
 	
+	/** Deletes a business user. */
 	deleteUser : function(req, res) {
-		// Delete user by id
 		var userId = req.params.userId;
 		
 		logger.info("DELETE at /api/users/" + userId);
@@ -117,8 +119,8 @@ module.exports = {
 		
 	},
 	
-	information : function(req, res) {
-		// Obtain user information by id
+	/** Obtains information of the user. */
+	getInformation : function(req, res) {
 		var userId = req.params.userId;
 		
 		logger.info("GET at /users/" + userId);
@@ -135,8 +137,8 @@ module.exports = {
 		});
 	},
 	
-	updateInfo : function(req, res) {
-		// Update user information by id
+	/** Updates information of the user. */
+	updateInformation : function(req, res) {
 		var userId = req.params.userId;
 		var receivedRef = req.body._ref;
 		var type = req.body.type;
@@ -191,8 +193,8 @@ module.exports = {
 		}
 	},
 	
-	userCarsList : function(req, res) {
-		// Returns all the information about the cars of the user
+	/** Lists all the information about the cars of a user. */
+	listUserCars : function(req, res) {
 		var userId = req.params.userId;
 		
 		logger.info("GET at /api/users/" + userId + "/cars");
@@ -206,8 +208,8 @@ module.exports = {
 		})
 	},
 	
+	/** Registers a user car. */
 	registerUserCar : function(req, res) {
-		// Register car of a user
 		var userId = req.params.userId;
 		var properties = req.body.properties;
 		
@@ -228,8 +230,8 @@ module.exports = {
 		}
 	},
 	
+	/** Deletes a user car. */
 	deleteUserCar : function(req, res) {
-		// Delete user car
 		var userId = req.params.userId;
 		var carId = req.params.carId;
 		
@@ -252,8 +254,8 @@ module.exports = {
 		})
 	},
 	
-	userCarInfo : function(req, res) {
-		// Returns all the information about :carId of :userId
+	/** Obtains information about a user car. */
+	getCarInformation : function(req, res) {
 		var userId = req.params.userId;
 		var carId = req.params.carId;
 		
@@ -271,8 +273,8 @@ module.exports = {
 		});
 	},
 	
-	updateCarInfo :  function(req, res) {
-		// Update car information
+	/** Updates information of a user car. */
+	updateCarInformation :  function(req, res) {
 		var userId = req.params.userId;
 		var carId = req.params.carId;
 		var receivedRef = req.body._ref;
@@ -309,8 +311,8 @@ module.exports = {
 		}
 	},
 	
-	transactions :  function(req, res) {
-		// Returns all the transactions corresponding to the user
+	/** Lists all the transactions that belongs to the user. */
+	getTransactions :  function(req, res) {
 		var userId = req.params.userId;
 		var request = "GET at /api/users/" + userId + "/transactions";
 		
@@ -325,14 +327,15 @@ module.exports = {
 		})
 	},
 	
+	/** Makes a payment for the user. */
 	makePayment : function(req, res) {
 		//logger.info("POST at /users/" + req.params.userId + "/transactions");
-		// The user makes a payment
+		
 	},
 	
-	trips : function(req, res) {
-		logger.info("GET at /users/" + req.params.userId + "/trips");
-		res.send("List of user " + req.params.userId + " trips");
+	/** Lists all the trips of the user. */
+	getTrips : function(req, res) {
+		//logger.info("GET at /users/" + req.params.userId + "/trips");
 	}
 
 }

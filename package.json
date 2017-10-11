@@ -8,7 +8,7 @@
     "test": "./node_modules/mocha/bin/mocha --timeout 15000 ./src/test/*",
     "cover": "istanbul cover _mocha ./src/test/*",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-    "jsdoc": "./node_modules/.bin/jsdoc -r -d ./docs/documentation ./src",
+    "jsdoc": "./node_modules/.bin/jsdoc -r -d ./docs/documentation --readme ./README.md --package ./package.json ./src",
     "create-shared-server-migration": "knex --knexfile=./src/db/knexfile.js  migrate:make shared_server",
     "knex-dev-migrate": "knex --knexfile ./src/db/knexfile.js migrate:latest --env development"
   },

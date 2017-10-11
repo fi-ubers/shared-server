@@ -28,13 +28,13 @@ router.get('/business-users', verifyToken.businessVerify, authCheck('admin'), re
 
 router.post('/business-users', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.register);
 
-router.get('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.myInformation);
+router.get('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.getMyInformation);
 
 router.put('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.updateMyInfo);
 
 router.delete('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.deleteUser);
 
-router.get('/business-users/:userId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.userInformation);
+router.get('/business-users/:userId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.getUserInformation);
 
 router.put('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.updateUserInfo);
 
@@ -49,30 +49,30 @@ router.post('/users/validate', verifyToken.appVerify, revokedTokenCheck, userCon
 
 router.delete('/users/:userId', verifyToken.businessVerify, authCheck('manager'), verifyToken.checkSignatureError, revokedTokenCheck, userController.deleteUser);
 
-router.get('/users/:userId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.information);
+router.get('/users/:userId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.getInformation);
 
-router.put('/users/:userId', verifyToken.appVerify, revokedTokenCheck, userController.updateInfo);
+router.put('/users/:userId', verifyToken.appVerify, revokedTokenCheck, userController.updateInformation);
 
-router.get('/users/:userId/cars', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.userCarsList);
+router.get('/users/:userId/cars', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.listUserCars);
 
 router.post('/users/:userId/cars', verifyToken.appVerify, revokedTokenCheck, userController.registerUserCar);
 
 router.delete('/users/:userId/cars/:carId', verifyToken.businessVerify, authCheck('manager'), verifyToken.checkSignatureError, revokedTokenCheck, userController.deleteUserCar);
 
-router.get('/users/:userId/cars/:carId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.userCarInfo);
+router.get('/users/:userId/cars/:carId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.getCarInformation);
 
-router.put('/users/:userId/cars/:carId', verifyToken.appVerify, revokedTokenCheck, userController.updateCarInfo);
+router.put('/users/:userId/cars/:carId', verifyToken.appVerify, revokedTokenCheck, userController.updateCarInformation);
 
-router.get('/users/:userId/transactions', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.transactions);
+router.get('/users/:userId/transactions', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.getTransactions);
 
 router.post('/users/:userId/transactions', userController.makePayment);
 
-router.get('/users/:userId/trips', userController.trips);
+router.get('/users/:userId/trips', userController.getTrips);
 
 
 /* Defining /paymethods endpoint */
 
-router.get('/paymethods', paymethodsController.paymethods);
+router.get('/paymethods', paymethodsController.getPaymethods);
 
 
 /* Defining /trips endpoints */
@@ -83,7 +83,7 @@ router.post('/trips', tripController.register);
 
 router.post('/trips/estimate', tripController.estimateValue);
 
-router.get('/trips/:tripId', tripController.information);
+router.get('/trips/:tripId', tripController.getInformation);
 
 
 /* Defining /servers endpoints */
@@ -94,9 +94,9 @@ router.post('/servers', verifyToken.businessVerify, authCheck('manager'), revoke
 
 router.post('/servers/ping', verifyToken.appVerify, verifyToken.checkExpirationError, revokedTokenCheck, serverController.ping);
 
-router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.serverInfo);
+router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.getInformation);
 
-router.put('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.updateServerInfo);
+router.put('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.updateInformation);
 
 router.post('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.resetServerToken);
 
@@ -113,15 +113,15 @@ router.post('/rules/run', ruleController.executeRules);
 
 router.delete('/rules/:ruleId', ruleController.deleteRule);
 
-router.get('/rules/:ruleId', ruleController.ruleInfo);
+router.get('/rules/:ruleId', ruleController.getInformation);
 
 router.put('/rules/:ruleId', ruleController.modifyRule);
 
 router.post('/rules/:ruleId/run', ruleController.run);
 
-router.get('/rules/:ruleId/commits', ruleController.commits);
+router.get('/rules/:ruleId/commits', ruleController.getCommits);
 
-router.get('/rules/:ruleId/commits/:commitId', ruleController.commitState);
+router.get('/rules/:ruleId/commits/:commitId', ruleController.getRuleInCommitState);
 
 
 /* Defining /token endpoint */

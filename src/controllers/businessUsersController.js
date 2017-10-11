@@ -7,9 +7,11 @@ var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');
 
+/** @module businessUsersController */
 module.exports = {
+
+	/** Lists all the information about the business users. */
 	list : function(req, res) {
-		// Business users list
 		logger.info("GET at /business-users");
 		
 		queryController.selectAll(businessUsersTable)
@@ -22,8 +24,8 @@ module.exports = {
 		})
 	},
 	
+	/** Registers a business user. */
 	register : function(req, res) {
-		// Register business user
 		var username = req.body.username;
 		var password = req.body.password;
 		var name = req.body.name;
@@ -50,8 +52,8 @@ module.exports = {
 		}
 	},
 	
-	myInformation : function(req, res) {
-		// Obtain information of the connected business user
+	/** Obtains information about the connected business user. */
+	getMyInformation : function(req, res) {
 		var id = req.user.id;
 		
 		logger.info("GET at /business-users/me");
@@ -68,8 +70,8 @@ module.exports = {
 		});
 	},
 	
+	/** Updates information belonging to the connected business user. */
 	updateMyInfo : function(req, res) {
-		// Update connected user business information
 		var id = req.user.id;
 		var receivedRef = req.body._ref;
 		var username = req.body.username;
@@ -110,8 +112,8 @@ module.exports = {
 		}
 	},
 	
+	/** Deletes a business user. */
 	deleteUser : function(req, res) {
-		// Delete business user
 		var userId = req.params.userId;
 		
 		logger.info("DELETE at /business-users/" + userId);
@@ -133,8 +135,8 @@ module.exports = {
 		})
 	},
 	
-	userInformation : function(req, res) {
-		//Obtain information of a business user
+	/** Obtains information of the business user. */
+	getUserInformation : function(req, res) {
 		var userId =  req.params.userId;
 		
 		logger.info("GET at /business-users/" + userId);
@@ -151,8 +153,8 @@ module.exports = {
 		});
 	},
 	
+	/** Updates information of the business user. */
 	updateUserInfo : function(req, res) {
-		// Update information of a business user
 		var userId =  req.params.userId;
 		var receivedRef = req.body._ref;
 		var username = req.body.username;

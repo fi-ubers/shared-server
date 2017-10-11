@@ -21,11 +21,15 @@ var createBusinessToken = function(businessUser) {
 		process.env.BUSINESS_USER_KEY);
 };
 
+/** @module tokenController */
 module.exports = {
+
 	expiration: expiration,
 	
+	/** Creates a BusinessToken. */
 	createBusinessToken : createBusinessToken,
 	
+	/** Creates a ApplicationToken. */
 	createApplicationToken : (function(appServer) {
 		return jwt.sign({
 			id: appServer.id,
@@ -34,10 +38,12 @@ module.exports = {
 			process.env.APP_KEY);
 	}),
 	
+	/** Decodes a token. */
 	decodeToken : (function(token) {
 		return jwt.decode(token);
 	}),
-
+	
+	/** Generates a business user token if the credentials provided are valid. */
 	generateToken : (function(req, res) {
 		// Generate business user token
 		var username = req.body.username;
