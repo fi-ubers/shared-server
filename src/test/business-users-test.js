@@ -603,7 +603,33 @@ describe('API business-users routes', function() {
 					res.body.businessUser.surname.should.equal('Fernandez');
 					res.body.businessUser.should.have.property('roles');
 					res.body.businessUser.roles.should.deep.equal(['manager', 'user']);
-					done();
+					chai.request(server)
+					.get('/api/business-users/1?token=' + userToken)
+					.end(function(err, res1) {
+						res1.should.have.status(200);
+						res1.should.be.json;
+						res1.body.should.be.a('Object');
+						res1.body.should.have.property('metadata');
+						res1.body.should.have.property('businessUser');
+						res1.body.metadata.should.be.a('Object');
+						res1.body.metadata.should.have.property('version');
+						res1.body.businessUser.should.be.a('Object');
+						res1.body.businessUser.should.have.property('id');
+						res1.body.businessUser.id.should.equal(1);
+						res1.body.businessUser.should.have.property('_ref');
+						res1.body.businessUser._ref.should.not.equal(result.body.businessUser._ref);
+						res1.body.businessUser.should.have.property('username');
+						res1.body.businessUser.username.should.equal('fiuberPasion');
+						res1.body.businessUser.should.have.property('password');
+						res1.body.businessUser.password.should.equal('betterPassword');
+						res1.body.businessUser.should.have.property('name');
+						res1.body.businessUser.name.should.equal('Pedro');
+						res1.body.businessUser.should.have.property('surname');
+						res1.body.businessUser.surname.should.equal('Fernandez');
+						res1.body.businessUser.should.have.property('roles');
+						res1.body.businessUser.roles.should.deep.equal(['manager', 'user']);
+						done();
+					});
 				});
 			});
 		});
