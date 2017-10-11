@@ -1,3 +1,7 @@
+/** 
+ * @fileOverview Logger creation and configuration.
+ */
+
 var winston = require('winston');
 require('winston-daily-rotate-file');
 var fs = require('fs');
@@ -11,7 +15,11 @@ if (!fs.existsSync(logDir)) {
 
 var tsFormat = () => (new Date()).toLocaleTimeString();
 
-// Using own Logger
+
+/**   
+ * @constant
+ * @type {winston.Logger}
+ */
 const logger = new (winston.Logger) ({
 	transports: [
 		new (winston.transports.Console) ({
@@ -39,8 +47,3 @@ logger.stream = {
 		logger.info(message);	
 	}
 };
-
-// Logging examples
-//logger.log('info', 'Hello log files!');
-//logger.info('Hello again!');
-//logger.error('Error example!');

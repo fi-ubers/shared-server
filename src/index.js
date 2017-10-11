@@ -1,3 +1,7 @@
+/** 
+ * @fileOverview Starts shared server.
+ */
+
 var express = require("express");
 var bodyParser = require("body-parser");
 var morgan = require('morgan');
@@ -6,6 +10,9 @@ var routes = require('./routes/api');
 var db = require('./db/knex');
 require('dotenv').config();
 
+/**
+ * Express app.
+ */
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 
@@ -44,7 +51,7 @@ app.use(function(err, req, res, next) {
 	});
 });
 
-// Start server
+
 var server = app.listen(app.get('port'), function () {
 	logger.info("Listening on port %s...", app.get('port'));
 });

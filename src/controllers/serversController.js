@@ -10,13 +10,15 @@ var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');
 
+/** @module serversController */
 module.exports = {
+
+	/** Lists all the information about the application servers. */
 	listServers : function(req, res) {
-		// Returns all the information about the indicated application servers
 		logger.info("GET at /servers");
 		queryController.selectAll(appTable)
 		.then(function(servers) {
-			logger.info("Showing aplication servers list");
+			logger.info("Showing application servers list");
 			responseController.sendServers(res, servers.length, servers.length, servers);
 		})
 		.catch(function(error) {
@@ -24,6 +26,7 @@ module.exports = {
 		})
 	},
 	
+	/** Registers an application server. */
 	registerServer : function(req, res) {
 		// Register an application server
 		var createdBy = req.body.createdBy;
@@ -41,7 +44,7 @@ module.exports = {
 				
 				queryController.insert(tokenTable, {id: server[0].id, token: token})
 				.then(function() {
-					logger.info("Registering aplication server");
+					logger.info("Registering application server");
 					
 					responseController.sendServerCreation(res, server[0], tokenController.expiration, token);
 				})
@@ -53,6 +56,7 @@ module.exports = {
 		
 	},
 	
+	/** Notifies server life and refreshes token if expired. */
 	ping : function(req, res) {
 		// Notify server life
 		logger.info("POST at /servers/ping");
@@ -87,8 +91,8 @@ module.exports = {
 		})
 	},
 	
-	serverInfo : function(req, res) {
-		// Obtain information of a server
+	/** Obtains information about a server. */
+	getInformation : function(req, res) {
 		var serverId = req.params.serverId;
 		
 		logger.info("GET at /servers/" + serverId);
@@ -106,8 +110,8 @@ module.exports = {
 		})
 	},
 	
-	updateServerInfo : function(req, res) {
-		// Update information of a server
+	/** Updates information of a server. */
+	updateInformation : function(req, res) {
 		var serverId = req.params.serverId;
 		var serverName = req.body.name;
 		var receivedRef = req.body._ref;
@@ -141,8 +145,8 @@ module.exports = {
 		
 	},
 	
+	/** Resets token of a server. */
 	resetServerToken : function(req, res) {
-		// Reset a server token
 		var serverId = req.params.serverId;
 		
 		logger.info("POST at /servers/" + serverId);
@@ -172,8 +176,8 @@ module.exports = {
 			});
 	},
 	
+	/** Deletes a server. */
 	deleteServer : function(req, res) {
-		// Delete server
 		var serverId = req.params.serverId;
 		
 		logger.info("DELETE at /servers/" + req.params.serverId);

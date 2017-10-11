@@ -1,4 +1,5 @@
 // Update with your config settings.
+require('dotenv').config();
 var dev_database = process.env.DEV_DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/shared_server';
 
 module.exports = {
@@ -28,7 +29,7 @@ module.exports = {
     client: 'postgresql',
     connection: process.env.DATABASE_URL + '?ssl=true',
     migrations: {
-      directory: __dirname + '/migrations'
+      directory: __dirname + '/migrations/production'
     },
     seeds: {
       directory: __dirname + '/seeds/production'

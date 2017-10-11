@@ -285,7 +285,6 @@ describe('API servers routes', function() {
 			.post('/api/servers/ping?token=' + appToken) 
 			.end(function(err, res) {
 				res.should.have.status(200);
-				// AppToken was invalidated
 				chai.request(server)
 				.post('/api/servers/ping?token=' + appToken)
 				.end(function(err, res) {
