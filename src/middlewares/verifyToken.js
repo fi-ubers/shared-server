@@ -1,7 +1,15 @@
+/** @module verifyToken */
 var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+/**
+ * Returns the query token if it exists, otherwise null.
+ * @module verifyToken
+ * @name fromQuerystring
+ * @function
+ * @param {Object} req - Express request object
+ */
 function fromQuerystring(req) {
     	if (req.query && req.query.token) {
       		return req.query.token;
@@ -10,16 +18,22 @@ function fromQuerystring(req) {
 }
 
 module.exports = {
+
+	/** Verifies that the given token is a valid ApplicationToken. */
 	appVerify: expressJwt({ 
 		secret: process.env.APP_KEY,
 		getToken: fromQuerystring
 	}),
 	
+	/** Verifies that the given token is a valid BusinessToken. */
 	businessVerify: expressJwt({ 
 		secret: process.env.BUSINESS_USER_KEY,
 		getToken: fromQuerystring
 	}),
 	
+	/** Checks for an 'jwt expired' error, and in that case decodes the given 
+	 * token and continues to the next middleware. 
+	 */
 	checkExpirationError: function (err, req, res, next) {
     		if (err.message == 'jwt expired') {
     			var token = req.query.token;
@@ -35,6 +49,9 @@ module.exports = {
 
 	},
 	
+	/** Checks for an 'invalid signature' error, and in that case verifies
+	 * that the given token is a valid ApplicationToken. 
+	 */
 	checkSignatureError: function (err, req, res, next) {
     		if (err) {
     			if (err.message == 'invalid signature') {

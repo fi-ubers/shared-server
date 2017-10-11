@@ -1,6 +1,5 @@
 /** 
  * @fileOverview Starts shared server.
- * @version 1.0.0
  */
 
 var express = require("express");
