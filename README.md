@@ -43,7 +43,7 @@ Donde _tipo_ es POST, GET, etc; _data_ son los datos a mandar en la request (un 
 
 Si se quiere utilizar docker primero debe instalarse [Docker](https://docs.docker.com/engine/installation/) y [Docker compose](https://docs.docker.com/compose/install/). Además se debe configurar para [correrlo sin sudo](https://docs.docker.com/engine/installation/linux/linux-postinstall/).
 
-Para correr el servidor, haciendo build de las imágenes antes de que empiecen los containers, usar `docker-compose up --build shared-server` (ver [docker-compose up](https://docs.docker.com/compose/reference/up/) para más información).
+Para correr el servidor, haciendo build de las imágenes antes de que empiecen los containers, usar `docker-compose up --build shared-server` (ver [docker-compose up](https://docs.docker.com/compose/reference/up/) para más información). Para detener el container de la base de datos, usar `docker stop database`.
 
 Si se quiere correr el servidor en segundo plano usar `docker-compose up -d --build shared-server`. Para detenerlo usar `docker-compose stop` y para iniciarlo nuevamente, `docker-compose start`. Si se quiere detener y eliminar el container usar `docker-compose down`.
 
