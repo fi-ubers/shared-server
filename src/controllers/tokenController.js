@@ -63,7 +63,6 @@ module.exports = {
 					errorController.unauthorized(res, 'POST /api/token/');	
 				}
 			}).catch(function(error) {
-				logger.error("Unexpected error: POST /token");
 				errorController.unexpectedError(res, error, 'POST /api/token/');
 			})
 		}
