@@ -29,6 +29,8 @@ exports.up = function(knex, Promise) {
 	  		table.string('type');
 	  		table.specificType('cars', 'json[]');
 	  		table.string('username');
+	  		table.string('password');
+	  		table.specificType('fb', 'json');
 	  		table.string('name');
 	  		table.string('surname');
 	  		table.string('country');
@@ -45,7 +47,15 @@ exports.up = function(knex, Promise) {
 	  knex.schema.createTableIfNotExists('app_tokens', function(table) {
 	  		table.integer('id').primary();
 	  		table.string('token');
+	  }),
+	  
+	  knex.schema.createTableIfNotExists('cars', function(table) {
+	  		table.increments('id').primary();
+	  		table.string('_ref');
+	  		table.string('owner');
+	  		table.specificType('properties', 'json[]');
 	  })
+	  
     ])
 };
 
@@ -55,6 +65,7 @@ exports.down = function(knex, Promise) {
         knex.schema.dropTableIfExists('business_users'),
         knex.schema.dropTableIfExists('application_users'),
         knex.schema.dropTableIfExists('blacklist'),
-        knex.schema.dropTableIfExists('app_tokens')
+        knex.schema.dropTableIfExists('app_tokens'),
+        knex.schema.dropTableIfExists('cars')
     ])
 };

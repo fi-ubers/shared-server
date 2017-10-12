@@ -1,5 +1,12 @@
 var express = require('express');
-var router = express.Router();
+var logger = require('./../logger');
+
+/** 
+ * Express router
+ * type {Object}
+ * @const
+ */
+const router = express.Router();
 
 // Controllers
 var indexController = require('./../controllers/indexController');
@@ -16,117 +23,378 @@ var verifyToken = require('./../middlewares/verifyToken');
 var authCheck = require('./../middlewares/authCheck');
 var revokedTokenCheck = require('./../middlewares/revokedTokenCheck');
 
-/* Test-endpoints */
+// Endpoints for testing
 router.get('/', indexController.sayHello);
 router.get('/goodbye', indexController.sayGoodbye);
 
 
-/* Defining /business-users endpoints */
+// Defining /business-users endpoints
+ 
+/**
+ * @name get/business-users
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/business-users', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.list);
 
-router.get('/business-users', businessUserController.list);
+/**
+ * @name post/business-users
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.post('/business-users', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.register);
 
-router.post('/business-users', businessUserController.register);
+/**
+ * @name get/business-users/me
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.getMyInformation);
 
-router.get('/business-users/me', businessUserController.myInformation);
+/**
+ * @name put/business-users/me
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.put('/business-users/me', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.updateMyInfo);
 
-router.put('/business-users/me', businessUserController.updateMyInfo);
+/**
+ * @name delete/business-users/:userId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.delete('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.deleteUser);
 
-router.delete('/business-users/:userId', businessUserController.deleteUser);
+/**
+ * @name get/business-users/:userId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/business-users/:userId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, businessUserController.getUserInformation);
 
-router.get('/business-users/:userId', businessUserController.userInformation);
-
-router.put('/business-users/:userId', businessUserController.updateUserInfo);
+/**
+ * @name put/business-users:userId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.put('/business-users/:userId', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, businessUserController.updateUserInfo);
 
 
 /* Defining /users endpoints */
 
-router.get('/users', userController.list);
+/**
+ * @name get/users
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/users', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.listUsers);
 
-router.post('/users', userController.register);
+/**
+ * @name post/users
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.post('/users', verifyToken.appVerify, revokedTokenCheck, userController.register);
 
-router.post('/users/validate', userController.validate);
+/**
+ * @name post/users/validate
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.post('/users/validate', verifyToken.appVerify, revokedTokenCheck, userController.validate);
 
-router.delete('/users/:userId', userController.deleteUser);
+/**
+ * @name delete/users/:userId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.delete('/users/:userId', verifyToken.businessVerify, authCheck('manager'), verifyToken.checkSignatureError, revokedTokenCheck, userController.deleteUser);
 
-router.get('/users/:userId', userController.information);
+/**
+ * @name get/users/:userId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/users/:userId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.getInformation);
 
-router.put('/users/:userId', userController.updateInfo);
+/**
+ * @name put/users/:userId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.put('/users/:userId', verifyToken.appVerify, revokedTokenCheck, userController.updateInformation);
 
-router.get('/users/:id/cars', userController.userCarsList);
+/**
+ * @name get/users/:userId/cars
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/users/:userId/cars', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.listUserCars);
 
-router.post('/users/:userId/cars', userController.registerUserCar);
+/**
+ * @name post/users/:userId/cars
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.post('/users/:userId/cars', verifyToken.appVerify, revokedTokenCheck, userController.registerUserCar);
 
-router.delete('/users/:userId/cars/:carId', userController.deleteUserCar);
+/**
+ * @name delete/users/:userId/cars/:carId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.delete('/users/:userId/cars/:carId', verifyToken.businessVerify, authCheck('manager'), verifyToken.checkSignatureError, revokedTokenCheck, userController.deleteUserCar);
 
-router.get('/users/:userId/cars/:carId', userController.userCarInfo);
+/**
+ * @name get/users/:userId/cars/:carId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/users/:userId/cars/:carId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.getCarInformation);
 
-router.put('/users/:userId/cars/:carId', userController.updateCarInfo);
+/**
+ * @name put/users/:userId/cars/:carId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.put('/users/:userId/cars/:carId', verifyToken.appVerify, revokedTokenCheck, userController.updateCarInformation);
 
-router.get('/users/:userId/transactions', userController.transactions);
+/**
+ * @name get/users/:userId/transactions
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/users/:userId/transactions', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.getTransactions);
 
+/**
+ * @name post/users/:userId/transactions
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/users/:userId/transactions', userController.makePayment);
 
-router.get('/users/:userId/trips', userController.trips);
+/**
+ * @name get/users/:userId/trips
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/users/:userId/trips', userController.getTrips);
 
 
 /* Defining /paymethods endpoint */
 
-router.get('/paymethods', paymethodsController.paymethods);
+/**
+ * @name get/paymethods
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/paymethods', paymethodsController.getPaymethods);
 
 
 /* Defining /trips endpoints */
 
+/**
+ * @name get/trips
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.get('/trips', tripController.list);
 
+/**
+ * @name post/trips
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/trips', tripController.register);
 
+/**
+ * @name post/trips/estimate
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/trips/estimate', tripController.estimateValue);
 
-router.get('/trips/:tripId', tripController.information);
+/**
+ * @name get/trips/:tripId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/trips/:tripId', tripController.getInformation);
 
 
 /* Defining /servers endpoints */
 
+/**
+ * @name get/servers
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.get('/servers', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.listServers);
 
+/**
+ * @name post/servers
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/servers', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.registerServer);
 
+/**
+ * @name post/servers/ping
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/servers/ping', verifyToken.appVerify, verifyToken.checkExpirationError, revokedTokenCheck, serverController.ping);
 
-router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.serverInfo);
+/**
+ * @name get/servers/:serverId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/servers/:serverId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, serverController.getInformation);
 
-router.put('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.updateServerInfo);
 
+/**
+ * @name put/servers/:serverId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.put('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.updateInformation);
+
+/**
+ * @name post/servers/:serverId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.resetServerToken);
 
+/**
+ * @name delete/servers/:serverId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.delete('/servers/:serverId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, serverController.deleteServer);
 
 
 /* Defining /rules endpoints */
 
+/**
+ * @name get/rules
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.get('/rules', ruleController.list);
 
+/**
+ * @name post/rules
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/rules', ruleController.register);
 
+/**
+ * @name post/rules/run
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/rules/run', ruleController.executeRules);
 
+/**
+ * @name delete/rules/:ruleId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.delete('/rules/:ruleId', ruleController.deleteRule);
 
-router.get('/rules/:ruleId', ruleController.ruleInfo);
+/**
+ * @name get/rules/:ruleId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/rules/:ruleId', ruleController.getInformation);
 
+/**
+ * @name put/rules/:ruleId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.put('/rules/:ruleId', ruleController.modifyRule);
 
+/**
+ * @name post/rules/:ruleId/run
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/rules/:ruleId/run', ruleController.run);
 
-router.get('/rules/:ruleId/commits', ruleController.commits);
+/**
+ * @name get/rules/:ruleId/commits
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/rules/:ruleId/commits', ruleController.getCommits);
 
-router.get('/rules/:ruleId/commits/:commitId', ruleController.commitState);
+/**
+ * @name get/rules/:ruleId/commits/:commitId
+ * @function
+ * @memberof module:router
+ * @inner
+ */
+router.get('/rules/:ruleId/commits/:commitId', ruleController.getRuleInCommitState);
 
 
 /* Defining /token endpoint */
 
+/**
+ * @name post/token
+ * @function
+ * @memberof module:router
+ * @inner
+ */
 router.post('/token', tokenController.generateToken);
 
 
-// Return router
+/** Express router providing API routes
+ * @module router
+ */
 module.exports = router;
