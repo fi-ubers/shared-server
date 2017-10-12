@@ -40,7 +40,7 @@ module.exports = {
 		
 		logger.info("POST at /users");
 		// Agregar !fb ?? 
-		if (!type || !username || !password || !firstname || ! lastname || !country || !email || !birthdate || !images) { 
+		if (!type || !username || !password || !firstname || !lastname || !country || !email || !birthdate || !images) { 
 			errorController.missingParameters(res, "POST /api/users");
 		} else {
 			logger.info("Registering user");
@@ -75,23 +75,21 @@ module.exports = {
 		logger.info("POST at /users/validate");
 		if (!username || (!password && !facebookAuthToken)) { 
 			errorController.missingParameters(res, "POST /api/users/validate");
+		} else if (password) {
+			queryController.selectOneWhere(userTable, {username: username, password: password}, visibleUserFields)
+			.then(function(user) {
+				if (user) {
+					logger.info("Validation success");
+					responseController.sendUser(res, 200, user);
+				} else {
+					errorController.failedValidation(res, 'POST /api/users/validate');
+				}
+			})
+			.catch(function(error) {
+				errorController.unexpectedError(res, error, "POST /api/users/validate");
+			});
 		} else {
-			if (password) {
-				queryController.selectOneWhere(userTable, {username: username, password: password}, visibleUserFields)
-				.then(function(user) {
-					if (user) {
-						logger.info("Validation success");
-						responseController.sendUser(res, 200, user);
-					} else {
-						errorController.failedValidation(res, 'POST /api/users/validate');
-					}
-				})
-				.catch(function(error) {
-					errorController.unexpectedError(res, error, "POST /api/users/validate");
-				});
-			} else {
-				// TODO: fb auth token validation
-			}
+			// TODO: fb auth token validation
 		}
 	},
 	
@@ -154,7 +152,7 @@ module.exports = {
 		
 		logger.info("PUT at /users/" + userId);
 		// Agregar !fb ?? 
-		if (!receivedRef || !type || !username || !password || !firstname || ! lastname || !country || !email || !birthdate || !images) { 
+		if (!receivedRef || !type || !username || !password || !firstname || !lastname || !country || !email || !birthdate || !images) { 
 			errorController.missingParameters(res, "PUT /api/users/" + userId);
 		} else {
 			queryController.selectOneWhere(userTable, {id: userId})
@@ -219,8 +217,8 @@ module.exports = {
 		} else {
 			logger.info("Registering user car");
 			queryController.insert(carTable, { _ref: uuidv4(),
-							 	owner: userId,
-							 	properties: properties})
+								owner: userId,
+								properties: properties})
 			.then(function(cars) {
 				responseController.sendCar(res, 201, cars[0]);	
 			})

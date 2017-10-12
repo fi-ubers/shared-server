@@ -1,7 +1,6 @@
 process.env.NODE_ENV = 'test';
 
 var chai = require('chai');
-var should = chai.should();
 var chaiHttp = require('chai-http');
 var server = require('./../index');
 var knex = require('./../db/knex');
@@ -9,6 +8,7 @@ var jwt = require('jsonwebtoken');
 var uuidv4 = require('uuid/v4');
 var moment = require('moment');
 
+chai.should();
 chai.use(chaiHttp);
 
 var expiration = moment().add(5, 'days').unix();
@@ -442,7 +442,8 @@ describe('API servers routes', function() {
 					.put('/api/servers/2?token=' + managerToken)
 					.send({
 						name: 'TestServerAgain',
-						_ref: res1.body.server._ref // Try to update with previous _ref
+						// Try to update with previous _ref
+						_ref: res1.body.server._ref 
 					})
 					.end(function(err, res) {
 						res.should.have.status(409);

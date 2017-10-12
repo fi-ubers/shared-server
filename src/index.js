@@ -7,7 +7,7 @@ var bodyParser = require("body-parser");
 var morgan = require('morgan');
 var logger = require('./logger');
 var routes = require('./routes/api');
-var db = require('./db/knex');
+require('./db/knex');
 require('dotenv').config();
 
 /**
@@ -43,7 +43,8 @@ app.use(function(req, res, next) {
 
 
 // Error handler
-app.use(function(err, req, res, next) {
+//eslint-disable-next-line no-unused-vars
+app.use(function(err, req, res, next) { 
 	res.status(err.status || 500);
 	res.json({
 		code: err.status,
@@ -51,8 +52,8 @@ app.use(function(err, req, res, next) {
 	});
 });
 
-
-var server = app.listen(app.get('port'), function () {
+// Start server
+app.listen(app.get('port'), function () {
 	logger.info("Listening on port %s...", app.get('port'));
 });
 

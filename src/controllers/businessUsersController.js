@@ -2,7 +2,6 @@ var logger = require('./../logger');
 var uuidv4 = require('uuid/v4');
 var businessUsersTable = 'business_users';
 
-var queryController = require('./queryController');
 var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');
@@ -137,7 +136,7 @@ module.exports = {
 	
 	/** Obtains information of the business user. */
 	getUserInformation : function(req, res) {
-		var userId =  req.params.userId;
+		var userId = req.params.userId;
 		
 		logger.info("GET at /business-users/" + userId);
 		queryController.selectOneWhere(businessUsersTable, {id: userId})
@@ -152,10 +151,10 @@ module.exports = {
 			errorController.unexpectedError(res, error, "GET /api/business-users/" + userId);
 		});
 	},
-	
+
 	/** Updates information of the business user. */
 	updateUserInfo : function(req, res) {
-		var userId =  req.params.userId;
+		var userId = req.params.userId;
 		var receivedRef = req.body._ref;
 		var username = req.body.username;
 		var password = req.body.password;
@@ -171,7 +170,7 @@ module.exports = {
 			.then(function(user) {
 				if (user) {
 					if (user._ref != receivedRef) {
-						errorController.updateConflict(res, "PUT /api/business-users/"  + userId);
+						errorController.updateConflict(res, "PUT /api/business-users/" + userId);
 					} else {
 						logger.info("Updating information of business user " + userId);
 						return queryController.updateWhere(businessUsersTable, {id: userId}, {

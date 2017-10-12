@@ -1,11 +1,11 @@
 process.env.NODE_ENV = 'test';
 
 var chai = require('chai');
-var should = chai.should();
 var chaiHttp = require('chai-http');
 var server = require('./../index');
 
 chai.use(chaiHttp);
+chai.should();
 
 describe('GET /api/somePath', function() {
 	it('Get not-found path', function(done) {
