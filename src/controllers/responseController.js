@@ -1,19 +1,15 @@
 var pjson = require('../../package.json');
 
 var entityMetadata = { version: pjson.version };
-var collectionMetadata = (count, total) => {
-	return {
-		count: count,
-		total: total,
-		version: pjson.version
-	};
-};
-var tokenSchema = (token, expiration) => {
-	return {
-			expiresAt: expiration,
-			token: token
-	};	
-};
+var collectionMetadata = (count, total) => ({
+	count: count,
+	total: total,
+	version: pjson.version
+});
+var tokenSchema = (token, expiration) => ({
+		expiresAt: expiration,
+		token: token
+});
 
 
 /** @module responseController */

@@ -1,7 +1,5 @@
 var logger = require('./../logger');
-var knex = require('../db/knex');
 var jwt = require('jsonwebtoken');
-var pjson = require('../../package.json');
 var moment = require('moment');
 var uuidv4 = require('uuid/v4');
 
@@ -12,14 +10,14 @@ var responseController = require('./responseController');
 var businessUsersTable = 'business_users';
 var expiration = moment().add(5, 'days').unix();
 
-var createBusinessToken = function(businessUser) {
+function createBusinessToken(businessUser) {
 	return jwt.sign({
 		id: businessUser.id,
 		roles: businessUser.roles,
 		jti: uuidv4(),
 		exp: expiration}, 
 		process.env.BUSINESS_USER_KEY);
-};
+}
 
 /** @module tokenController */
 module.exports = {

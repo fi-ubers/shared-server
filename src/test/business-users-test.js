@@ -1,7 +1,6 @@
 process.env.NODE_ENV = 'test';
 
 var chai = require('chai');
-var should = chai.should();
 var chaiHttp = require('chai-http');
 var server = require('./../index');
 var knex = require('./../db/knex');
@@ -10,6 +9,7 @@ var uuidv4 = require('uuid/v4');
 var moment = require('moment');
 
 chai.use(chaiHttp);
+chai.should();
 
 var expiration = moment().add(5, 'days').unix();
 var adminJti = uuidv4();
@@ -186,8 +186,9 @@ describe('API business-users routes', function() {
 	
 	describe('GET /api/business-users/me', function() {
 		it('Get connected business user with code 200', function(done) {
+			// We obtain the token with our credentials
 			chai.request(server)
-			.post('/api/token') // We obtain the token with our credentials
+			.post('/api/token')
 			.send({
 				username: 'emma23',
 				password: 'ilovedogs'
@@ -472,7 +473,8 @@ describe('API business-users routes', function() {
 						chai.request(server)
 						.put('/api/business-users/me?token=' + result1.body.token.token)
 						.send({
-							_ref: result2.body.businessUser._ref, // Try to update with previous _ref
+							// Try to update with previous _ref
+							_ref: result2.body.businessUser._ref,
 							username: 'fiuberPasion',
 							password: 'betterPassword',
 							name: 'Pedro',
@@ -716,7 +718,8 @@ describe('API business-users routes', function() {
 					chai.request(server)
 					.put('/api/business-users/2?token=' + adminToken)
 					.send({
-						_ref: result.body.businessUser._ref, // Try to update with previous _ref
+						// Try to update with previous _ref
+						_ref: result.body.businessUser._ref,
 						username: 'marshmello',
 						password: 'pass',
 						name: 'John',

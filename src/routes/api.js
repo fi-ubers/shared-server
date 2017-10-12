@@ -1,5 +1,4 @@
 var express = require('express');
-var logger = require('./../logger');
 
 /** 
  * Express router

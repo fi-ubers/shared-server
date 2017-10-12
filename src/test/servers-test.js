@@ -442,7 +442,8 @@ describe('API servers routes', function() {
 					.put('/api/servers/2?token=' + managerToken)
 					.send({
 						name: 'TestServerAgain',
-						_ref: res1.body.server._ref // Try to update with previous _ref
+						// Try to update with previous _ref
+						_ref: res1.body.server._ref 
 					})
 					.end(function(err, res) {
 						res.should.have.status(409);
