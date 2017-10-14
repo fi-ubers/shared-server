@@ -1,7 +1,6 @@
 process.env.NODE_ENV = 'test';
 
 var chai = require('chai');
-var should = chai.should();
 var chaiHttp = require('chai-http');
 var server = require('./../index');
 var knex = require('./../db/knex');
@@ -10,6 +9,7 @@ var uuidv4 = require('uuid/v4');
 var moment = require('moment');
 
 chai.use(chaiHttp);
+chai.should();
 
 var expiration = moment().add(5, 'days').unix();
 var managerJti = uuidv4();
@@ -553,7 +553,40 @@ describe('API users routes', function() {
 					res.body.user.should.have.property('balance');
 					res.body.user.should.not.have.property('password');
 					res.body.user.should.not.have.property('fb');
-					done();
+					chai.request(server)
+					.get('/api/users/1?token=' + userToken)
+					.end(function(err, res1) {
+						res1.should.have.status(200);
+						res1.should.be.json;
+						res1.body.should.be.a('Object');
+						res1.body.should.have.property('metadata');
+						res1.body.should.have.property('user');
+						res1.body.user.should.have.property('id');
+						res1.body.user.id.should.equal(1);
+						res1.body.user.should.have.property('_ref');
+						res1.body.user.should.have.property('applicationOwner');
+						res1.body.user.applicationOwner.should.equal('2');
+						res1.body.user.should.have.property('type');
+						res1.body.user.type.should.equal('passenger');
+						res1.body.user.should.have.property('cars');
+						res1.body.user.should.have.property('username');
+						res1.body.user.username.should.equal('roblue');
+						res1.body.user.should.have.property('name');
+						res1.body.user.name.should.equal('Robin');
+						res1.body.user.should.have.property('surname');
+						res1.body.user.surname.should.equal('Scherbatsky');
+						res1.body.user.should.have.property('country');
+						res1.body.user.country.should.equal('Argentina');
+						res1.body.user.should.have.property('email');
+						res1.body.user.email.should.equal('robinscher@gmail.com');
+						res1.body.user.should.have.property('birthdate');
+						res1.body.user.should.have.property('images');
+						res1.body.user.images.should.deep.equal(['imageLink', 'anotherImageLink']);
+						res1.body.user.should.have.property('balance');
+						res1.body.user.should.not.have.property('password');
+						res1.body.user.should.not.have.property('fb');
+						done();
+					});
 				});
 			});
 		});
@@ -649,7 +682,8 @@ describe('API users routes', function() {
 					chai.request(server)
 					.put('/api/users/1?token=' + appToken)
 					.send({
-						_ref: result.body.user._ref, // Try to update with previous _ref
+						// Try to update with previous _ref
+						_ref: result.body.user._ref, 
 						type: 'passenger',
 						username: 'roblue',
 						password: 'betterPassword',
@@ -924,7 +958,8 @@ describe('API users routes', function() {
 					chai.request(server)
 					.put('/api/users/3/cars/3?token=' + appToken)
 					.send({
-						_ref: result.body.car._ref, // Try to update with previous _ref
+						// Try to update with previous _ref
+						_ref: result.body.car._ref, 
 						properties: [{ name: 'Toyota Corolla', value: 'AA563BD' }]
 					})
 					.end(function(err, res) {
