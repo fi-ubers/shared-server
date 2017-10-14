@@ -89,7 +89,7 @@ describe('API users routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.users.should.be.a('array');
-				res.body.users.length.should.equal(3);
+				res.body.users.length.should.equal(5);
 				res.body.users[0].should.have.property('id');
 				res.body.users[0].id.should.equal(1);
 				res.body.users[0].should.have.property('_ref');
@@ -115,7 +115,8 @@ describe('API users routes', function() {
 				res.body.users[0].images.should.deep.equal(['imageLink', 'anotherImageLink']);
 				res.body.users[0].should.have.property('balance');
 				res.body.users[0].balance.should.deep.equal([{currency: 'ARS', value: 100}]);
-				res.body.users[2].cars.should.deep.equal([{ id: 3, _ref: 'testRef', owner: '3', properties: {name: 'Chevrolet Spin', value: 'NAF248'}}]);
+				res.body.users[2].cars.should.deep.equal([{id: 3 , _ref: 'specialRefForTesting', owner: 3, properties: [{ name: 'Chevrolet Spin', value: 'NAF248'}]}]);
+				res.body.users[4].cars.should.deep.equal([{id: 1, _ref: 'ref1', owner: 5, properties: [{ name: 'Volkswagen Suran', value: 'AA123BF' }]}, {id: 2, _ref: 'ref2', owner: 5, properties: [{ name: 'Fitito', value: 'GOF226' }]}]);
 				res.body.users[0].should.not.have.property('password');
 				res.body.users[0].should.not.have.property('fb');
 				done();
@@ -136,7 +137,7 @@ describe('API users routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.users.should.be.a('array');
-				res.body.users.length.should.equal(3);
+				res.body.users.length.should.equal(5);
 				res.body.users[2].should.have.property('id');
 				res.body.users[2].id.should.equal(3);
 				res.body.users[2].should.have.property('_ref');
@@ -145,7 +146,7 @@ describe('API users routes', function() {
 				res.body.users[2].should.have.property('type');
 				res.body.users[2].type.should.equal('driver');
 				res.body.users[2].should.have.property('cars');
-				res.body.users[2].cars.should.deep.equal([{ id: 3, _ref: 'testRef', owner: '3', properties: {name: 'Chevrolet Spin', value: 'NAF248'}}]);
+				res.body.users[2].cars.should.deep.equal([{id: 3 , _ref: 'specialRefForTesting', owner: 3, properties: [{ name: 'Chevrolet Spin', value: 'NAF248'}]}]);
 				res.body.users[2].should.have.property('username');
 				res.body.users[2].username.should.equal('iwilldriveu');
 				res.body.users[2].should.have.property('name');
@@ -210,7 +211,7 @@ describe('API users routes', function() {
 			});
 		});
 	});
-	
+
 	describe('POST /api/users', function() {
 		it('Register user with code 201', function(done) {
 			chai.request(server)
@@ -233,7 +234,7 @@ describe('API users routes', function() {
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('user');
 				res.body.user.should.have.property('id');
-				res.body.user.id.should.equal(4);
+				res.body.user.id.should.equal(6);
 				res.body.user.should.have.property('_ref');
 				res.body.user.should.have.property('applicationOwner');
 				res.body.user.applicationOwner.should.equal('15');
@@ -303,7 +304,7 @@ describe('API users routes', function() {
 				res.body.user.should.have.property('type');
 				res.body.user.type.should.equal('driver');
 				res.body.user.should.have.property('cars');
-				res.body.user.cars.should.deep.equal([{ id: 3, _ref: 'testRef', owner: '3', properties: {name: 'Chevrolet Spin', value: 'NAF248'}}]);
+				res.body.user.cars.should.deep.equal([{ id: 3, _ref: 'specialRefForTesting', owner: 3, properties: [{name: 'Chevrolet Spin', value: 'NAF248'}]}]);
 				res.body.user.should.have.property('username');
 				res.body.user.username.should.equal('iwilldriveu');
 				res.body.user.should.have.property('name');
@@ -378,18 +379,26 @@ describe('API users routes', function() {
 	describe('DELETE /api/users/:id', function() {
 		it('Delete user by id with code 204 and ApplicationToken', function(done) {
 			chai.request(server)
-			.delete('/api/users/2?token=' + appToken)
+			.delete('/api/users/5?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(204);
 				chai.request(server)
-				.get('/api/users/2?token=' + appToken)
+				.get('/api/users/5?token=' + appToken)
 				.end(function(err, res) {
 					res.should.have.status(404);
 					res.should.be.json;
 					res.body.should.have.property('code');
 					res.body.code.should.equal(404);
 					res.body.should.have.property('message');
-					done();	
+					// Check the cars of the deleted user
+					chai.request(server)
+					.get('/api/users/5/cars?token=' + appToken)
+					.end(function(err, res) {
+						res.should.have.status(200);
+						res.should.be.json;
+						res.body.cars.should.deep.equal([]);
+						done();
+					});
 				});
 			});
 		});
@@ -439,7 +448,7 @@ describe('API users routes', function() {
 			});
 		});
 	});
-	
+
 	describe('GET /api/users/:id', function() {
 		it('Get user by id with code 200', function(done) {
 			chai.request(server)
@@ -458,7 +467,7 @@ describe('API users routes', function() {
 				res.body.user.should.have.property('type');
 				res.body.user.type.should.equal('driver');
 				res.body.user.should.have.property('cars');
-				res.body.user.cars.should.deep.equal([{ id: 3, _ref: 'testRef', owner: '3', properties: {name: 'Chevrolet Spin', value: 'NAF248'}}]);
+				res.body.user.cars.should.deep.equal([{ id: 3, _ref: 'specialRefForTesting', owner: 3, properties: [{name: 'Chevrolet Spin', value: 'NAF248'}]}]);
 				res.body.user.should.have.property('username');
 				res.body.user.username.should.equal('iwilldriveu');
 				res.body.user.should.have.property('name');
@@ -482,7 +491,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/5?token=' + appToken)
+			.get('/api/users/6?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -527,6 +536,7 @@ describe('API users routes', function() {
 					res.body.user.should.have.property('type');
 					res.body.user.type.should.equal('passenger');
 					res.body.user.should.have.property('cars');
+					res.body.user.cars.should.deep.equal([]);
 					res.body.user.should.have.property('username');
 					res.body.user.username.should.equal('roblue');
 					res.body.user.should.have.property('name');
@@ -567,7 +577,7 @@ describe('API users routes', function() {
 	
 		it('Update user by id with code 404', function(done) {
 			chai.request(server)
-			.put('/api/users/5?token=' + appToken)
+			.put('/api/users/6?token=' + appToken)
 			.send({
 				_ref: 'test',
 				type: 'passenger',
@@ -679,7 +689,7 @@ describe('API users routes', function() {
 				res.body.cars[0].id.should.equal(1);
 				res.body.cars[0].should.have.property('_ref');
 				res.body.cars[0].should.have.property('owner');
-				res.body.cars[0].owner.should.equal('5');
+				res.body.cars[0].owner.should.equal(5);
 				res.body.cars[0].should.have.property('properties');
 				res.body.cars[0].properties[0].should.have.property('name');
 				res.body.cars[0].properties[0].name.should.equal('Volkswagen Suran');
@@ -689,7 +699,7 @@ describe('API users routes', function() {
 				res.body.cars[1].id.should.equal(2);
 				res.body.cars[1].should.have.property('_ref');
 				res.body.cars[1].should.have.property('owner');
-				res.body.cars[1].owner.should.equal('5');
+				res.body.cars[1].owner.should.equal(5);
 				res.body.cars[1].should.have.property('properties');
 				res.body.cars[1].properties[0].should.have.property('name');
 				res.body.cars[1].properties[0].name.should.equal('Fitito');
@@ -717,7 +727,7 @@ describe('API users routes', function() {
 				res.body.car.id.should.equal(4);
 				res.body.car.should.have.property('_ref');
 				res.body.car.should.have.property('owner');
-				res.body.car.owner.should.equal('4');
+				res.body.car.owner.should.equal(4);
 				res.body.car.should.have.property('properties');
 				res.body.car.properties[0].name.should.equal('Ford Focus');
 				res.body.car.properties[0].value.should.equal('GOA432');
@@ -786,7 +796,7 @@ describe('API users routes', function() {
 				res.body.car.id.should.equal(3);
 				res.body.car.should.have.property('_ref');
 				res.body.car.should.have.property('owner');
-				res.body.car.owner.should.equal('3');
+				res.body.car.owner.should.equal(3);
 				res.body.car.should.have.property('properties');
 				res.body.car.properties[0].name.should.equal('Chevrolet Spin');
 				res.body.car.properties[0].value.should.equal('NAF248');
@@ -809,7 +819,7 @@ describe('API users routes', function() {
 		
 		it('Get user car by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/5/cars/3?token=' + appToken)
+			.get('/api/users/6/cars/3?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -842,7 +852,7 @@ describe('API users routes', function() {
 					res.body.car.id.should.equal(3);
 					res.body.car.should.have.property('_ref');
 					res.body.car.should.have.property('owner');
-					res.body.car.owner.should.equal('3');
+					res.body.car.owner.should.equal(3);
 					res.body.car.should.have.property('properties');
 					res.body.car.properties[0].name.should.equal('Toyota Corolla');
 					res.body.car.properties[0].value.should.equal('AA563BD');	
@@ -970,7 +980,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/5/transaction?token=' + appToken)
+			.get('/api/users/6/transaction?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
