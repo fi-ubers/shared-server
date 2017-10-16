@@ -57,6 +57,7 @@ module.exports = {
 							_ref: uuidv4(), 
 							applicationOwner: req.user.id,
 							type: type,
+							cars: [],
 							username: username,
 							password: password,
 							fb: fb,
@@ -65,7 +66,8 @@ module.exports = {
 							country:country,
 							email: email,
 							birthdate: birthdate,
-							images: images}, visibleUserFields)
+							images: images,
+							balance: []}, visibleUserFields)
 			.then(function(user) {
 				responseController.sendUser(res, 201, user[0]);	
 			})

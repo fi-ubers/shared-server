@@ -258,6 +258,56 @@ describe('API users routes', function() {
 				res.body.user.should.have.property('balance');
 				res.body.user.should.not.have.property('password');
 				res.body.user.should.not.have.property('fb');
+				chai.request(server)
+				.post('/api/users/6/cars?token=' + appToken)
+				.send({
+					properties: [{ name: 'Ford Focus', value: 'MNA872' }]
+				})
+				.end(function(err, res) {
+					res.should.have.status(201);
+					res.should.be.json;
+					res.body.should.be.a('Object');
+					res.body.should.have.property('metadata');
+					res.body.should.have.property('car');
+					res.body.car.should.have.property('id');
+					res.body.car.id.should.equal(4);
+					res.body.car.should.have.property('_ref');
+					res.body.car.should.have.property('owner');
+					res.body.car.owner.should.equal(6);
+					res.body.car.should.have.property('properties');
+					res.body.car.properties[0].name.should.equal('Ford Focus');
+					res.body.car.properties[0].value.should.equal('MNA872');
+					chai.request(server)
+					.get('/api/users?token=' + appToken)
+					.end(function(err, res) {
+						res.should.have.status(200);
+						res.should.be.json;
+						res.body.should.be.a('Object');
+						res.body.users.should.be.a('array');
+						res.body.users.length.should.equal(6);
+						res.body.users[5].should.have.property('cars');
+						done();
+					});
+				});
+			});
+		});
+		
+		it('Register user with existing email code 201', function(done) {
+			chai.request(server)
+			.post('/api/users?token=' + appToken)
+			.send({
+				type: 'driver',
+				username: 'olibeer',
+				password: 'ninjaWArrior',
+				firstname: 'Oliver',
+				lastname: 'Williams',
+				country: 'Argentina',
+				email: 'marquisar@gmail.com',
+				birthdate: '14/12/1992',
+				images: ['myCarImageLink']
+			})
+			.end(function(err, res) {
+				res.should.have.status(500);
 				done();
 			});
 		});
@@ -765,6 +815,22 @@ describe('API users routes', function() {
 				res.body.car.should.have.property('properties');
 				res.body.car.properties[0].name.should.equal('Ford Focus');
 				res.body.car.properties[0].value.should.equal('GOA432');
+				done();
+			});
+		});
+		
+		it('Register user car with non-existent user with code 201', function(done) {
+			chai.request(server)
+			.post('/api/users/7/cars?token=' + appToken)
+			.send({
+				properties: [{ name: 'Ford Focus', value: 'GOA432' }]
+			})
+			.end(function(err, res) {
+				res.should.have.status(500);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(500);
+				res.body.should.have.property('message');
 				done();
 			});
 		});
