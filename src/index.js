@@ -5,9 +5,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
+const cors = require('cors');
+const path = require('path');
 const logger = require('./logger');
 const routes = require('./routes/api');
-const cors = require('cors');
 require('./db/knex');
 require('dotenv').config();
 
@@ -19,6 +20,9 @@ app.set('port', (process.env.PORT || 5000));
 
 // CORS Middleware
 app.use(cors());
+
+// Set Static Folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Configure app to use bodyParser
 // to get the data
