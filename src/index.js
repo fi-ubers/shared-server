@@ -2,22 +2,26 @@
  * @fileOverview Starts shared server.
  */
 
-var express = require("express");
-var bodyParser = require("body-parser");
-var morgan = require('morgan');
-var logger = require('./logger');
-var routes = require('./routes/api');
+const express = require("express");
+const bodyParser = require("body-parser");
+const morgan = require('morgan');
+const logger = require('./logger');
+const routes = require('./routes/api');
+const cors = require('cors');
 require('./db/knex');
 require('dotenv').config();
 
 /**
  * Express app.
  */
-var app = express();
+const app = express();
 app.set('port', (process.env.PORT || 5000));
 
+// CORS Middleware
+app.use(cors());
+
 // Configure app to use bodyParser
-// to get the data from a POST
+// to get the data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
