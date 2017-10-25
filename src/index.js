@@ -22,7 +22,7 @@ app.set('port', (process.env.PORT || 5000));
 app.use(cors());
 
 // Set Static Folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Configure app to use bodyParser
 // to get the data
@@ -58,6 +58,10 @@ app.use(function(err, req, res, next) {
 		code: err.status,
 		message: err.message
 	});
+});
+
+app.get('*', function(req, res) {
+	res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Start server
