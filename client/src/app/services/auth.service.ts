@@ -11,10 +11,10 @@ export class AuthService {
   constructor(private http:Http) { }
   
   authenticateUser(user) {
-    let url = 'http://localhost:5000/api/token';
+    let uri = 'api/token';
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post(url, user, {headers: headers})
+    return this.http.post(uri, user, {headers: headers})
       .map(res => res.json());
   }
   
@@ -28,11 +28,11 @@ export class AuthService {
   }
   
   getProfile() {
-    let url = 'http://localhost:5000/api/business-users/me';
+    let uri = 'api/business-users/me';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
-    return this.http.get(url + '?token=' + this.authToken, {headers: headers})
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
       .map(res => res.json());
   }
   

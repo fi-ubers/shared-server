@@ -596,10 +596,10 @@ var AuthService = (function () {
         this.http = http;
     }
     AuthService.prototype.authenticateUser = function (user) {
-        var url = 'http://localhost:5000/api/token';
+        var uri = 'api/token';
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]();
         headers.append('Content-Type', 'application/json');
-        return this.http.post(url, user, { headers: headers })
+        return this.http.post(uri, user, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     AuthService.prototype.loadToken = function () {
@@ -610,11 +610,11 @@ var AuthService = (function () {
         return Object(__WEBPACK_IMPORTED_MODULE_3_angular2_jwt__["tokenNotExpired"])('id_token');
     };
     AuthService.prototype.getProfile = function () {
-        var url = 'http://localhost:5000/api/business-users/me';
+        var uri = 'api/business-users/me';
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]();
         this.loadToken();
         headers.append('Content-Type', 'application/json');
-        return this.http.get(url + '?token=' + this.authToken, { headers: headers })
+        return this.http.get(uri + '?token=' + this.authToken, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     AuthService.prototype.storeUserData = function (token, user) {
