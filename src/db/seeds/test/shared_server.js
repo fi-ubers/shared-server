@@ -177,38 +177,38 @@ exports.seed = function(knex, Promise) {
 						owner: 3,
 						properties: [{ name: 'Chevrolet Spin', value: 'NAF248' }]
 					});
+				}),
+				
+				knex('transactions').del()
+				.then(function () {
+					return knex('transactions').insert({
+						trip: 5,
+						timestamp: '2017-10-08T20:30:45.000Z',
+						cost: { currency: 'ARS', value: '250' },
+						description: 'Some description',
+						data: {},
+						user: 2
+					});
+				}).then(function() {
+					return knex('transactions').insert({
+						trip: 5,
+						timestamp: '2017-10-08T11:47:41.000Z',
+						cost: { currency: 'ARS', value: '110' },
+						description: 'Another interesting description',
+						data: {},
+						user: 1
+					});
+				}).then(function() {
+					return knex('transactions').insert({
+						trip: 10,
+						timestamp: '2017-10-09T18:11:23.000Z',
+						cost: { currency: 'ARS', value: '145' },
+						description: 'Another incredible description',
+						data: {},
+						user: 1
+					});
 				})
 			])
-		}),
-				    
-		knex('transactions').del()
-		.then(function () {
-			return knex('transactions').insert({
-				id: 2,
-				trip: '5',
-				timestamp: '2017-10-08T20:30:45.000Z',
-				cost: { currency: 'ARS', value: '250' },
-				description: 'Some description',
-				data: {}
-			});
-		}).then(function() {
-			return knex('transactions').insert({
-				id: 1,
-				trip: '5',
-				timestamp: '2017-10-08T11:47:41.000Z',
-				cost: { currency: 'ARS', value: '110' },
-				description: 'Another interesting description',
-				data: {}
-			});
-		}).then(function() {
-			return knex('transactions').insert({
-				id: 1,
-				trip: '10',
-				timestamp: '2017-10-09T18:11:23.000Z',
-				cost: { currency: 'ARS', value: '145' },
-				description: 'Another incredible description',
-				data: {}
-			});
 		})    
 	])
 };

@@ -115,5 +115,21 @@ module.exports = {
 		response.metadata = collectionMetadata(count, total);
 		response.transactions = transactionsList;
 		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and a list of rules with code 200. */
+	sendRules : (function(res, count, total, rulesList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.rules = rulesList;
+		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and information of a rule with the given code. */
+	sendRule : (function(res, code, rule) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.rule = rule;
+		res.status(code).send(response);
 	})
 }

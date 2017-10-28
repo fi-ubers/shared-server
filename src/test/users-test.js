@@ -73,7 +73,7 @@ describe('API users routes', function() {
 			done();
 		});
 	});
-
+	
 	describe('GET /api/users', function() {
 		it('Get users with BusinessToken', function(done) {
 			chai.request(server)
@@ -1054,9 +1054,9 @@ describe('API users routes', function() {
 				res.body.transactions.should.be.a('array');
 				res.body.transactions.length.should.equal(2);
 				res.body.transactions[0].should.have.property('id');
-				res.body.transactions[0].id.should.equal(1);
+				res.body.transactions[0].id.should.equal(2);
 				res.body.transactions[0].should.have.property('trip');
-				res.body.transactions[0].trip.should.equal('5');
+				res.body.transactions[0].trip.should.equal(5);
 				res.body.transactions[0].should.have.property('timestamp');
 				res.body.transactions[0].timestamp.should.equal('2017-10-08T11:47:41.000Z');
 				res.body.transactions[0].should.have.property('cost');
@@ -1065,9 +1065,9 @@ describe('API users routes', function() {
 				res.body.transactions[0].description.should.equal('Another interesting description');
 				res.body.transactions[0].should.have.property('data');
 				res.body.transactions[1].should.have.property('id');
-				res.body.transactions[1].id.should.equal(1);
+				res.body.transactions[1].id.should.equal(3);
 				res.body.transactions[1].should.have.property('trip');
-				res.body.transactions[1].trip.should.equal('10');
+				res.body.transactions[1].trip.should.equal(10);
 				res.body.transactions[1].should.have.property('timestamp');
 				res.body.transactions[1].timestamp.should.equal('2017-10-09T18:11:23.000Z');
 				res.body.transactions[1].should.have.property('cost');

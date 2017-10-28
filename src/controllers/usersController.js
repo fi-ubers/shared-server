@@ -4,6 +4,7 @@ var userTable = 'application_users';
 var carTable = 'cars';
 var transactionTable = 'transactions';
 var visibleUserFields = ['id', '_ref', 'applicationOwner', 'type', 'cars', 'username', 'name', 'surname', 'country', 'email', 'birthdate', 'images', 'balance'];
+var visibleTransactionFields = ['id', 'trip', 'timestamp', 'cost', 'description', 'data'];
 
 var errorController = require('./errorController');
 var queryController = require('./queryController');
@@ -346,7 +347,7 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/transactions";
 		
 		logger.info(request);
-		queryController.selectAllWhere(transactionTable, {id: userId})
+		queryController.selectAllWhere(transactionTable, {user: userId}, visibleTransactionFields)
 		.then(function(transactions) {
 			logger.info("Showing transactions list");
 			responseController.sendTransactions(res, transactions.length, transactions.length, transactions);

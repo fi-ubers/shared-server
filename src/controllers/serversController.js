@@ -15,27 +15,28 @@ module.exports = {
 
 	/** Lists all the information about the application servers. */
 	listServers : function(req, res) {
-		logger.info("GET at /servers");
+		var request = "GET at /api/servers";
+		logger.info(request);
 		queryController.selectAll(appTable)
 		.then(function(servers) {
 			logger.info("Showing application servers list");
 			responseController.sendServers(res, servers.length, servers.length, servers);
 		})
 		.catch(function(error) {
-			errorController.unexpectedError(res, error, "GET /api/servers/");
+			errorController.unexpectedError(res, error, request);
 		})
 	},
 	
 	/** Registers an application server. */
 	registerServer : function(req, res) {
-		// Register an application server
+		var request = "POST at /api/servers";
 		var createdBy = req.body.createdBy;
 		var createdTime = req.body.createdTime;
 		var name = req.body.name;
 		
-		logger.info("POST at /servers");
+		logger.info(request);
 		if (!createdBy || !createdTime || !name) { 
-			errorController.missingParameters(res, "POST /api/servers");
+			errorController.missingParameters(res, request);
 		} else {
 			queryController.insert(appTable, {_ref: uuidv4(), createdBy: createdBy, createdTime: createdTime, name: name})
 			.then(function(server) {
@@ -50,7 +51,7 @@ module.exports = {
 				})
 			})
 			.catch(function(error) {
-				errorController.unexpectedError(res, error, "POST /api/servers/");
+				errorController.unexpectedError(res, error, request);
 			})
 		}
 		
@@ -58,8 +59,8 @@ module.exports = {
 	
 	/** Notifies server life and refreshes token if expired. */
 	ping : function(req, res) {
-		// Notify server life
-		logger.info("POST at /servers/ping");
+		var request = "POST at /api/servers/ping";
+		logger.info(request);
 		var id = req.user.id;
 		
 		queryController.updateWhere(appTable, {id: id}, {lastConnection: knex.fn.now()})
@@ -87,26 +88,27 @@ module.exports = {
 			}
 		})
 		.catch(function(error) {
-			errorController.unexpectedError(res, error, "POST /api/servers/ping");
+			errorController.unexpectedError(res, error, request);
 		})
 	},
 	
 	/** Obtains information about a server. */
 	getInformation : function(req, res) {
 		var serverId = req.params.serverId;
+		var request = "GET at /api/servers/" + serverId;
 		
-		logger.info("GET at /servers/" + serverId);
+		logger.info(request);
 		queryController.selectOneWhere(appTable, {id: serverId})
 		.then(function(server) {
 			if (server) {
 				logger.info("Obtaining information of server " + serverId);
 				responseController.sendServer(res, server);
 			} else {
-				errorController.nonExistentResource(res, "server", "GET /api/servers/" + serverId);	
+				errorController.nonExistentResource(res, "server", request);	
 			}
 		})
 		.catch(function(error) {
-			errorController.unexpectedError(res, error, "GET /api/servers/" + serverId);
+			errorController.unexpectedError(res, error, request);
 		})
 	},
 	
@@ -115,22 +117,23 @@ module.exports = {
 		var serverId = req.params.serverId;
 		var serverName = req.body.name;
 		var receivedRef = req.body._ref;
+		var request = "PUT at /api/servers/" + serverId;
 		
-		logger.info("PUT at /servers/" + serverId);
+		logger.info(request);
 		if (!serverName || !receivedRef) {
-			errorController.missingParameters(res, "PUT /api/servers/");
+			errorController.missingParameters(res, request);
 		} else {
 			queryController.selectOneWhere(appTable, {id: serverId})
 			.then(function(server) {
 				if (server) {
 					if (server._ref != receivedRef) {
-						errorController.updateConflict(res, "PUT /api/servers/");
+						errorController.updateConflict(res, request);
 					} else {
 						logger.info("Updating information of server " + serverId);
 						return queryController.updateWhere(appTable, {id: serverId}, {_ref: uuidv4(), name: serverName});
 					}	
 				} else {
-					errorController.nonExistentResource(res, "server", "PUT /api/servers/" + serverId);	
+					errorController.nonExistentResource(res, "server", request);	
 				}
 			})
 			.then(function(updatedServer) {
@@ -139,7 +142,7 @@ module.exports = {
 				}
 			})
 			.catch(function(error) {
-				errorController.unexpectedError(res, error, "PUT /api/servers/" + serverId);
+				errorController.unexpectedError(res, error, request);
 			})
 		}	
 		
@@ -148,8 +151,9 @@ module.exports = {
 	/** Resets token of a server. */
 	resetServerToken : function(req, res) {
 		var serverId = req.params.serverId;
+		var request = "POST at /api/servers/" + serverId;
 		
-		logger.info("POST at /servers/" + serverId);
+		logger.info(request);
 		queryController.selectOneWhere(tokenTable, {id: serverId})
 		.then(function(server) {
 				if (server) {
@@ -168,19 +172,20 @@ module.exports = {
 						});
 					});
 				} else {
-					errorController.nonExistentResource(res, "server", "POST /api/servers/" + serverId);
+					errorController.nonExistentResource(res, "server", request);
 				}
 			})
 			.catch(function(error) {
-				errorController.unexpectedError(res, error, "POST /api/servers/" + serverId);
+				errorController.unexpectedError(res, error, request);
 			});
 	},
 	
 	/** Deletes a server. */
 	deleteServer : function(req, res) {
 		var serverId = req.params.serverId;
+		var request = "DELETE at /api/servers/" + serverId;
 		
-		logger.info("DELETE at /servers/" + req.params.serverId);
+		logger.info(request);
 		queryController.selectOneWhere(appTable, {id: serverId})
 		.then(function(server) {
 			if (server) {
@@ -192,11 +197,11 @@ module.exports = {
 				});
 							
 			} else {
-				errorController.nonExistentResource(res, "server", "DELETE /api/servers/" + serverId);	
+				errorController.nonExistentResource(res, "server", request);	
 			}
 		})
 		.catch(function(error) {
-			errorController.unexpectedError(res, error, "DELETE /api/servers/" + serverId);
+			errorController.unexpectedError(res, error, request);
 		})
 	}
 

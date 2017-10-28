@@ -1,18 +1,46 @@
 var logger = require('./../logger');
+var uuidv4 = require('uuid/v4');
+var ruleTable = 'rules';
+
+var errorController = require('./errorController');
+var queryController = require('./queryController');
+var responseController = require('./responseController');
 
 /** @module rulesController */
 module.exports = {
 
 	/** Lists all the information about the rules. */
 	list : function(req, res) {
-		logger.info("GET at /rules");
-		res.send("List of rules");
+		var request = "GET at /api/rules";
+		logger.info(request);
+		queryController.selectAll(ruleTable)
+		.then(function(rules) {
+			responseController.sendRules(res, rules.length, rules.length, rules);
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		})
 	},
 	
 	/** Creates a rule. */
 	register : function(req, res) {
-		//logger.info("POST at /rules");
-		// Register a rule
+		var request = "POST at /api/rules";
+		var language = req.body.language;
+		var blob = req.body.blob;
+		var active = req.body.active;
+		
+		logger.info(request);
+		if (!language || !blob || active == undefined) { 
+			errorController.missingParameters(res, request);
+		} else {
+			queryController.insert(ruleTable, {_ref: uuidv4(), language: language, blob: blob , active: active})
+			.then(function(rule) {
+				responseController.sendRule(res, 201, rule[0]);
+			})
+			.catch(function(error) {
+				errorController.unexpectedError(res, error, request);
+			})
+		}
 	},
 	
 	/** Executes a set of rules. */
@@ -23,14 +51,32 @@ module.exports = {
 	
 	/** Deletes a rule. */
 	deleteRule : function(req, res) {
-		//logger.info("DELETE at /rules/" + req.params.ruleId);
-		// Delete rule
+		var ruleId = req.params.ruleId;
+		var request = "DELETE at /api/rules/" + ruleId;
+		
+		logger.info(request);
+		queryController.selectOneWhere(ruleTable, {id: ruleId})
+		.then(function(rule) {
+			if (rule) {
+				logger.info("Deleting rule " + ruleId);
+				queryController.deleteWhere(ruleTable, {id: ruleId})
+				.then( function() { 
+					logger.debug("Correct removal: rule " + ruleId);
+					res.status(204).send();
+				});
+							
+			} else {
+				errorController.nonExistentResource(res, "rule", request);	
+			}
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		})
 	},
 	
 	/** Obtains the information about a rule. */
 	getInformation : function(req, res) {
 		logger.info("GET at /rules/" + req.params.ruleId);
-		res.send("Get info of a rule");
 	},
 	
 	/** Modifies a rule, generating a new commit. */
@@ -48,13 +94,11 @@ module.exports = {
 	/** Lists all the commits of a rule. */
 	getCommits : function(req, res) {
 		logger.info("GET at /rules/" + req.params.ruleId + "/commits");
-		res.send("List of commits of a rule");
 	},
 	
 	/** Returns the rule in the commit state. */
 	getRuleInCommitState : function(req, res) {
 		logger.info("GET at /rules/" + req.params.ruleId + "/commits/" + req.params.commitId);
-		res.send("Rule in the commit state");
 	}
 
 }
