@@ -331,7 +331,7 @@ router.post('/rules', verifyToken.businessVerify, authCheck('manager'), revokedT
  * @memberof module:router
  * @inner
  */
-router.post('/rules/run', ruleController.executeRules);
+router.post('/rules/run', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, ruleController.executeRules);
 
 /**
  * @name delete/rules/:ruleId
@@ -347,7 +347,7 @@ router.delete('/rules/:ruleId', verifyToken.businessVerify, authCheck('manager')
  * @memberof module:router
  * @inner
  */
-router.get('/rules/:ruleId', ruleController.getInformation);
+router.get('/rules/:ruleId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, ruleController.getInformation);
 
 /**
  * @name put/rules/:ruleId
@@ -355,7 +355,7 @@ router.get('/rules/:ruleId', ruleController.getInformation);
  * @memberof module:router
  * @inner
  */
-router.put('/rules/:ruleId', ruleController.modifyRule);
+router.put('/rules/:ruleId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, ruleController.modifyRule);
 
 /**
  * @name post/rules/:ruleId/run

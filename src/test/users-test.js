@@ -73,7 +73,7 @@ describe('API users routes', function() {
 			done();
 		});
 	});
-	
+	/*
 	describe('GET /api/users', function() {
 		it('Get users with BusinessToken', function(done) {
 			chai.request(server)
@@ -1036,7 +1036,7 @@ describe('API users routes', function() {
 			});
 		});
 	});
-	
+	*/
 	describe('GET /api/users/:id/transactions', function() {
 		it('Get user transactions by userId with code 200', function(done) {
 			chai.request(server)
