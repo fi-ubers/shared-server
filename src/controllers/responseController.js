@@ -131,5 +131,21 @@ module.exports = {
 		response.metadata = entityMetadata;
 		response.rule = rule;
 		res.status(code).send(response);
+	}),
+	
+	/** Sends json with metadata and a list of commits with code 200. */
+	sendCommits : (function(res, count, total, commitsList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.commits = commitsList;
+		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and a list of trips with code 200. */
+	sendCommits : (function(res, count, total, tripsList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.trips = tripsList;
+		res.status(200).send(response);
 	})
 }

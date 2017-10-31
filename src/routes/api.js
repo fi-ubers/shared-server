@@ -198,7 +198,7 @@ router.post('/users/:userId/transactions', userController.makePayment);
  * @memberof module:router
  * @inner
  */
-router.get('/users/:userId/trips', userController.getTrips);
+router.get('/users/:userId/trips', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.getTrips);
 
 
 /* Defining /paymethods endpoint */
@@ -363,7 +363,7 @@ router.put('/rules/:ruleId', verifyToken.businessVerify, authCheck('manager'), r
  * @memberof module:router
  * @inner
  */
-router.post('/rules/:ruleId/run', ruleController.run);
+router.post('/rules/:ruleId/run', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, ruleController.run);
 
 /**
  * @name get/rules/:ruleId/commits
@@ -371,7 +371,7 @@ router.post('/rules/:ruleId/run', ruleController.run);
  * @memberof module:router
  * @inner
  */
-router.get('/rules/:ruleId/commits', ruleController.getCommits);
+router.get('/rules/:ruleId/commits', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, ruleController.getCommits);
 
 /**
  * @name get/rules/:ruleId/commits/:commitId
@@ -379,7 +379,7 @@ router.get('/rules/:ruleId/commits', ruleController.getCommits);
  * @memberof module:router
  * @inner
  */
-router.get('/rules/:ruleId/commits/:commitId', ruleController.getRuleInCommitState);
+router.get('/rules/:ruleId/commits/:commitId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, ruleController.getRuleInCommitState);
 
 
 /* Defining /token endpoint */

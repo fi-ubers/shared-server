@@ -2,9 +2,10 @@ const logger = require('./../logger');
 const Rules = require('../services/rulesService');
 const serialize = require('serialize-javascript');
 const knex = require('../db/knex');
-const deserialize = str => eval(`(${str})`);
+const deserialize = str => eval('(' + str + ')');
 const uuidv4 = require('uuid/v4');
 const ruleTable = 'rules';
+const commitTable = 'commits';
 const businessUsersTable = 'business_users';
 
 var errorController = require('./errorController');
@@ -145,7 +146,7 @@ module.exports = {
 													language: language, 
 													lastCommit: {
 														author: user,
-														message: // ???????,
+														message: ' ???????',
 														timestamp: knex.fn.now()
 													}, 
 													blob: blob,
@@ -161,6 +162,8 @@ module.exports = {
 			})
 			.then(function(updatedRule) {
 				if (updatedRule) {
+					logger.info("Storing new commit of rule " + ruleId);
+					queryController.insert(commitTable, {rule: updatedRule, ruleId: ruleId});
 					responseController.sendRule(res, 200, updatedRule[0]);
 				}
 			})
@@ -172,18 +175,64 @@ module.exports = {
 	
 	/** Runs the rule individually. */
 	run : function(req, res) {
-		//logger.info("POST at /rules/" + req.params.ruleId + "/run");
-		// Run the rule individually
+		var ruleId = req.params.ruleId;
+		var facts = req.body.facts;
+		var request = "POST at /api/rules/" + ruleId + "/run";
+		logger.info(request);
+		
+		if (!facts) { 
+			errorController.missingParameters(res, request);
+		} else {
+			queryController.selectOneWhere(ruleTable, {id: ruleId}, ['blob'])
+			.then(function(rule) {
+				rule = deserialize(rule);
+				facts.map(fact => {
+					fact = deserialize(fact.blob);
+					Rules.execute(fact, rule)
+						.then(function(r) {
+							// ??????
+						});
+				});
+			}).catch(function(error) {
+				errorController.unexpectedError(res, error, request);
+			})
+		}
 	},
 	
 	/** Lists all the commits of a rule. */
 	getCommits : function(req, res) {
-		logger.info("GET at /rules/" + req.params.ruleId + "/commits");
+		var ruleId = req.params.ruleId;
+		var request = "GET at /api/rules/" + ruleId + "/commits";
+		logger.info(request);
+		
+		queryController.selectAllWhere(commitTable, {ruleId: ruleId}, ['rule'])
+		.then(function(rules) {
+			commits = rules.map(rule => rule.lastCommit);
+			responseController.sendCommits(res, commits.length, commits.length, commits);
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		});
 	},
 	
 	/** Returns the rule in the commit state. */
 	getRuleInCommitState : function(req, res) {
-		logger.info("GET at /rules/" + req.params.ruleId + "/commits/" + req.params.commitId);
+		var ruleId = req.params.ruleId;
+		var commitId = req.params.commitId;
+		var request = "GET at /rules/" + ruleId + "/commits/" + commitId;
+		
+		logger.info(request);
+		queryController.selectOneWhere(commitTable, {id: commitId, ruleId: ruleId}, ['rule'])
+		.then(function(rule) {
+			if (rule) {
+				responseController.sendRule(res, 200, rule);
+			} else {
+				errorController.nonExistentResource(res, "rule", request);
+			}
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		});
 	}
 
 }
