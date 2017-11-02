@@ -142,10 +142,18 @@ module.exports = {
 	}),
 	
 	/** Sends json with metadata and a list of trips with code 200. */
-	sendCommits : (function(res, count, total, tripsList) {
+	sendTrips : (function(res, count, total, tripsList) {
 		var response = {};
 		response.metadata = collectionMetadata(count, total);
 		response.trips = tripsList;
 		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and information of a trip with the given code. */
+	sendTrip : (function(res, code, trip) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.trip = trip;
+		res.status(code).send(response);
 	})
 }

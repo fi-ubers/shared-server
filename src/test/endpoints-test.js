@@ -31,16 +31,4 @@ describe('Content tests', function() {
 		});
 	});
 	
-	it('Content in endpoint /api/trips', function() {
-		request('http://localhost:' + port + '/api/trips', function(error, response, body) {
-			expect(body).to.equal('List of trips');
-		});
-	});
-	
-	it('Content in endpoint /api/trips/14', function() {
-		request('http://localhost:' + port + '/api/trips/14', function(error, response, body) {
-			expect(body).to.equal('Obtain trip 14 information');
-		});
-	});
-	
 });

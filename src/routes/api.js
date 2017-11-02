@@ -220,7 +220,7 @@ router.get('/paymethods', paymethodsController.getPaymethods);
  * @memberof module:router
  * @inner
  */
-router.get('/trips', tripController.list);
+router.get('/trips', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, tripController.list);
 
 /**
  * @name post/trips
@@ -228,7 +228,7 @@ router.get('/trips', tripController.list);
  * @memberof module:router
  * @inner
  */
-router.post('/trips', tripController.register);
+router.post('/trips', verifyToken.appVerify, revokedTokenCheck, tripController.register);
 
 /**
  * @name post/trips/estimate
@@ -236,7 +236,7 @@ router.post('/trips', tripController.register);
  * @memberof module:router
  * @inner
  */
-router.post('/trips/estimate', tripController.estimateValue);
+router.post('/trips/estimate', verifyToken.appVerify, revokedTokenCheck, tripController.estimateValue);
 
 /**
  * @name get/trips/:tripId
@@ -244,7 +244,7 @@ router.post('/trips/estimate', tripController.estimateValue);
  * @memberof module:router
  * @inner
  */
-router.get('/trips/:tripId', tripController.getInformation);
+router.get('/trips/:tripId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, tripController.getInformation);
 
 
 /* Defining /servers endpoints */
