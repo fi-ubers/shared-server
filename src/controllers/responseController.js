@@ -155,5 +155,13 @@ module.exports = {
 		response.metadata = entityMetadata;
 		response.trip = trip;
 		res.status(code).send(response);
+	}),
+	
+	/** Sends json with metadata and a list of paymethods with code 200. */
+	sendTrips : (function(res, count, total, paymethodsList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.paymethods = paymethodsList;
+		res.status(200).send(response);
 	})
 }
