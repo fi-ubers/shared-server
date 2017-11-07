@@ -75,13 +75,16 @@ module.exports = {
 	
 	generatePaymentToken : (function() {
 		var uri = '/user/oauth/authorize';
-		request.post({url: paymentAPI.baseUrl + uri, form: { 
-			client_id: paymentAPI.clientId,
-			client_secret: paymentAPI.clientSecret 
-			}}, function(err, httpResponse, body) {
-			if (!err) {
-				paymentToken = body; 
-			}
-		})
+		return new Promise(function(resolve, reject) {
+			request.post({url: paymentAPI.baseUrl + uri, form: { 
+				client_id: paymentAPI.clientId,
+				client_secret: paymentAPI.clientSecret 
+				}}, function(err, httpResponse, body) {
+				if (!err) {
+					paymentToken = body; 
+					resolve();
+				}
+			})
+		});
 	})
 }

@@ -158,7 +158,7 @@ module.exports = {
 	}),
 	
 	/** Sends json with metadata and a list of paymethods with code 200. */
-	sendTrips : (function(res, count, total, paymethodsList) {
+	sendPaymethods : (function(res, count, total, paymethodsList) {
 		var response = {};
 		response.metadata = collectionMetadata(count, total);
 		response.paymethods = paymethodsList;
