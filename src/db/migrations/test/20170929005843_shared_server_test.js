@@ -58,7 +58,7 @@ exports.up = function(knex, Promise) {
 	  }),
 	  
 	  knex.schema.createTableIfNotExists('trips', function(table) {
-	  		table.integer('id');
+	  		table.increments('id').primary();
 	  		table.string('applicationOwner');
 	  		table.integer('driver');
 	  		table.integer('passenger');

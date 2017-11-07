@@ -351,8 +351,12 @@ module.exports = {
 		logger.info(request);
 		queryController.selectAllWhere(transactionTable, {user: userId}, visibleTransactionFields)
 		.then(function(transactions) {
-			logger.info("Showing transactions list");
-			responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+			if (transactions.length > 0) {
+				logger.info("Showing transactions list");
+				responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+			} else {
+				errorController.nonExistentResource(res, "user", request);
+			}
 		})
 		.catch(function(error) {
 			errorController.unexpectedError(res, error, request);
@@ -371,10 +375,14 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/trips";
 		
 		logger.info(request);
-		queryController.selectAllWhere(tripTable, () => { this.where('driver', userId).orWhere('passenger', userId) }, visibleTripFields)
+		queryController.selectAllWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, visibleTripFields)
 		.then(function(trips) {
-			logger.info("Showing trips list");
-			responseController.sendTrips(res, trips.length, trips.length, trips);
+			if (trips.length > 0) {
+				logger.info("Showing trips list");
+				responseController.sendTrips(res, trips.length, trips.length, trips);
+			} else {
+				errorController.nonExistentResource(res, "user", request);
+			}
 		})
 		.catch(function(error) {
 			errorController.unexpectedError(res, error, request);

@@ -179,6 +179,24 @@ exports.seed = function(knex, Promise) {
 					});
 				}),
 				
+				knex('trips').del()
+				.then(function () {
+					return knex('trips').insert({
+						applicationOwner: '2',
+						driver: 5,
+						passenger: 2,
+						start: { address: {street: 'Av. Santa Fe', location: {lat: -34.595402353, lon: -58.398621082}}, timestamp: '2017-10-28T21:30:23.000Z'},
+						end: { address: {street: 'Av. Juan B. Justo', location: {lat: -34.585093255, lon: -58.434187174}}, timestamp: '2017-10-28T21:51:10.000Z'},
+						totalTime: 1260, 
+						waitTime: 300,
+						travelTime: 960,
+						distance: 5600,
+						route: [{ location: {lat: -34.596448030, lon: -58.426966667 }, timestamp: '2017-10-28T21:45:12.000Z'}],
+						cost: { currency: 'ARS', value: 50},
+						paymethod: { paymethod: 'cash', parameters: {type: 'banknote'} }
+					});
+				}),
+				
 				knex('transactions').del()
 				.then(function () {
 					return knex('transactions').insert({
