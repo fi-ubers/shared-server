@@ -1,5 +1,6 @@
 const logger = require('./../logger');
 const request = require('request');
+var rp = require('request-promise');
 
 const paymentAPI = require('../../config/paymentAPI');
 const tokenController = require('./tokenController');
@@ -16,18 +17,26 @@ module.exports = {
 		var request = "GET at /api/paymethods";
 		
 		logger.info(request);
-		request.get(paymentAPI.baseUrl + uri)
-		/*
-		if (!tokenController.paymentToken) {
-			tokenController.generatePaymentToken();
-		}*/
-		tokenController.generatePaymentToken().then(function() {
-		
+		tokenController.generatePaymentToken().then(function(body) {
+			var options = {
+				uri: paymentAPI.baseUrl + uri,
+				headers: {
+					'Authorization': 'Bearer ' + body.access_token
+				},
+				json: true
+			};
+			rp(options).then(function(paymethods) {
+				responseController.sendPaymethods(res, paymethods.items.length, paymethods.items.length, paymethods.items);
+			}).catch(function(error) {
+				logger.error(request + ': API request failed');
+				errorController.unexpectedError(res, error, request);
+			});
+			/*
 			request.get({url: paymentAPI.baseUrl + uri, auth: { 
 				bearer: tokenController.paymentToken.access_token
 				}}, function(err, httpResponse, body) {
 				responseController.sendPaymethods(res, body.items.length, body.items.length, body.items);
-			})
+			})*/
 		}).catch(function(error) {
 			errorController.unexpectedError(res, error, request);
 		})
