@@ -3,6 +3,7 @@ var jwt = require('jsonwebtoken');
 var moment = require('moment');
 var request = require('request');
 var uuidv4 = require('uuid/v4');
+var rp = require('request-promise');
 
 var paymentAPI = require('../../config/paymentAPI');
 var errorController = require('./errorController');
@@ -11,7 +12,7 @@ var responseController = require('./responseController');
 
 var businessUsersTable = 'business_users';
 var expiration = moment().add(5, 'days').unix();
-var paymentToken = null;
+//var paymentToken = null;
 
 function createBusinessToken(businessUser) {
 	return jwt.sign({
@@ -27,7 +28,7 @@ module.exports = {
 
 	expiration: expiration,
 	
-	paymentToken: paymentToken,
+	//paymentToken: paymentToken,
 	
 	/** Creates a BusinessToken. */
 	createBusinessToken : createBusinessToken,
@@ -73,8 +74,20 @@ module.exports = {
 		}
 	}),
 	
+	/** Generates a token for Payment API using the credentials. */
 	generatePaymentToken : (function() {
-		var uri = '/user/oauth/authorize';
+		var options = {
+			method: 'POST',
+			uri: paymentAPI.baseUrl + paymentAPI.tokenUri,
+			body: {
+				client_id: paymentAPI.clientId,
+				client_secret: paymentAPI.clientSecret
+			},
+			json: true
+		};
+		
+		return rp(options);
+		/*
 		return new Promise(function(resolve, reject) {
 			request.post({url: paymentAPI.baseUrl + uri, form: { 
 				client_id: paymentAPI.clientId,
@@ -85,6 +98,6 @@ module.exports = {
 					resolve();
 				}
 			})
-		});
+		});*/
 	})
 }
