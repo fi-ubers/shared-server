@@ -25,10 +25,4 @@ describe('Content tests', function() {
 		});
 	});
 	
-	it('Content in endpoint /api/paymethods', function() {
-		request('http://localhost:' + port + '/api/paymethods', function(error, response, body) {
-			expect(body).to.equal('Payment methods supported by the server');
-		});
-	});
-	
 });

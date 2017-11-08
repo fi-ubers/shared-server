@@ -1036,7 +1036,7 @@ describe('API users routes', function() {
 			});
 		});
 	});
-	*/
+	
 	describe('GET /api/users/:id/transactions', function() {
 		it('Get user transactions by userId with code 200', function(done) {
 			chai.request(server)
@@ -1054,7 +1054,7 @@ describe('API users routes', function() {
 				res.body.transactions.should.be.a('array');
 				res.body.transactions.length.should.equal(2);
 				res.body.transactions[0].should.have.property('id');
-				res.body.transactions[0].id.should.equal(2);
+				res.body.transactions[0].id.should.equal('2');
 				res.body.transactions[0].should.have.property('trip');
 				res.body.transactions[0].trip.should.equal(5);
 				res.body.transactions[0].should.have.property('timestamp');
@@ -1065,7 +1065,7 @@ describe('API users routes', function() {
 				res.body.transactions[0].description.should.equal('Another interesting description');
 				res.body.transactions[0].should.have.property('data');
 				res.body.transactions[1].should.have.property('id');
-				res.body.transactions[1].id.should.equal(3);
+				res.body.transactions[1].id.should.equal('3');
 				res.body.transactions[1].should.have.property('trip');
 				res.body.transactions[1].trip.should.equal(10);
 				res.body.transactions[1].should.have.property('timestamp');
@@ -1098,7 +1098,6 @@ describe('API users routes', function() {
 			chai.request(server)
 			.get('/api/users/2/trips?token=' + userToken)
 			.end(function(err, res) {
-				//res.body.message.should.equal(11);
 				res.should.have.status(200);
 				res.should.be.json;
 				res.body.should.be.a('Object');
@@ -1150,5 +1149,5 @@ describe('API users routes', function() {
 				done();
 			});
 		});
-	})
+	})*/
 });

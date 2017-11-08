@@ -1,6 +1,40 @@
 // Seed file
 var uuidv4 = require('uuid/v4');
+var serialize = require('serialize-javascript');
 var data = require('./../../../test/servers-test');
+
+var rule1 = { 
+	condition: function(R) {
+		R.when(this.age >= 21);
+	},
+	
+	consequence: function(R) {
+		this.ageResult = 'Adult';
+		R.next();
+	}
+};
+
+var rule2 = { 
+	condition: function(R) {
+		R.when(this.surname.length < 5);
+	},
+	
+	consequence: function(R) {
+		this.surnameResult = 'Short surname';
+		R.next();
+	}
+};
+
+var rule3 = { 
+	condition: function(R) {
+		R.when(this.name.startsWith("C"));
+	},
+	
+	consequence: function(R) {
+		this.nameResult = 'Cool person B)';
+		R.next();
+	}
+};
 
 exports.seed = function(knex, Promise) {
 	return Promise.all([
@@ -52,7 +86,7 @@ exports.seed = function(knex, Promise) {
 			});
 		}).then(function() {
             return knex('business_users').insert({
-              _ref: uuidv4(),
+              _ref: 'test',
               username: 'cookie_monster',
               password: '1234',
               name: 'John',
@@ -67,6 +101,34 @@ exports.seed = function(knex, Promise) {
 				name: 'Emma',
 				surname: 'Duval',
 				roles: ['manager', 'user']
+			});
+		}),
+		
+		knex('rules').del()
+		.then(function () {
+			// Inserts seed entries
+			return knex('rules').insert({
+				_ref: uuidv4(),
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-08-12T18:30:23.000Z' },
+				blob: serialize(rule1),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: uuidv4(),
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-15T11:37:45.000Z' },
+				blob: serialize(rule2),
+				active: false
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: uuidv4(),
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(rule3),
+				active: true
 			});
 		}),
         
@@ -200,6 +262,7 @@ exports.seed = function(knex, Promise) {
 				knex('transactions').del()
 				.then(function () {
 					return knex('transactions').insert({
+						id: '1',
 						trip: 5,
 						timestamp: '2017-10-08T20:30:45.000Z',
 						cost: { currency: 'ARS', value: '250' },
@@ -209,6 +272,7 @@ exports.seed = function(knex, Promise) {
 					});
 				}).then(function() {
 					return knex('transactions').insert({
+						id: '2',
 						trip: 5,
 						timestamp: '2017-10-08T11:47:41.000Z',
 						cost: { currency: 'ARS', value: '110' },
@@ -218,6 +282,7 @@ exports.seed = function(knex, Promise) {
 					});
 				}).then(function() {
 					return knex('transactions').insert({
+						id: '3',
 						trip: 10,
 						timestamp: '2017-10-09T18:11:23.000Z',
 						cost: { currency: 'ARS', value: '145' },

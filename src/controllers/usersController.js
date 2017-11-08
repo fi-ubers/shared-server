@@ -11,6 +11,8 @@ var visibleTripFields = ['id', 'applicationOwner', 'driver', 'passenger', 'start
 var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');
+const paymentAPI = require('../../config/paymentAPI');
+const tokenController = require('./tokenController');
 
 
 /** @module usersController */
@@ -365,8 +367,47 @@ module.exports = {
 	
 	/** Makes a payment for the user. */
 	makePayment : function(req, res) {
-		//logger.info("POST at /users/" + req.params.userId + "/transactions");
+		/*
+		var userId = req.params.userId;
+		var request = "POST at /users/" + userId + "/transactions";
 		
+		// No hay body en la API, asumo lo siguiente
+		var cost = req.body.cost;
+		var trip = req.body.trip;
+		var paymethod = req.body.paymethod;
+		paymethod.parameters.method = paymethod.paymethod;
+		var paymentData = {
+			currency: cost.currency,
+			value: cost.value,
+			paymethod: paymethod.parameters
+		};
+		
+		tokenController.generatePaymentToken().then(function(body) {
+			paymentController.createPayment(body.access_token, paymentData).then(function(response) {
+				var transaction = {
+					id: response.transaction_id,
+					trip: trip,
+					timestamp: knex.fn.now(),
+					cost: cost,
+					description: "User payment",
+					user: userId
+				};
+				
+				// Balance ?
+				queryController.selectOneWhere(usersTable, { id: userId })
+				.then(function(userData) {
+					var balance = userData.balance.push({ currency: cost.currency, value: cost.value });
+					queryController.updateWhere(usersTable, { id: userId }, { balance: balance });
+				})
+						
+				queryController.insertAndReturnSome(transactionTable, transaction, visibleTransactionFields)
+				.then(function(transaction) {
+					responseController.sendTransactions(res, 200, transaction[0]);
+				})
+			})
+		}).catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		})*/
 	},
 	
 	/** Lists all the trips of the user. */

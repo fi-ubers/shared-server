@@ -190,7 +190,7 @@ router.get('/users/:userId/transactions', verifyToken.businessVerify, authCheck(
  * @memberof module:router
  * @inner
  */
-router.post('/users/:userId/transactions', userController.makePayment);
+router.post('/users/:userId/transactions', verifyToken.appVerify, revokedTokenCheck, userController.makePayment);
 
 /**
  * @name get/users/:userId/trips
@@ -209,7 +209,7 @@ router.get('/users/:userId/trips', verifyToken.businessVerify, authCheck('user')
  * @memberof module:router
  * @inner
  */
-router.get('/paymethods', paymethodsController.getPaymethods);
+router.get('/paymethods', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, paymethodsController.getPaymethods);
 
 
 /* Defining /trips endpoints */
