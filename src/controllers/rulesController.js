@@ -1,4 +1,5 @@
 const logger = require('./../logger');
+const moment = require('moment');
 const Rules = require('../services/rulesService');
 const serialize = require('serialize-javascript');
 const knex = require('../db/knex');
@@ -39,9 +40,25 @@ module.exports = {
 		if (!language || !blob || active == undefined) { 
 			errorController.missingParameters(res, request);
 		} else {
-			queryController.insert(ruleTable, {_ref: uuidv4(), language: language, blob: blob , active: active})
-			.then(function(rule) {
-				responseController.sendRule(res, 201, rule[0]);
+			queryController.selectOneWhere(businessUsersTable, {id: req.user.id})
+			.then(function(user) {
+				if (user) {
+					var lastCommit = {
+						author: user,
+						message: 'Create rule',
+						timestamp: moment().format() 
+					};
+					
+					queryController.insert(ruleTable, {_ref: uuidv4(), language: language, lastCommit: lastCommit, blob: blob , active: active})
+					.then(function(rule) {
+						logger.info("Storing new commit of rule " + rule[0].id);
+						queryController.insert(commitTable, {rule: rule[0], ruleId: rule[0].id});
+						responseController.sendRule(res, 201, rule[0]);
+					})
+					
+				} else {
+					errorController.nonExistentResource(res, "user", request);	
+				}
 			})
 			.catch(function(error) {
 				errorController.unexpectedError(res, error, request);
@@ -146,8 +163,8 @@ module.exports = {
 													language: language, 
 													lastCommit: {
 														author: user,
-														message: ' ???????',
-														timestamp: knex.fn.now()
+														message: 'Modify rule',
+														timestamp: moment().format()
 													}, 
 													blob: blob,
 													active: active});
@@ -155,16 +172,16 @@ module.exports = {
 								errorController.nonExistentResource(res, "user", request);	
 							}
 						})
+						.then(function(updatedRule) {
+							if (updatedRule) {
+								logger.info("Storing new commit of rule " + ruleId);
+								queryController.insert(commitTable, {rule: updatedRule, ruleId: ruleId});
+								responseController.sendRule(res, 200, updatedRule[0]);
+							}
+						})
 					}
 				} else {
 					errorController.nonExistentResource(res, "rule", request);	
-				}
-			})
-			.then(function(updatedRule) {
-				if (updatedRule) {
-					logger.info("Storing new commit of rule " + ruleId);
-					queryController.insert(commitTable, {rule: updatedRule, ruleId: ruleId});
-					responseController.sendRule(res, 200, updatedRule[0]);
 				}
 			})
 			.catch(function(error) {

@@ -117,6 +117,14 @@ module.exports = {
 		res.status(200).send(response);
 	}),
 	
+	/** Sends json with metadata and information of a car with the given code. */
+	sendTransaction : (function(res, code, transaction) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.transaction = transaction;
+		res.status(code).send(response);
+	}),
+	
 	/** Sends json with metadata and a list of rules with code 200. */
 	sendRules : (function(res, count, total, rulesList) {
 		var response = {};

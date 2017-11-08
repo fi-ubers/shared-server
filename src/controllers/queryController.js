@@ -25,11 +25,17 @@ module.exports = {
 			.returning('*');
 	}),
 	
-	/** Inserts in the table the given data proyectingo only the given columns. */
+	/** Inserts in the table the given data proyecting only the given columns. */
 	insertAndReturnSome : (function(table, data, columns) {
 		return knex(table)
 			.insert(data)
 			.returning(columns);
+	}),
+	
+	/** Inserts in the table the given data without return the result. */
+	insertWithoutReturn : (function(table, data) {
+		return knex(table)
+			.insert(data);
 	}),
 	
 	/** Receives a table and selects the rows that meet the conditions. */
