@@ -108,7 +108,7 @@ exports.seed = function(knex, Promise) {
 		.then(function () {
 			// Inserts seed entries
 			return knex('rules').insert({
-				_ref: uuidv4(),
+				_ref: '1111',
 				language: 'node-rules/javascript', 
 				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-08-12T18:30:23.000Z' },
 				blob: serialize(rule1),
@@ -116,7 +116,7 @@ exports.seed = function(knex, Promise) {
 			});
 		}).then(function() {
 			return knex('rules').insert({
-				_ref: uuidv4(),
+				_ref: '2222',
 				language: 'node-rules/javascript', 
 				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-15T11:37:45.000Z' },
 				blob: serialize(rule2),
@@ -124,12 +124,51 @@ exports.seed = function(knex, Promise) {
 			});
 		}).then(function() {
 			return knex('rules').insert({
-				_ref: uuidv4(),
+				_ref: '3333',
 				language: 'node-rules/javascript', 
 				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
 				blob: serialize(rule3),
 				active: true
 			});
+		}).then(function() {
+			return knex('commits').del()
+				.then(function () {
+					return knex('commits').insert({
+						rule: {
+							id: 1,
+							_ref: '1111',
+							language: 'node-rules/javascript', 
+							lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-08-12T18:30:23.000Z' },
+							blob: serialize(rule1),
+							active: true
+						},
+						ruleId: 1
+					});
+				}).then(function() {
+					return knex('commits').insert({
+						rule: {
+							id: 2,
+							_ref: '2222',
+							language: 'node-rules/javascript', 
+							lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-15T11:37:45.000Z' },
+							blob: serialize(rule2),
+							active: false
+						},
+						ruleId: 2
+					});
+				}).then(function() {
+					return knex('commits').insert({
+						rule: {
+							id: 1,
+							_ref: '3333',
+							language: 'node-rules/javascript', 
+							lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+							blob: serialize(rule3),
+							active: true
+						},
+						ruleId: 3
+					});
+				})
 		}),
         
 		knex('application_users').del()
