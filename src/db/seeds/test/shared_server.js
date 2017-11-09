@@ -301,7 +301,6 @@ exports.seed = function(knex, Promise) {
 				knex('transactions').del()
 				.then(function () {
 					return knex('transactions').insert({
-						id: '1',
 						trip: 5,
 						timestamp: '2017-10-08T20:30:45.000Z',
 						cost: { currency: 'ARS', value: '250' },
@@ -311,7 +310,6 @@ exports.seed = function(knex, Promise) {
 					});
 				}).then(function() {
 					return knex('transactions').insert({
-						id: '2',
 						trip: 5,
 						timestamp: '2017-10-08T11:47:41.000Z',
 						cost: { currency: 'ARS', value: '110' },
@@ -321,7 +319,6 @@ exports.seed = function(knex, Promise) {
 					});
 				}).then(function() {
 					return knex('transactions').insert({
-						id: '3',
 						trip: 10,
 						timestamp: '2017-10-09T18:11:23.000Z',
 						cost: { currency: 'ARS', value: '145' },

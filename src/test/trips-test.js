@@ -94,7 +94,7 @@ describe('API trips routes', function() {
 			});
 		});
 	});
-
+*/
 	describe('POST /api/trips', function() {
 		it('Register trip with code 201', function(done) {
 			chai.request(server)
@@ -167,8 +167,38 @@ describe('API trips routes', function() {
 				done();
 			});
 		});
+		
+		it('Register trip with payment fail', function(done) {
+			chai.request(server)
+			.post('/api/trips?token=' + appToken)
+			.send({
+				trip: {
+					driver: 3,
+					passenger: 1,
+					start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-10-30T10:15:54.000Z'},
+					end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-10-30T10:39:10.000Z'},
+					totalTime: 1440, 
+					waitTime: 300,
+					travelTime: 1140,
+					distance: 6000,
+					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]
+				},
+				paymethod: { paymethod: 'card', parameters: { type: 'visa' } }
+			})
+			.end(function(err, res) {
+				res.should.have.status(500);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(500);
+				res.body.should.have.property('message');
+				res.body.message.should.include('Create Payment Error');
+				done();
+			});
+		});
 	});
 	
+	
+	/*
 	describe('GET /api/trips/:id', function() {
 		it('Get application trip by id with code 200', function(done) {
 			chai.request(server)

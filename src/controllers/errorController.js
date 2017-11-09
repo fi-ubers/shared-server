@@ -6,7 +6,7 @@ module.exports = {
 	/** Reports an unexpected error. */
 	unexpectedError : (function(res, error, request) {
 		logger.error("Unexpected error: " + request);
-		res.status(500).send({code: 500, message: "Unexpected error: " + error});
+		res.status(500).send({code: 500, message: request + " Unexpected error: " + error});
 	}),
 	
 	/** Reports a 'missing parameters' error. */

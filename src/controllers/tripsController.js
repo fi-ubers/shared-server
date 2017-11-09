@@ -2,7 +2,6 @@ var logger = require('./../logger');
 var knex = require('../db/knex');
 var tripTable = 'trips';
 var transactionTable = 'transactions';
-var usersTable = 'application_users';
 var visibleTripFields = ['id', 'applicationOwner', 'driver', 'passenger', 'start', 'end', 'totalTime', 'waitTime', 'travelTime', 'distance', 'route', 'cost'];
 
 var errorController = require('./errorController');
@@ -10,6 +9,7 @@ var queryController = require('./queryController');
 var responseController = require('./responseController');
 var paymentController = require('./paymentController');
 var tokenController = require('./tokenController');
+var balanceController = require('./balanceController');
 
 /** @module tripsController */
 module.exports = {
@@ -45,17 +45,53 @@ module.exports = {
 		if (!driver || !passenger || !start || !end || !totalTime || !waitTime || !travelTime || !distance || !route || !paymethod) { 
 			errorController.missingParameters(res, request);
 		} else {
-			logger.debug("Using rules engine to calculate the cost of the trip");
+			logger.info("Using the rules engine to calculate the cost of the trip");
 			// TODO: Calculate cost
 			var costValue = 100;
 			var cost = { currency: "ARS", value: costValue };
-			paymethod.parameters.method = paymethod.paymethod;
-			var paymentData = {
-				currency: cost.currency,
-				value: cost.value,
-				paymethod: paymethod.parameters
-			};
 			
+			/*
+			// Passenger balance 
+			queryController.selectOneWhere(usersTable, { id: passenger })
+			.then(function(passengerData) {
+				var count = 0;
+				var balance = passengerData.balance;
+				balance.map(element => {
+					if (element.currency == cost.currency) {
+						element.value -= cost.value;
+					}
+					else {
+						count++;
+					}
+				});
+				
+				if (count == balance.length) {
+					balance.push({ currency: cost.currency, value: -cost.value })
+				}
+				queryController.updateWhere(usersTable, { id: passenger }, { balance: balance });
+			})
+			
+			// Driver balance 	
+			queryController.selectOneWhere(usersTable, { id: driver })
+			.then(function(driverData) {
+				var count = 0;
+				var balance = driverData.balance;
+				balance.map(element => {
+					if (element.currency == cost.currency) {
+						element.value += cost.value;
+					}
+					else {
+						count++;
+					}
+				});
+				
+				if (count == balance.length) {
+					balance.push({ currency: cost.currency, value: cost.value })
+				}
+				queryController.updateWhere(usersTable, { id: driver }, { balance: balance });
+			})*/
+			
+			logger.info("Registering trip");	
 			queryController.insertAndReturnSome(tripTable, {
 				applicationOwner: req.user.id,
 				driver: driver,
@@ -71,49 +107,65 @@ module.exports = {
 				paymethod: paymethod
 			}, visibleTripFields)
 			.then(function(trip) {
+			
+				logger.info("Creating transactions for passenger and driver");
+				var tripId = trip[0].id;
+			
+				var passengerTransaction = {
+					trip: tripId,
+					timestamp: knex.fn.now(),
+					cost: {
+						currency: cost.currency,
+						value: -cost.value
+					},
+					description: "Trip cost",
+					user: passenger
+				};
+			
+				var driverTransaction = {
+					trip: tripId,
+					timestamp: knex.fn.now(),
+					cost: cost,
+					description: "Trip gain",
+					user: driver
+				};
+			
+				queryController.insertWithoutReturn(transactionTable, passengerTransaction);
+				queryController.insertWithoutReturn(transactionTable, driverTransaction);
+				
+				balanceController.manageBalance(passenger, cost, 'negative');
+				balanceController.manageBalance(driver, cost, 'positive');
+
+				logger.info("Making trip payment");	
 				tokenController.generatePaymentToken().then(function(body) {
-					paymentController.createPayment(body.access_token, paymentData).then(function(response) {
-						var passengerTransaction = {
-							id: response.transaction_id,
-							trip: trip[0].id,
-							timestamp: knex.fn.now(),
-							cost: {
-								currency: cost.currency,
-								value: -cost.value
-							},
-							description: "Trip payment",
-							user: passenger
-						};
-						var driverTransaction = {
-							id: response.transaction_id,
-							trip: trip[0].id,
+					paymethod.parameters.method = paymethod.paymethod;
+					var paymentData = {
+						currency: cost.currency,
+						value: cost.value,
+						paymethod: paymethod.parameters
+					};
+					paymentController.createPayment(body.access_token, paymentData)
+					.then(function(response) {
+						logger.info("Payment success");
+						logger.info("Creating payment transaction");
+						var paymentTransaction = {
+							trip: tripId,
 							timestamp: knex.fn.now(),
 							cost: cost,
 							description: "Trip payment",
-							user: driver
+							user: passenger
 						};
-						queryController.insertWithoutReturn(transactionTable, passengerTransaction);
-						queryController.insertWithoutReturn(transactionTable, driverTransaction);
-						/*
-						// Balance ?
-						queryController.selectOneWhere(usersTable, { id: passenger })
-						.then(function(passengerData) {
-							var balance = passengerData.balance.push({ currency: cost.currency, value: -cost.value });
-							queryController.updateWhere(usersTable, { id: passenger }, { balance: balance });
-						})
-					
-						queryController.selectOneWhere(usersTable, { id: driver })
-						.then(function(driverData) {
-							var balance = driverData.balance.push({ currency: cost.currency, value: cost.value });
-							queryController.updateWhere(usersTable, { id: driver }, { balance: balance });
-						})
-						*/
+						queryController.insertWithoutReturn(transactionTable, paymentTransaction);
+						balanceController.manageBalance(passenger, cost, 'positive');
 						responseController.sendTrip(res, 201, trip[0]);
 					})
+					.catch(function(error) {
+						logger.error("Payment fail");	
+						errorController.unexpectedError(res, error, "Create Payment Error - " + request);
+					})
 				})
-				//responseController.sendTrip(res, 201, trip[0]);
-				
-			}).catch(function(error) {
+			})
+			.catch(function(error) {
 				errorController.unexpectedError(res, error, request);
 			})
 		}

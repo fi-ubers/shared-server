@@ -76,7 +76,7 @@ exports.up = function(knex, Promise) {
 	  }),
 	  
 	  knex.schema.createTableIfNotExists('transactions', function(table) {
-	  		table.string('id').primary();
+	  		table.increments('id').primary();
 	  		table.integer('trip');
 	  		table.timestamp('timestamp');
 	  		table.specificType('cost', 'json');
