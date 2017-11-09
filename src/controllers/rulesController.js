@@ -52,8 +52,11 @@ module.exports = {
 					queryController.insert(ruleTable, {_ref: uuidv4(), language: language, lastCommit: lastCommit, blob: blob , active: active})
 					.then(function(rule) {
 						logger.info("Storing new commit of rule " + rule[0].id);
-						queryController.insert(commitTable, {rule: rule[0], ruleId: rule[0].id});
-						responseController.sendRule(res, 201, rule[0]);
+						queryController.insert(commitTable, {rule: rule[0], ruleId: rule[0].id})
+						.then(function(commit) {
+							rule[0].lastCommit.id = commit[0].id;
+							return responseController.sendRule(res, 201, rule[0]);
+						})
 					})
 					
 				} else {
@@ -175,8 +178,11 @@ module.exports = {
 						.then(function(updatedRule) {
 							if (updatedRule) {
 								logger.info("Storing new commit of rule " + ruleId);
-								queryController.insert(commitTable, {rule: updatedRule, ruleId: ruleId});
-								responseController.sendRule(res, 200, updatedRule[0]);
+								queryController.insert(commitTable, {rule: updatedRule[0], ruleId: ruleId})
+								.then(function(commit) {
+									updatedRule[0].lastCommit.id = commit[0].id;
+									return responseController.sendRule(res, 200, updatedRule[0]);
+								})
 							}
 						})
 					}
@@ -222,10 +228,13 @@ module.exports = {
 		var request = "GET at /api/rules/" + ruleId + "/commits";
 		logger.info(request);
 		
-		queryController.selectAllWhere(commitTable, {ruleId: ruleId}, ['rule'])
-		.then(function(rules) {
-			commits = rules.map(rule => rule.lastCommit);
-			responseController.sendCommits(res, commits.length, commits.length, commits);
+		queryController.selectAllWhere(commitTable, {ruleId: ruleId})
+		.then(function(commits) {
+			commitsResponse = commits.map( commit => { 
+			 	commit.rule.lastCommit.id = commit.id;
+			 	return commit.rule.lastCommit; 
+			 });
+			responseController.sendCommits(res, commitsResponse.length, commitsResponse.length, commitsResponse);
 		})
 		.catch(function(error) {
 			errorController.unexpectedError(res, error, request);
@@ -239,10 +248,11 @@ module.exports = {
 		var request = "GET at /rules/" + ruleId + "/commits/" + commitId;
 		
 		logger.info(request);
-		queryController.selectOneWhere(commitTable, {id: commitId, ruleId: ruleId}, ['rule'])
-		.then(function(rule) {
-			if (rule) {
-				responseController.sendRule(res, 200, rule);
+		queryController.selectOneWhere(commitTable, {id: commitId, ruleId: ruleId})
+		.then(function(commit) {
+			if (commit) {
+				commit.rule.lastCommit.id = commitId;
+				responseController.sendRule(res, 200, commit.rule);
 			} else {
 				errorController.nonExistentResource(res, "rule", request);
 			}
@@ -251,5 +261,4 @@ module.exports = {
 			errorController.unexpectedError(res, error, request);
 		});
 	}
-
 }
