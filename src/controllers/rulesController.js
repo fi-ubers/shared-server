@@ -206,16 +206,22 @@ module.exports = {
 		if (!facts) { 
 			errorController.missingParameters(res, request);
 		} else {
-			queryController.selectOneWhere(ruleTable, {id: ruleId}, ['blob'])
+			queryController.selectOneWhere(ruleTable, {id: ruleId})
 			.then(function(rule) {
-				rule = deserialize(rule);
-				facts.map(fact => {
+				rule = deserialize(rule.blob);
+				
+				var factsPromise = facts.map(fact => {
 					fact = deserialize(fact.blob);
-					Rules.execute(fact, rule)
-						.then(function(r) {
-							// ??????
-						});
+					return Rules.execute(fact, rule).then(function(result) {
+						return { language: 'node-rules/javascript', blob: result };
+						
+					});
 				});
+				
+				Promise.all(factsPromise).then(function(factsResult) {
+					responseController.sendFacts(res, factsResult);	
+				});
+				
 			}).catch(function(error) {
 				errorController.unexpectedError(res, error, request);
 			})

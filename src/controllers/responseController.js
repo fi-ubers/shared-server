@@ -171,5 +171,13 @@ module.exports = {
 		response.metadata = collectionMetadata(count, total);
 		response.paymethods = paymethodsList;
 		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and the results of the facts with the given code. */
+	sendFacts : (function(res, facts) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.facts = facts;
+		res.status(200).send(response);
 	})
 }
