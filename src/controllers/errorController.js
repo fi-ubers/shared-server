@@ -6,7 +6,7 @@ module.exports = {
 	/** Reports an unexpected error. */
 	unexpectedError : (function(res, error, request) {
 		logger.error("Unexpected error: " + request);
-		res.status(500).send({code: 500, message: request + " Unexpected error: " + error});
+		res.status(500).send({code: 500, message: "Unexpected error: " + error});
 	}),
 	
 	/** Reports a 'missing parameters' error. */
@@ -37,5 +37,11 @@ module.exports = {
 	failedValidation : (function(res, request) {
 		logger.error("Failed validation: " + request);
 		res.status(400).send({code: 400, message: "Failed validation"});
+	}),
+	
+	/** Reports a 'create payment' error. */
+	paymentError : (function(res, error, request, transaction) {
+		logger.error("Create Payment Error: " + request);
+		res.status(500).send({code: 500, message: "Create Payment Error: " + error, transaction: transaction});
 	})
 }
