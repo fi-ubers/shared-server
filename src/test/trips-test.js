@@ -48,7 +48,7 @@ describe('API trips routes', function() {
 			done();
 		});
 	});
-	/*
+	
 	describe('GET /api/trips', function() {
 		it('Get trips', function(done) {
 			chai.request(server)
@@ -94,7 +94,7 @@ describe('API trips routes', function() {
 			});
 		});
 	});
-*/
+
 	describe('POST /api/trips', function() {
 		it('Register trip with code 201', function(done) {
 			chai.request(server)
@@ -192,13 +192,12 @@ describe('API trips routes', function() {
 				res.body.code.should.equal(500);
 				res.body.should.have.property('message');
 				res.body.message.should.include('Create Payment Error');
+				res.body.should.have.property('transaction');
 				done();
 			});
 		});
 	});
 	
-	
-	/*
 	describe('GET /api/trips/:id', function() {
 		it('Get application trip by id with code 200', function(done) {
 			chai.request(server)
@@ -253,5 +252,5 @@ describe('API trips routes', function() {
 				done();
 			});
 		});
-	});*/
+	});
 });

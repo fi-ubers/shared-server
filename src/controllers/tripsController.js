@@ -50,47 +50,6 @@ module.exports = {
 			var costValue = 100;
 			var cost = { currency: "ARS", value: costValue };
 			
-			/*
-			// Passenger balance 
-			queryController.selectOneWhere(usersTable, { id: passenger })
-			.then(function(passengerData) {
-				var count = 0;
-				var balance = passengerData.balance;
-				balance.map(element => {
-					if (element.currency == cost.currency) {
-						element.value -= cost.value;
-					}
-					else {
-						count++;
-					}
-				});
-				
-				if (count == balance.length) {
-					balance.push({ currency: cost.currency, value: -cost.value })
-				}
-				queryController.updateWhere(usersTable, { id: passenger }, { balance: balance });
-			})
-			
-			// Driver balance 	
-			queryController.selectOneWhere(usersTable, { id: driver })
-			.then(function(driverData) {
-				var count = 0;
-				var balance = driverData.balance;
-				balance.map(element => {
-					if (element.currency == cost.currency) {
-						element.value += cost.value;
-					}
-					else {
-						count++;
-					}
-				});
-				
-				if (count == balance.length) {
-					balance.push({ currency: cost.currency, value: cost.value })
-				}
-				queryController.updateWhere(usersTable, { id: driver }, { balance: balance });
-			})*/
-			
 			logger.info("Registering trip");	
 			queryController.insertAndReturnSome(tripTable, {
 				applicationOwner: req.user.id,
@@ -161,7 +120,7 @@ module.exports = {
 					})
 					.catch(function(error) {
 						logger.error("Payment fail");	
-						errorController.unexpectedError(res, error, "Create Payment Error - " + request);
+						errorController.paymentError(res, error, request, { trip: tripId, cost: cost, description: "Trip payment", paymethod: paymethod });
 					})
 				})
 			})

@@ -1,5 +1,6 @@
 var logger = require('./../logger');
 var uuidv4 = require('uuid/v4');
+var knex = require('../db/knex');
 var userTable = 'application_users';
 var carTable = 'cars';
 var transactionTable = 'transactions';
@@ -12,8 +13,9 @@ var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');
 const paymentAPI = require('../../config/paymentAPI');
+var paymentController = require('./paymentController');
 const tokenController = require('./tokenController');
-
+var balanceController = require('./balanceController');
 
 /** @module usersController */
 module.exports = {
@@ -367,15 +369,16 @@ module.exports = {
 	
 	/** Makes a payment for the user. */
 	makePayment : function(req, res) {
-		/*
+		
 		var userId = req.params.userId;
 		var request = "POST at /users/" + userId + "/transactions";
 		
-		// No hay body en la API, asumo lo siguiente
+		// No hay body en la API, asumo que recibe los atributos de la transaccion del error
 		var cost = req.body.cost;
-		var trip = req.body.trip;
+		var tripId = req.body.trip;
+		var description = req.body.description;
 		var paymethod = req.body.paymethod;
-		paymethod.parameters.method = paymethod.paymethod;
+		
 		var paymentData = {
 			currency: cost.currency,
 			value: cost.value,
@@ -383,31 +386,28 @@ module.exports = {
 		};
 		
 		tokenController.generatePaymentToken().then(function(body) {
-			paymentController.createPayment(body.access_token, paymentData).then(function(response) {
+			logger.info("Making trip payment");	
+			paymentController.createPayment(body.access_token, paymentData)
+			.then(function(response) {
+				logger.info("Payment success");
+				logger.info("Creating payment transaction");
 				var transaction = {
-					id: response.transaction_id,
-					trip: trip,
+					trip: tripId,
 					timestamp: knex.fn.now(),
 					cost: cost,
-					description: "User payment",
+					description: description,
 					user: userId
 				};
-				
-				// Balance ?
-				queryController.selectOneWhere(usersTable, { id: userId })
-				.then(function(userData) {
-					var balance = userData.balance.push({ currency: cost.currency, value: cost.value });
-					queryController.updateWhere(usersTable, { id: userId }, { balance: balance });
-				})
-						
+			
+				balanceController.manageBalance(userId, cost, 'positive');	
 				queryController.insertAndReturnSome(transactionTable, transaction, visibleTransactionFields)
 				.then(function(transaction) {
-					responseController.sendTransactions(res, 200, transaction[0]);
+					responseController.sendTransaction(res, 200, transaction[0]);
 				})
 			})
 		}).catch(function(error) {
 			errorController.unexpectedError(res, error, request);
-		})*/
+		})
 	},
 	
 	/** Lists all the trips of the user. */

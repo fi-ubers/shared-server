@@ -59,7 +59,7 @@ describe('API business-users routes', function() {
 			done();
 		});
 	});
-	/*
+	
 	describe('GET /api/business-users', function() {
 		it('Get business users', function(done) {
 			chai.request(server)
@@ -733,5 +733,5 @@ describe('API business-users routes', function() {
 				});
 			});
 		});
-	});*/
+	});
 });
