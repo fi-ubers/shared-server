@@ -66,11 +66,11 @@ describe('API paymethods routes', function() {
 				res.body.paymethods.should.be.a('array');
 				res.body.paymethods.length.should.equal(2);
 				res.body.paymethods[0].should.have.property('parameters');
-				res.body.paymethods[0].should.have.property('paymethod'); // Cambiar a name?
-				res.body.paymethods[0].paymethod.should.equal('card');
+				res.body.paymethods[0].should.have.property('name'); // Cambiar a name?
+				res.body.paymethods[0].name.should.equal('card');
 				res.body.paymethods[1].should.have.property('parameters');
-				res.body.paymethods[1].should.have.property('paymethod'); // Cambiar a name?
-				res.body.paymethods[1].paymethod.should.equal('cash');
+				res.body.paymethods[1].should.have.property('name'); // Cambiar a name?
+				res.body.paymethods[1].name.should.equal('cash');
 				done();
 			});
 		});

@@ -169,7 +169,7 @@ module.exports = {
 	sendPaymethods : (function(res, count, total, paymethodsList) {
 		var response = {};
 		response.metadata = collectionMetadata(count, total);
-		response.paymethods = paymethodsList;
+		response.paymethods = paymethodsList.map(paymethod => { return { name: paymethod.paymethod, parameters: paymethod.parameters} });
 		res.status(200).send(response);
 	}),
 	
