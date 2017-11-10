@@ -27,7 +27,7 @@ exports.up = function(knex, Promise) {
 	  		table.string('applicationOwner');
 	  		table.string('type');
 	  		table.specificType('cars', 'json[]');
-	  		table.string('username');
+	  		table.string('username').unique();
 	  		table.string('password');
 	  		table.specificType('fb', 'json');
 	  		table.string('name');
@@ -57,18 +57,8 @@ exports.up = function(knex, Promise) {
 	  		table.foreign('owner').references('application_users.id').onDelete('cascade');
 	  }),
 	  
-	  knex.schema.createTableIfNotExists('transactions', function(table) {
-	  		table.integer('id');
-	  		table.string('trip');
-	  		table.timestamp('timestamp');
-	  		table.specificType('cost', 'json');
-	  		table.string('description');
-	  		table.specificType('data', 'json');
-	  		table.primary(['id', 'timestamp']);
-	  }),
-	  
 	  knex.schema.createTableIfNotExists('trips', function(table) {
-	  		table.integer('id');
+	  		table.increments('id').primary();
 	  		table.string('applicationOwner');
 	  		table.integer('driver');
 	  		table.integer('passenger');
@@ -80,8 +70,38 @@ exports.up = function(knex, Promise) {
 	  		table.integer('distance');
 	  		table.specificType('route', 'json[]');
 	  		table.specificType('cost', 'json');
-	  })
+	  		table.specificType('paymethod', 'json');
+	  		table.foreign('driver').references('application_users.id').onDelete('cascade');
+	  		table.foreign('passenger').references('application_users.id').onDelete('cascade');
+	  }),
 	  
+	  knex.schema.createTableIfNotExists('transactions', function(table) {
+	  		table.increments('id').primary();
+	  		table.integer('trip');
+	  		table.timestamp('timestamp');
+	  		table.specificType('cost', 'json');
+	  		table.string('description');
+	  		table.specificType('data', 'json');
+	  		table.integer('user');
+	  		table.foreign('user').references('application_users.id').onDelete('cascade');
+	  		//table.foreign('trip').references('trips.id').onDelete('cascade');
+	  }),
+	  
+	  knex.schema.createTableIfNotExists('rules', function(table) {
+	  		table.increments('id').primary();
+	  		table.string('_ref');
+	  		table.string('language');
+	  		table.specificType('lastCommit', 'json');
+	  		table.string('blob');
+	  		table.boolean('active');
+	  }),
+	  
+	  knex.schema.createTableIfNotExists('commits', function(table) {
+	  		table.increments('id').primary();
+	  		table.specificType('rule', 'json');
+	  		table.integer('ruleId');
+	  		table.foreign('ruleId').references('rules.id').onDelete('cascade');
+	  })
 	])
 };
 
@@ -91,9 +111,11 @@ exports.down = function(knex, Promise) {
 		knex.schema.dropTableIfExists('app_servers'),
 		knex.schema.dropTableIfExists('business_users'),
 		knex.schema.dropTableIfExists('cars'),
+		knex.schema.dropTableIfExists('transactions'),
+		knex.schema.dropTableIfExists('trips'),
 		knex.schema.dropTableIfExists('application_users'),
 		knex.schema.dropTableIfExists('blacklist'),
-		knex.schema.dropTableIfExists('transactions'),
-		knex.schema.dropTableIfExists('trips')
+		knex.schema.dropTableIfExists('commits'),
+		knex.schema.dropTableIfExists('rules')
 	])
 };

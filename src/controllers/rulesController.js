@@ -79,18 +79,25 @@ module.exports = {
 		if (!rules || !facts) { 
 			errorController.missingParameters(res, request);
 		} else {
-			rules = rules.map(deserialize);
-			facts.map(fact => {
-				fact = deserialize(fact.blob);
-				Rules.execute(fact, rules)
-					.then(function(r) {
-						// ??????
-					})
-					.catch(function(error) {
-						errorController.unexpectedError(res, error, request);
-					})
-			});
-			
+			queryController.selectWhereIn(ruleTable, 'id', rules)
+			.then(function(selectedRules) {
+				rules = selectedRules.map(rule => deserialize(rule.blob));
+				
+				var factsPromise = facts.map(fact => {
+					fact = deserialize(fact.blob);
+					return Rules.execute(fact, rules).then(function(result) {
+						return { language: 'node-rules/javascript', blob: serialize(result) };
+						
+					});
+				});
+				
+				Promise.all(factsPromise).then(function(factsResult) {
+					responseController.sendFacts(res, factsResult);	
+				});
+			})
+			.catch(function(error) {
+				errorController.unexpectedError(res, error, request);
+			})
 		}
 	},
 	
@@ -213,7 +220,7 @@ module.exports = {
 				var factsPromise = facts.map(fact => {
 					fact = deserialize(fact.blob);
 					return Rules.execute(fact, rule).then(function(result) {
-						return { language: 'node-rules/javascript', blob: result };
+						return { language: 'node-rules/javascript', blob: serialize(result) };
 						
 					});
 				});

@@ -52,6 +52,18 @@ var rule3 = {
 	}
 };
 
+var fact1 = { 
+	age: 10,
+	name: "Mariana",
+	surname: "Ale"
+};
+
+var fact2 = { 
+	age: 23,
+	name: "Candela",
+	surname: "Dominguez"
+};
+
 describe('API rules routes', function() {
 	beforeEach(function(done) { 
 		knex.migrate.rollback()
@@ -451,4 +463,144 @@ describe('API rules routes', function() {
 			});
 		});
 	})
+	
+	describe('POST /api/rules/:ruleId/run', function() {
+		it('Run specific rule with code 200', function(done) {
+			chai.request(server)
+			.post('/api/rules/3/run?token=' + businessToken)
+			.send({
+				facts: [
+					{ language: 'node-rules/javascript', blob: serialize(fact1) },
+					{ language: 'node-rules/javascript', blob: serialize(fact2) }
+				]
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('facts');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('version');
+				res.body.facts.should.be.a('array');
+				res.body.facts.length.should.equal(2);
+				res.body.facts[0].should.have.property('language');
+				res.body.facts[0].language.should.equal('node-rules/javascript');
+				res.body.facts[0].should.have.property('blob');
+				res.body.facts[0].blob.should.not.include('nameResult');
+				res.body.facts[1].should.have.property('language');
+				res.body.facts[1].language.should.equal('node-rules/javascript');
+				res.body.facts[1].should.have.property('blob');
+				res.body.facts[1].blob.should.include('Cool person B)');
+				done();
+			});
+		});
+		
+		it('Run specific rule with code 400', function(done) {
+			chai.request(server)
+			.post('/api/rules/1/run?token=' + businessToken)
+			.end(function(err, res) {
+				res.should.have.status(400);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(400);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+	});
+	
+	describe('POST /api/rules/:ruleId/run', function() {
+		it('Run all rules with code 200', function(done) {
+			chai.request(server)
+			.post('/api/rules/run?token=' + businessToken)
+			.send({
+				rules: [
+					'1', 
+					'2',
+					'3'
+				],
+				facts: [
+					{ language: 'node-rules/javascript', blob: serialize(fact1) },
+					{ language: 'node-rules/javascript', blob: serialize(fact2) }
+				]
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('facts');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('version');
+				res.body.facts.should.be.a('array');
+				res.body.facts.length.should.equal(2);
+				res.body.facts[0].should.have.property('language');
+				res.body.facts[0].language.should.equal('node-rules/javascript');
+				res.body.facts[0].should.have.property('blob');
+				res.body.facts[0].blob.should.not.include('Cool person B)');
+				res.body.facts[0].blob.should.not.include('Adult');
+				res.body.facts[0].blob.should.include('Short surname');
+				res.body.facts[1].should.have.property('language');
+				res.body.facts[1].language.should.equal('node-rules/javascript');
+				res.body.facts[1].should.have.property('blob');
+				res.body.facts[1].blob.should.not.include('Short surname');
+				res.body.facts[1].blob.should.include('Cool person B)');
+				res.body.facts[1].blob.should.include('Adult');
+				done();
+			});
+		});
+		
+		it('Run some rules with code 200', function(done) {
+			chai.request(server)
+			.post('/api/rules/run?token=' + businessToken)
+			.send({
+				rules: [
+					'2',
+					'3'
+				],
+				facts: [
+					{ language: 'node-rules/javascript', blob: serialize(fact1) },
+					{ language: 'node-rules/javascript', blob: serialize(fact2) }
+				]
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('facts');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('version');
+				res.body.facts.should.be.a('array');
+				res.body.facts.length.should.equal(2);
+				res.body.facts[0].should.have.property('language');
+				res.body.facts[0].language.should.equal('node-rules/javascript');
+				res.body.facts[0].should.have.property('blob');
+				res.body.facts[0].blob.should.not.include('Cool person B)');
+				res.body.facts[0].blob.should.not.include('Adult');
+				res.body.facts[0].blob.should.include('Short surname');
+				res.body.facts[1].should.have.property('language');
+				res.body.facts[1].language.should.equal('node-rules/javascript');
+				res.body.facts[1].should.have.property('blob');
+				res.body.facts[1].blob.should.not.include('Short surname');
+				res.body.facts[1].blob.should.include('Cool person B)');
+				res.body.facts[1].blob.should.not.include('Adult');
+				done();
+			});
+		});
+		
+		it('Run rules with code 400', function(done) {
+			chai.request(server)
+			.post('/api/rules/run?token=' + businessToken)
+			.end(function(err, res) {
+				res.should.have.status(400);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(400);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+	});
 });

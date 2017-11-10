@@ -32,12 +32,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Output stream for writing morgan's log lines
 app.use(morgan ('combined', { 'stream': logger.stream }));
 
-// Defining endpoint
-app.get("/", function(req, res) {
-	logger.info("GET at /");
-	res.send("Welcome!");
-});
-
 // Routes
 app.use('/api', routes);
 
