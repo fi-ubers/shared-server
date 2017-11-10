@@ -96,7 +96,7 @@ describe('API trips routes', function() {
 	});
 
 	describe('POST /api/trips', function() {
-		it('Register trip with code 201', function(done) {
+		it('Register trip with card and code 201', function(done) {
 			chai.request(server)
 			.post('/api/trips?token=' + appToken)
 			.send({
@@ -111,9 +111,63 @@ describe('API trips routes', function() {
 					distance: 6000,
 					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]
 				},
-				paymethod: { paymethod: 'card', parameters: { ccvv: '1234', expiration_month: '08', expiration_year: '2018', number: '656435362525', type: 'visa' } }
+				paymethod: { name: 'card', parameters: { ccvv: '1234', expiration_month: '08', expiration_year: '2018', number: '656435362525', type: 'visa' } }
 			})
 			.end(function(err, res) {
+				res.should.have.status(201);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('trip');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('version');
+				res.body.trip.should.have.property('id');
+				res.body.trip.id.should.equal(2);
+				res.body.trip.should.have.property('applicationOwner');
+				res.body.trip.applicationOwner.should.equal('1');
+				res.body.trip.should.have.property('driver');
+				res.body.trip.driver.should.equal(3);
+				res.body.trip.should.have.property('passenger');
+				res.body.trip.passenger.should.equal(1);
+				res.body.trip.should.have.property('start');
+				res.body.trip.start.should.deep.equal({ address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-10-30T10:15:54.000Z'});
+				res.body.trip.should.have.property('end');
+				res.body.trip.end.should.deep.equal({ address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-10-30T10:39:10.000Z'});
+				res.body.trip.should.have.property('totalTime');
+				res.body.trip.totalTime.should.equal(1440);
+				res.body.trip.should.have.property('waitTime');
+				res.body.trip.waitTime.should.equal(300);
+				res.body.trip.should.have.property('travelTime');
+				res.body.trip.travelTime.should.equal(1140);
+				res.body.trip.should.have.property('distance');
+				res.body.trip.distance.should.equal(6000);
+				res.body.trip.should.have.property('route');
+				res.body.trip.route.should.deep.equal([{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]);
+				res.body.trip.should.have.property('cost');
+				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 100 });
+				done();
+			});
+		});
+		
+		it('Register trip with cash and code 201', function(done) {
+			chai.request(server)
+			.post('/api/trips?token=' + appToken)
+			.send({
+				trip: {
+					driver: 3,
+					passenger: 1,
+					start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-10-30T10:15:54.000Z'},
+					end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-10-30T10:39:10.000Z'},
+					totalTime: 1440, 
+					waitTime: 300,
+					travelTime: 1140,
+					distance: 6000,
+					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]
+				},
+				paymethod: { name: 'cash', parameters: { type: 'someType' } }
+			})
+			.end(function(err, res) {
+				console.log(res.body)
 				res.should.have.status(201);
 				res.should.be.json;
 				res.body.should.be.a('Object');
@@ -183,7 +237,7 @@ describe('API trips routes', function() {
 					distance: 6000,
 					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]
 				},
-				paymethod: { paymethod: 'card', parameters: { type: 'visa' } }
+				paymethod: { name: 'card', parameters: { type: 'visa' } }
 			})
 			.end(function(err, res) {
 				res.should.have.status(500);

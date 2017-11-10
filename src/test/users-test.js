@@ -1100,11 +1100,10 @@ describe('API users routes', function() {
 			.send({
 				trip: 1,
 				cost: { currency: "ARS", value: 50 }, 
-				description: "Trip payment", 
-				paymethod: { paymethod: 'card', parameters: { ccvv: '1234', expiration_month: '08', expiration_year: '2018', number: '656435362525', type: 'visa', method: 'card' }}
+				description: "Trip card payment", 
+				paymethod: { name: 'card', parameters: { ccvv: '1234', expiration_month: '08', expiration_year: '2018', number: '656435362525', type: 'visa', method: 'card' }}
 			})
 			.end(function(err, res) {
-				console.log(res.body.message)
 				res.should.have.status(200);
 				res.should.be.json;
 				res.body.should.be.a('Object');
@@ -1117,7 +1116,7 @@ describe('API users routes', function() {
 				res.body.transaction.should.have.property('cost');
 				res.body.transaction.cost.should.deep.equal({ currency: "ARS", value: 50 });
 				res.body.transaction.should.have.property('description');
-				res.body.transaction.description.should.equal('Trip payment');
+				res.body.transaction.description.should.equal('Trip card payment');
 				res.body.transaction.should.have.property('data');
 				res.body.transaction.should.not.have.property('paymethod');
 				done();

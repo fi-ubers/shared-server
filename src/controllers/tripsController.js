@@ -70,6 +70,14 @@ module.exports = {
 				logger.info("Creating transactions for passenger and driver");
 				var tripId = trip[0].id;
 			
+				var driverTransaction = {
+					trip: tripId,
+					timestamp: knex.fn.now(),
+					cost: cost,
+					description: "Trip gain",
+					user: driver
+				};
+				
 				var passengerTransaction = {
 					trip: tripId,
 					timestamp: knex.fn.now(),
@@ -80,49 +88,61 @@ module.exports = {
 					description: "Trip cost",
 					user: passenger
 				};
-			
-				var driverTransaction = {
-					trip: tripId,
-					timestamp: knex.fn.now(),
-					cost: cost,
-					description: "Trip gain",
-					user: driver
-				};
-			
-				queryController.insertWithoutReturn(transactionTable, passengerTransaction);
-				queryController.insertWithoutReturn(transactionTable, driverTransaction);
 				
-				balanceController.manageBalance(passenger, cost, 'negative');
+				queryController.insertWithoutReturn(transactionTable, driverTransaction);			
+				queryController.insertWithoutReturn(transactionTable, passengerTransaction);
+				
 				balanceController.manageBalance(driver, cost, 'positive');
+				
+				if (paymethod.name == "card") {
+					balanceController.manageBalance(passenger, cost, 'negative');
 
-				logger.info("Making trip payment");	
-				tokenController.generatePaymentToken().then(function(body) {
-					paymethod.parameters.method = paymethod.paymethod;
-					var paymentData = {
-						currency: cost.currency,
-						value: cost.value,
-						paymethod: paymethod.parameters
-					};
-					paymentController.createPayment(body.access_token, paymentData)
-					.then(function(response) {
-						logger.info("Payment success");
-						logger.info("Creating payment transaction");
-						var paymentTransaction = {
-							trip: tripId,
-							timestamp: knex.fn.now(),
-							cost: cost,
-							description: "Trip payment",
-							user: passenger
+					logger.info("Making trip payment");	
+					tokenController.generatePaymentToken().then(function(body) {
+						paymethod.parameters.method = paymethod.name;
+						var paymentData = {
+							currency: cost.currency,
+							value: cost.value,
+							paymethod: paymethod.parameters
 						};
-						queryController.insertWithoutReturn(transactionTable, paymentTransaction);
-						balanceController.manageBalance(passenger, cost, 'positive');
-						responseController.sendTrip(res, 201, trip[0]);
+						
+						paymentController.createPayment(body.access_token, paymentData)
+						.then(function(response) {
+							logger.info("Payment success");
+							logger.info("Creating payment transaction");
+							var paymentTransaction = {
+								trip: tripId,
+								timestamp: knex.fn.now(),
+								cost: cost,
+								description: "Trip card payment",
+								user: passenger
+							};
+							queryController.insertWithoutReturn(transactionTable, paymentTransaction);
+							balanceController.manageBalance(passenger, cost, 'positive');
+							responseController.sendTrip(res, 201, trip[0]);
+						})
+						.catch(function(error) {
+							logger.error("Payment fail");	
+							errorController.paymentError(res, error, request, { trip: tripId, cost: cost, description: "Trip payment", paymethod: paymethod });
+						})
 					})
 					.catch(function(error) {
-						logger.error("Payment fail");	
-						errorController.paymentError(res, error, request, { trip: tripId, cost: cost, description: "Trip payment", paymethod: paymethod });
+							logger.error("Payment token fail");	
+							errorController.unexpectedError(res, error, request);
 					})
-				})
+					
+				} else {
+					logger.info("Creating payment transaction with cash");
+					var cashPaymentTransaction = {
+						trip: tripId,
+						timestamp: knex.fn.now(),
+						cost: cost,
+						description: "Trip cash payment",
+						user: passenger
+					};
+					queryController.insertWithoutReturn(transactionTable, cashPaymentTransaction);
+					responseController.sendTrip(res, 201, trip[0]);
+				}
 			})
 			.catch(function(error) {
 				errorController.unexpectedError(res, error, request);
