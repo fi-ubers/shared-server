@@ -36,6 +36,218 @@ var rule3 = {
 	}
 };
 
+// Passenger rules
+var ruleP1 = { 
+	condition: function(R) {
+		R.when(this);
+	},
+	
+	consequence: function(R) {
+		this.minCost = 50;
+		R.next();
+	}
+};
+
+var ruleP2 = { 
+	condition: function(R) {
+		R.when(this.trip.distance);
+	},
+	
+	consequence: function(R) {
+		this.cost += this.trip.distance/1000 * 15;
+		R.next();
+	}
+};
+
+var ruleP3 = { 
+	condition: function(R) {
+		var tripDate = new Date(this.trip.start.timestamp)
+		var dayOfWeek = tripDate.getDay();
+		var hour = tripDate.getHours();
+		R.when((dayOfWeek == 3) && (hour == 15 || hour == 16));
+	},
+	
+	consequence: function(R) {
+		this.discount.push(0.05);
+		R.next();
+	}
+};
+
+var ruleP4 = { 
+	condition: function(R) {
+		R.when(this.firstTrip);
+	},
+	
+	consequence: function(R) {
+		this.cost -= 100;
+		R.next();
+	}
+};
+
+var ruleP5 = { 
+	condition: function(R) {
+		var tripDate = new Date(this.trip.start.timestamp)
+		var dayOfWeek = tripDate.getDay();
+		var hour = tripDate.getHours();
+		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 || hour <= 19));
+	},
+	
+	consequence: function(R) {
+		this.surcharges.push(0.1);
+		R.next();
+	}
+};
+
+var ruleP6 = { 
+	condition: function(R) {
+		var tripDate = new Date(this.trip.start.timestamp);
+		var currentTime = tripDate.getTime();
+		
+		queryController.selectAll('trips')
+		.then(function(trips) {
+			var count = 0;
+			for(var i = 0; i < trips.length; i++) {
+				var startTimestamp = trip[i].start.timestamp;
+				var otherTripDate = new Date(startTimestamp);
+				var timeBetween = currentTime - otherTripDate.getTime();
+				var thirtyMinutesInMs = 1800000;
+				if (timeBetween <= thirtyMinutesInMs)
+					count++;
+			}
+		})
+		R.when(count > 10)
+		
+	},
+	
+	consequence: function(R) {
+		this.surcharges.push(0.15);
+		R.next();
+	}
+};
+
+var ruleP7 = { 
+	condition: function(R) {
+		R.when(this.user.email.endsWith('@llevame.com'));
+	},
+	
+	consequence: function(R) {
+		this.free = true;
+		R.stop();
+	}
+};
+
+var ruleP8 = { 
+	condition: function(R) {
+		var negativeBalance = false;
+		for(var i = 0; i < this.user.balance.length; i++) {
+			if (this.user.balance[i].cost < 0)
+				negativeBalance = true;
+		}
+		
+		R.when(negativeBalance);
+	},
+	
+	consequence: function(R) {
+		this.canTravel = false;
+		R.stop();
+	}
+};
+
+var ruleP9 = { 
+	condition: function(R) {
+		var tripDate = new Date(this.trip.start.timestamp);
+		var tripDay = tripDate.getDate();
+		var tripYear = tripDate.getFullYear();
+		var tripMonth = tripDate.getMonth();
+		
+		queryController.selectAllWhere('trips', {id: this.user.id})
+		.then(function(trips) {
+			var count = 0;
+			for(var i = 0; i < trips.length; i++) {
+				var startTimestamp = trip[i].start.timestamp;
+				var otherTripDate = new Date(startTimestamp);
+				var otherTripDay = otherTripDate.getDate();
+				var otherTripYear = otherTripDate.getFullYear();
+				var otherTripMonth = otherTripDate.getMonth();
+				if ((tripDay == otherTripDay) || (tripYear == otherTripYear) || (tripMonth == otherTripMonth))
+					count++;
+			}
+		})
+		R.when(count >= 5)
+	},
+	
+	consequence: function(R) {
+		this.discount.push(0.05);
+		R.next();
+	}
+};
+
+// Driver rules
+var ruleD1 = { 
+	condition: function(R) {
+		R.when(this);
+	},
+	
+	consequence: function(R) {
+		this.minPayment = 30;
+		R.next();
+	}
+};
+
+var ruleD2 = { 
+	condition: function(R) {
+		R.when(this.trip.distance);
+	},
+	
+	consequence: function(R) {
+		this.cost += this.trip.distance/1000 * 5;
+		R.next();
+	}
+};
+
+var ruleD3 = { 
+	condition: function(R) {
+		var tripDate = new Date(this.trip.start.timestamp)
+		var dayOfWeek = tripDate.getDay();
+		var hour = tripDate.getHours();
+		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 || hour <= 19));
+	},
+	
+	consequence: function(R) {
+		this.surcharges.push(0.03);
+		R.next();
+	}
+};
+
+var ruleD4 = { 
+	condition: function(R) {
+		var tripDate = new Date(this.trip.start.timestamp);
+		var tripDay = tripDate.getDate();
+		var tripYear = tripDate.getFullYear();
+		var tripMonth = tripDate.getMonth();
+		
+		queryController.selectAllWhere('trips', {id: this.user.id})
+		.then(function(trips) {
+			var count = 0;
+			for(var i = 0; i < trips.length; i++) {
+				var startTimestamp = trip[i].start.timestamp;
+				var otherTripDate = new Date(startTimestamp);
+				var otherTripDay = otherTripDate.getDate();
+				var otherTripYear = otherTripDate.getFullYear();
+				var otherTripMonth = otherTripDate.getMonth();
+				if ((tripDay == otherTripDay) || (tripYear == otherTripYear) || (tripMonth == otherTripMonth))
+					count++;
+			}
+		})
+		R.when(count > 10)
+	},
+	
+	consequence: function(R) {
+		this.surcharges.push(0.02);
+		R.next();
+	}
+};
+
 exports.seed = function(knex, Promise) {
 	return Promise.all([
 		// Deletes ALL existing entries

@@ -37,6 +37,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
     "express-jwt": "^5.3.0",
+    "geolib": "^2.0.24",
     "jsonwebtoken": "^8.0.1",
     "knex": "^0.13.0",
     "moment": "^2.18.1",

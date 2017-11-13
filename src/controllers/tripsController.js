@@ -2,6 +2,8 @@ var logger = require('./../logger');
 var knex = require('../db/knex');
 var tripTable = 'trips';
 var transactionTable = 'transactions';
+var ruleTable = 'rules';
+var userTable = 'application_users';
 var visibleTripFields = ['id', 'applicationOwner', 'driver', 'passenger', 'start', 'end', 'totalTime', 'waitTime', 'travelTime', 'distance', 'route', 'cost'];
 
 var errorController = require('./errorController');
@@ -10,6 +12,32 @@ var responseController = require('./responseController');
 var paymentController = require('./paymentController');
 var tokenController = require('./tokenController');
 var balanceController = require('./balanceController');
+
+function calculateCost(userId, tripData) {
+	// Run 'active' rules
+	queryController.selectAllWhere(ruleTable, {active: true})
+	.then(function(selectedRules) {
+		queryController.countWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, 'id')
+		.then(function(tripsCount) {
+			queryController.select
+			rules = selectedRules.map(rule => deserialize(rule.blob));
+		
+			var fact = {
+				trip: tripData,
+				user: userData,
+				cost: 0,
+				discounts: [],
+				surcharges: [],
+				canTravel: true,
+				firstTrip: tripsCount == 0
+			}
+			Rules.execute(fact, rules).then(function(result) {
+				//
+			})
+			
+		})
+	})
+}
 
 /** @module tripsController */
 module.exports = {
@@ -40,7 +68,7 @@ module.exports = {
 		var distance = req.body.trip.distance;
 		var route = req.body.trip.route;
 		var paymethod = req.body.paymethod;
-		
+
 		logger.info(request);
 		if (!driver || !passenger || !start || !end || !totalTime || !waitTime || !travelTime || !distance || !route || !paymethod) { 
 			errorController.missingParameters(res, request);
