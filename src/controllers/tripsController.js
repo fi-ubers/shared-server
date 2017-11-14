@@ -1,5 +1,8 @@
 var logger = require('./../logger');
 var knex = require('../db/knex');
+var Rules = require('../services/rulesService');
+var serialize = require('serialize-javascript');
+var deserialize = str => eval('(' + str + ')');
 var tripTable = 'trips';
 var transactionTable = 'transactions';
 var ruleTable = 'rules';
@@ -15,24 +18,48 @@ var balanceController = require('./balanceController');
 
 function calculateCost(userId, tripData) {
 	// Run 'active' rules
-	queryController.selectAllWhere(ruleTable, {active: true})
+	return queryController.selectAllWhere(ruleTable, {active: true})
 	.then(function(selectedRules) {
-		queryController.countWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, 'id')
-		.then(function(tripsCount) {
-			queryController.select
-			rules = selectedRules.map(rule => deserialize(rule.blob));
-		
-			var fact = {
-				trip: tripData,
-				user: userData,
-				cost: 0,
-				discounts: [],
-				surcharges: [],
-				canTravel: true,
-				firstTrip: tripsCount == 0
-			}
-			Rules.execute(fact, rules).then(function(result) {
-				//
+		return queryController.selectAll(tripTable)
+		.then(function(trips) {
+			return queryController.selectOneWhere(userTable, {id: userId})
+			.then(function(userData) {
+				rules = selectedRules.map(rule => deserialize(rule.blob));
+				var userTrips = trips.filter(trip => trip.passenger == userId);
+				var fact = {
+					trips: trips,
+					userTrip: tripData,
+					user: userData,
+					cost: 0,
+					discounts: [],
+					surcharges: [],
+					canTravel: true,
+					firstTrip: userTrips.length == 0
+				}
+				
+				return Rules.execute(fact, rules).then(function(result) {
+					if (result.free)
+						return 0;
+					
+					if (!result.canTravel)
+						return -1;
+						
+					var cost = result.cost;
+					// Apply discounts
+					for(var i = 0; i < result.discounts.length; i++) {
+						cost = cost - (cost * result.discounts[i]);
+					}
+				
+					// Apply surcharges
+					for(var i = 0; i < result.surcharges.length; i++) {
+						cost = cost + (cost * result.surcharges[i]);
+					}
+				
+					if (result.minCost && (cost < result.minCost))
+						return result.minCost;
+
+					return parseFloat(cost.toFixed(2));
+				})
 			})
 			
 		})
@@ -74,103 +101,115 @@ module.exports = {
 			errorController.missingParameters(res, request);
 		} else {
 			logger.info("Using the rules engine to calculate the cost of the trip");
-			// TODO: Calculate cost
-			var costValue = 100;
-			var cost = { currency: "ARS", value: costValue };
 			
-			logger.info("Registering trip");	
-			queryController.insertAndReturnSome(tripTable, {
-				applicationOwner: req.user.id,
-				driver: driver,
-				passenger: passenger, 
-				start: start, 
-				end: end,
-				totalTime: totalTime,
-				waitTime: waitTime,
-				travelTime: travelTime,
-				distance: distance,
-				route: route,
-				cost: cost,
-				paymethod: paymethod
-			}, visibleTripFields)
-			.then(function(trip) {
+			var promises = [];
+			promises.push(calculateCost(passenger, req.body.trip));
+			//promises.push(calculateGain(driver, req.body.trip));
+			Promise.all(promises)
+			.then(function(calculatedValues) {
+				var costValue = calculatedValues[0];
+				if (costValue == -1) {
+					return errorController.unauthorized(res, "User with negative balance " + request);
+				}
+				var cost = { currency: "ARS", value: costValue };
 			
-				logger.info("Creating transactions for passenger and driver");
-				var tripId = trip[0].id;
-			
-				var driverTransaction = {
-					trip: tripId,
-					timestamp: knex.fn.now(),
+				logger.info("Registering trip");	
+				queryController.insertAndReturnSome(tripTable, {
+					applicationOwner: req.user.id,
+					driver: driver,
+					passenger: passenger, 
+					start: start, 
+					end: end,
+					totalTime: totalTime,
+					waitTime: waitTime,
+					travelTime: travelTime,
+					distance: distance,
+					route: route,
 					cost: cost,
-					description: "Trip gain",
-					user: driver
-				};
-				
-				var passengerTransaction = {
-					trip: tripId,
-					timestamp: knex.fn.now(),
-					cost: {
-						currency: cost.currency,
-						value: -cost.value
-					},
-					description: "Trip cost",
-					user: passenger
-				};
-				
-				queryController.insertWithoutReturn(transactionTable, driverTransaction);			
-				queryController.insertWithoutReturn(transactionTable, passengerTransaction);
-				
-				balanceController.manageBalance(driver, cost, 'positive');
-				
-				if (paymethod.name == "card") {
-					balanceController.manageBalance(passenger, cost, 'negative');
-
-					logger.info("Making trip payment");	
-					tokenController.generatePaymentToken().then(function(body) {
-						paymethod.parameters.method = paymethod.name;
-						var paymentData = {
-							currency: cost.currency,
-							value: cost.value,
-							paymethod: paymethod.parameters
-						};
-						
-						paymentController.createPayment(body.access_token, paymentData)
-						.then(function(response) {
-							logger.info("Payment success");
-							logger.info("Creating payment transaction");
-							var paymentTransaction = {
-								trip: tripId,
-								timestamp: knex.fn.now(),
-								cost: cost,
-								description: "Trip card payment",
-								user: passenger
-							};
-							queryController.insertWithoutReturn(transactionTable, paymentTransaction);
-							balanceController.manageBalance(passenger, cost, 'positive');
-							responseController.sendTrip(res, 201, trip[0]);
-						})
-						.catch(function(error) {
-							logger.error("Payment fail");	
-							errorController.paymentError(res, error, request, { trip: tripId, cost: cost, description: "Trip payment", paymethod: paymethod });
-						})
-					})
-					.catch(function(error) {
-							logger.error("Payment token fail");	
-							errorController.unexpectedError(res, error, request);
-					})
-					
-				} else {
-					logger.info("Creating payment transaction with cash");
-					var cashPaymentTransaction = {
+					paymethod: paymethod
+				}, visibleTripFields)
+				.then(function(trip) {
+			
+					logger.info("Creating transactions for passenger and driver");
+					var tripId = trip[0].id;
+			
+					var driverTransaction = {
 						trip: tripId,
 						timestamp: knex.fn.now(),
 						cost: cost,
-						description: "Trip cash payment",
+						description: "Trip gain",
+						user: driver
+					};
+				
+					var passengerTransaction = {
+						trip: tripId,
+						timestamp: knex.fn.now(),
+						cost: {
+							currency: cost.currency,
+							value: -cost.value
+						},
+						description: "Trip cost",
 						user: passenger
 					};
-					queryController.insertWithoutReturn(transactionTable, cashPaymentTransaction);
-					responseController.sendTrip(res, 201, trip[0]);
-				}
+				
+					queryController.insertWithoutReturn(transactionTable, driverTransaction);			
+					queryController.insertWithoutReturn(transactionTable, passengerTransaction);
+				
+					balanceController.manageBalance(driver, cost, 'positive');
+				
+					if (paymethod.name == "card") {
+						balanceController.manageBalance(passenger, cost, 'negative');
+
+						logger.info("Making trip payment");	
+						tokenController.generatePaymentToken().then(function(body) {
+							paymethod.parameters.method = paymethod.name;
+							var paymentData = {
+								currency: cost.currency,
+								value: cost.value,
+								paymethod: paymethod.parameters
+							};
+						
+							paymentController.createPayment(body.access_token, paymentData)
+							.then(function(response) {
+								logger.info("Payment success");
+								logger.info("Creating payment transaction");
+								var paymentTransaction = {
+									trip: tripId,
+									timestamp: knex.fn.now(),
+									cost: cost,
+									description: "Trip card payment",
+									user: passenger
+								};
+								queryController.insertWithoutReturn(transactionTable, paymentTransaction);
+								balanceController.manageBalance(passenger, cost, 'positive');
+								responseController.sendTrip(res, 201, trip[0]);
+							})
+							.catch(function(error) {
+								logger.error("Payment fail");	
+								errorController.paymentError(res, error, request, { trip: tripId, cost: cost, description: "Trip payment", paymethod: paymethod });
+							})
+						})
+						.catch(function(error) {
+								logger.error("Payment token fail");	
+								errorController.unexpectedError(res, error, request);
+						})
+					
+					} else {
+						logger.info("Creating payment transaction with cash");
+						var cashPaymentTransaction = {
+							trip: tripId,
+							timestamp: knex.fn.now(),
+							cost: cost,
+							description: "Trip cash payment",
+							user: passenger
+						};
+						queryController.insertWithoutReturn(transactionTable, cashPaymentTransaction);
+						responseController.sendTrip(res, 201, trip[0]);
+					}
+				})
+				.catch(function(error) {
+					errorController.unexpectedError(res, error, request);
+				})
 			})
 			.catch(function(error) {
 				errorController.unexpectedError(res, error, request);

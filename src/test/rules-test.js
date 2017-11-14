@@ -21,7 +21,7 @@ var businessToken = jwt.sign({
 			
 var rule = { 
 	condition: function(R) {
-		R.when(this.age >= 21);
+		R.when(this.age && this.age >= 21);
 	},
 	
 	consequence: function(R) {
@@ -32,7 +32,7 @@ var rule = {
 
 var modifiedRule = { 
 	condition: function(R) {
-		R.when(this.age >= 18);
+		R.when(this.age && this.age >= 18);
 	},
 	
 	consequence: function(R) {
@@ -43,7 +43,7 @@ var modifiedRule = {
 
 var rule3 = { 
 	condition: function(R) {
-		R.when(this.name.startsWith("C"));
+		R.when(this.name && this.name.startsWith("C"));
 	},
 	
 	consequence: function(R) {
@@ -100,7 +100,7 @@ describe('API rules routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.rules.should.be.a('array');
-				res.body.rules.length.should.equal(3);
+				res.body.rules.length.should.equal(12);
 				res.body.rules[0].should.have.property('id');
 				res.body.rules[0].id.should.equal(1);
 				res.body.rules[0].should.have.property('_ref');
@@ -133,7 +133,7 @@ describe('API rules routes', function() {
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('rule');
 				res.body.rule.should.have.property('id');
-				res.body.rule.id.should.equal(4);
+				res.body.rule.id.should.equal(13);
 				res.body.rule.should.have.property('_ref');
 				res.body.rule.should.have.property('language');
 				res.body.rule.language.should.equal('node-rules/javascript');
@@ -187,7 +187,7 @@ describe('API rules routes', function() {
 		
 		it('Delete rule by id with code 404', function(done) {
 			chai.request(server)
-			.delete('/api/rules/6?token=' + businessToken)
+			.delete('/api/rules/34?token=' + businessToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -226,7 +226,7 @@ describe('API rules routes', function() {
 	
 		it('Get rule by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/rules/6?token=' + businessToken)
+			.get('/api/rules/36?token=' + businessToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -292,7 +292,7 @@ describe('API rules routes', function() {
 	
 		it('Update rule by id with code 404', function(done) {
 			chai.request(server)
-			.put('/api/rules/6?token=' + businessToken)
+			.put('/api/rules/36?token=' + businessToken)
 			.send({
 				_ref: 'test',
 				language: 'node-rules/javascript',
@@ -430,7 +430,7 @@ describe('API rules routes', function() {
 			.end(function(err, res) {
 				res.should.have.status(201);
 				chai.request(server)
-				.put('/api/rules/4?token=' + businessToken)
+				.put('/api/rules/13?token=' + businessToken)
 				.send({
 					_ref: res.body.rule._ref,
 					language: 'node-rules/javascript',
@@ -440,7 +440,7 @@ describe('API rules routes', function() {
 				.end(function(err, res) {
 					res.should.have.status(200);
 					chai.request(server)
-					.get('/api/rules/4/commits?token=' + businessToken)
+					.get('/api/rules/13/commits?token=' + businessToken)
 					.end(function(err, res) {
 						res.should.have.status(200);
 						res.body.commits.should.be.a('array');

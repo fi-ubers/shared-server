@@ -89,7 +89,7 @@ describe('API users routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.users.should.be.a('array');
-				res.body.users.length.should.equal(5);
+				res.body.users.length.should.equal(6);
 				res.body.users[0].should.have.property('id');
 				res.body.users[0].id.should.equal(1);
 				res.body.users[0].should.have.property('_ref');
@@ -137,7 +137,7 @@ describe('API users routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.users.should.be.a('array');
-				res.body.users.length.should.equal(5);
+				res.body.users.length.should.equal(6);
 				res.body.users[2].should.have.property('id');
 				res.body.users[2].id.should.equal(3);
 				res.body.users[2].should.have.property('_ref');
@@ -234,7 +234,7 @@ describe('API users routes', function() {
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('user');
 				res.body.user.should.have.property('id');
-				res.body.user.id.should.equal(6);
+				res.body.user.id.should.equal(7);
 				res.body.user.should.have.property('_ref');
 				res.body.user.should.have.property('applicationOwner');
 				res.body.user.applicationOwner.should.equal('15');
@@ -259,7 +259,7 @@ describe('API users routes', function() {
 				res.body.user.should.not.have.property('password');
 				res.body.user.should.not.have.property('fb');
 				chai.request(server)
-				.post('/api/users/6/cars?token=' + appToken)
+				.post('/api/users/7/cars?token=' + appToken)
 				.send({
 					properties: [{ name: 'Ford Focus', value: 'MNA872' }]
 				})
@@ -273,7 +273,7 @@ describe('API users routes', function() {
 					res.body.car.id.should.equal(4);
 					res.body.car.should.have.property('_ref');
 					res.body.car.should.have.property('owner');
-					res.body.car.owner.should.equal(6);
+					res.body.car.owner.should.equal(7);
 					res.body.car.should.have.property('properties');
 					res.body.car.properties[0].name.should.equal('Ford Focus');
 					res.body.car.properties[0].value.should.equal('MNA872');
@@ -284,7 +284,7 @@ describe('API users routes', function() {
 						res.should.be.json;
 						res.body.should.be.a('Object');
 						res.body.users.should.be.a('array');
-						res.body.users.length.should.equal(6);
+						res.body.users.length.should.equal(7);
 						res.body.users[5].should.have.property('cars');
 						done();
 					});
@@ -433,7 +433,7 @@ describe('API users routes', function() {
 			.end(function(err, res) {
 				res.should.have.status(204);
 				chai.request(server)
-				.get('/api/users/5?token=' + appToken)
+				.get('/api/users/7?token=' + appToken)
 				.end(function(err, res) {
 					res.should.have.status(404);
 					res.should.be.json;
@@ -442,7 +442,7 @@ describe('API users routes', function() {
 					res.body.should.have.property('message');
 					// Check the cars of the deleted user
 					chai.request(server)
-					.get('/api/users/5/cars?token=' + appToken)
+					.get('/api/users/6/cars?token=' + appToken)
 					.end(function(err, res) {
 						res.should.have.status(200);
 						res.should.be.json;
@@ -487,7 +487,7 @@ describe('API users routes', function() {
 		
 		it('Delete user by id with code 404', function(done) {
 			chai.request(server)
-			.delete('/api/users/6?token=' + managerToken)
+			.delete('/api/users/7?token=' + managerToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -541,7 +541,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/6?token=' + appToken)
+			.get('/api/users/7?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -660,7 +660,7 @@ describe('API users routes', function() {
 	
 		it('Update user by id with code 404', function(done) {
 			chai.request(server)
-			.put('/api/users/6?token=' + appToken)
+			.put('/api/users/7?token=' + appToken)
 			.send({
 				_ref: 'test',
 				type: 'passenger',
@@ -1139,7 +1139,7 @@ describe('API users routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.trips.should.be.a('array');
-				res.body.trips.length.should.equal(1);
+				res.body.trips.length.should.equal(4);
 				res.body.trips[0].should.have.property('id');
 				res.body.trips[0].id.should.equal(1);
 				res.body.trips[0].should.have.property('applicationOwner');

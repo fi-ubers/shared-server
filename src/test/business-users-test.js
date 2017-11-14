@@ -298,7 +298,7 @@ describe('API business-users routes', function() {
 				res.body.should.have.property('code');
 				res.body.code.should.equal(401);
 				res.body.should.have.property('message');
-				res.body.message.should.equal('Unauthorized');
+				res.body.message.should.equal('Unauthorized POST /api/token/');
 				done();
 			});
 		});

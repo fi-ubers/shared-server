@@ -45,13 +45,6 @@ module.exports = {
 			.returning(columns);
 	}),
 	
-	/** Receives a table and selects the rows that meet the conditions. */
-	countWhere : (function(table, conditions, column) {
-		return knex(table)
-			.where(conditions)
-			.count(column);
-	}),
-	
 	/** Receives a table and selects using whereIn with the given column and array. */
 	selectWhereIn : (function(table, column, array, columns = '*') {
 		return knex(table)

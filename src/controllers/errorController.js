@@ -30,7 +30,7 @@ module.exports = {
 	/** Reports an 'unauthorized' error. */
 	unauthorized : (function(res, request) {
 		logger.error("Unauthorized: " + request);
-		res.status(401).send({code: 401, message: "Unauthorized"});
+		res.status(401).send({code: 401, message: "Unauthorized " + request});
 	}),
 	
 	/** Reports a 'failed validation' error. */

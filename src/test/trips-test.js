@@ -64,7 +64,7 @@ describe('API trips routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.trips.should.be.a('array');
-				res.body.trips.length.should.equal(1);
+				res.body.trips.length.should.equal(4);
 				res.body.trips[0].should.have.property('id');
 				res.body.trips[0].id.should.equal(1);
 				res.body.trips[0].should.have.property('applicationOwner');
@@ -95,6 +95,7 @@ describe('API trips routes', function() {
 		});
 	});
 
+
 	describe('POST /api/trips', function() {
 		it('Register trip with card and code 201', function(done) {
 			chai.request(server)
@@ -122,7 +123,7 @@ describe('API trips routes', function() {
 				res.body.metadata.should.be.a('Object');
 				res.body.metadata.should.have.property('version');
 				res.body.trip.should.have.property('id');
-				res.body.trip.id.should.equal(2);
+				res.body.trip.id.should.equal(5);
 				res.body.trip.should.have.property('applicationOwner');
 				res.body.trip.applicationOwner.should.equal('1');
 				res.body.trip.should.have.property('driver');
@@ -144,7 +145,7 @@ describe('API trips routes', function() {
 				res.body.trip.should.have.property('route');
 				res.body.trip.route.should.deep.equal([{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]);
 				res.body.trip.should.have.property('cost');
-				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 100 });
+				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 50 });
 				done();
 			});
 		});
@@ -167,7 +168,6 @@ describe('API trips routes', function() {
 				paymethod: { name: 'cash', parameters: { type: 'someType' } }
 			})
 			.end(function(err, res) {
-				console.log(res.body)
 				res.should.have.status(201);
 				res.should.be.json;
 				res.body.should.be.a('Object');
@@ -176,7 +176,7 @@ describe('API trips routes', function() {
 				res.body.metadata.should.be.a('Object');
 				res.body.metadata.should.have.property('version');
 				res.body.trip.should.have.property('id');
-				res.body.trip.id.should.equal(2);
+				res.body.trip.id.should.equal(5);
 				res.body.trip.should.have.property('applicationOwner');
 				res.body.trip.applicationOwner.should.equal('1');
 				res.body.trip.should.have.property('driver');
@@ -198,7 +198,160 @@ describe('API trips routes', function() {
 				res.body.trip.should.have.property('route');
 				res.body.trip.route.should.deep.equal([{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]);
 				res.body.trip.should.have.property('cost');
-				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 100 });
+				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 50 });
+				done();
+			});
+		});
+		
+		it('Register free trip', function(done) {
+			chai.request(server)
+			.post('/api/trips?token=' + appToken)
+			.send({
+				trip: {
+					driver: 3,
+					passenger: 4,
+					start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-10-30T10:15:54.000Z'},
+					end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-10-30T10:39:10.000Z'},
+					totalTime: 1440, 
+					waitTime: 300,
+					travelTime: 1140,
+					distance: 6000,
+					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]
+				},
+				paymethod: { name: 'cash', parameters: { type: 'someType' } }
+			})
+			.end(function(err, res) {
+				res.should.have.status(201);
+				res.should.be.json;
+				res.body.trip.should.have.property('cost');
+				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 0 });
+				done();
+			});
+		});
+		
+		it('Register trip testing cost per km', function(done) {
+			chai.request(server)
+			.post('/api/trips?token=' + appToken)
+			.send({
+				trip: {
+					driver: 3,
+					passenger: 2,
+					start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-10-30T10:15:54.000Z'},
+					end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-10-30T10:39:10.000Z'},
+					totalTime: 1440, 
+					waitTime: 300,
+					travelTime: 1140,
+					distance: 10000,
+					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]
+				},
+				paymethod: { name: 'cash', parameters: { type: 'someType' } }
+			})
+			.end(function(err, res) {
+				res.should.have.status(201);
+				res.should.be.json;
+				res.body.trip.should.have.property('cost');
+				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 150 });
+				done();
+			});
+		});
+		
+		it('Register trip testing discounts I', function(done) {
+			chai.request(server)
+			.post('/api/trips?token=' + appToken)
+			.send({
+				trip: {
+					driver: 3,
+					passenger: 2,
+					start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-08T15:15:54.000Z'},
+					end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-11-08T15:39:10.000Z'},
+					totalTime: 1440, 
+					waitTime: 300,
+					travelTime: 1140,
+					distance: 10000,
+					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-11-08T15:24:30.000Z'}]
+				},
+				paymethod: { name: 'cash', parameters: { type: 'someType' } }
+			})
+			.end(function(err, res) {
+				res.should.have.status(201);
+				res.should.be.json;
+				res.body.trip.should.have.property('cost');
+				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 142.5 });
+				done();
+			});
+		});
+		
+		it('Register trip testing discounts II', function(done) {
+			chai.request(server)
+			.post('/api/trips?token=' + appToken)
+			.send({
+				trip: {
+					driver: 3,
+					passenger: 2,
+					start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-10-28T15:15:54.000Z'},
+					end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-10-28T15:39:10.000Z'},
+					totalTime: 1440, 
+					waitTime: 300,
+					travelTime: 1140,
+					distance: 10000,
+					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-28T15:24:30.000Z'}]
+				},
+				paymethod: { name: 'cash', parameters: { type: 'someType' } }
+			})
+			.end(function(err, res) {
+				res.should.have.status(201);
+				res.should.be.json;
+				res.body.trip.should.have.property('cost');
+				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 142.5 });
+				done();
+			});
+		});
+		
+		it('Register trip testing surcharges I', function(done) {
+			chai.request(server)
+			.post('/api/trips?token=' + appToken)
+			.send({
+				trip: {
+					driver: 3,
+					passenger: 2,
+					start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-08T18:15:54.000Z'},
+					end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-11-08T18:39:10.000Z'},
+					totalTime: 1440, 
+					waitTime: 300,
+					travelTime: 1140,
+					distance: 10000,
+					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-11-08T18:24:30.000Z'}]
+				},
+				paymethod: { name: 'cash', parameters: { type: 'someType' } }
+			})
+			.end(function(err, res) {
+				res.should.have.status(201);
+				res.should.be.json;
+				res.body.trip.should.have.property('cost');
+				res.body.trip.cost.should.deep.equal({ currency: "ARS", value: 165 });
+				done();
+			});
+		});
+		
+		it('Register trip fail: Negative balance', function(done) {
+			chai.request(server)
+			.post('/api/trips?token=' + appToken)
+			.send({
+				trip: {
+					driver: 3,
+					passenger: 6,
+					start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-08T18:15:54.000Z'},
+					end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-11-08T18:39:10.000Z'},
+					totalTime: 1440, 
+					waitTime: 300,
+					travelTime: 1140,
+					distance: 10000,
+					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-11-08T18:24:30.000Z'}]
+				},
+				paymethod: { name: 'cash', parameters: { type: 'someType' } }
+			})
+			.end(function(err, res) {
+				res.should.have.status(401);
 				done();
 			});
 		});
@@ -296,7 +449,7 @@ describe('API trips routes', function() {
 	
 		it('Get trip by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/trips/3?token=' + userToken)
+			.get('/api/trips/6?token=' + userToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;

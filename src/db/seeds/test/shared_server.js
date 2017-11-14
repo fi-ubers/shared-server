@@ -5,7 +5,7 @@ var data = require('./../../../test/servers-test');
 
 var rule1 = { 
 	condition: function(R) {
-		R.when(this.age >= 21);
+		R.when(this.age && this.age >= 21);
 	},
 	
 	consequence: function(R) {
@@ -16,7 +16,7 @@ var rule1 = {
 
 var rule2 = { 
 	condition: function(R) {
-		R.when(this.surname.length < 5);
+		R.when(this.surname && this.surname.length < 5);
 	},
 	
 	consequence: function(R) {
@@ -27,7 +27,7 @@ var rule2 = {
 
 var rule3 = { 
 	condition: function(R) {
-		R.when(this.name.startsWith("C"));
+		R.when(this.name && this.name.startsWith("C"));
 	},
 	
 	consequence: function(R) {
@@ -50,25 +50,27 @@ var ruleP1 = {
 
 var ruleP2 = { 
 	condition: function(R) {
-		R.when(this.trip.distance);
+		R.when(this.userTrip.distance);
 	},
 	
 	consequence: function(R) {
-		this.cost += this.trip.distance/1000 * 15;
+		this.cost += this.userTrip.distance/1000 * 15;
 		R.next();
 	}
 };
 
 var ruleP3 = { 
 	condition: function(R) {
-		var tripDate = new Date(this.trip.start.timestamp)
-		var dayOfWeek = tripDate.getDay();
-		var hour = tripDate.getHours();
+		if(this.userTrip.start.timestamp) {
+			var tripDate = new Date(this.userTrip.start.timestamp)
+			var dayOfWeek = tripDate.getUTCDay();
+			var hour = tripDate.getUTCHours();
+		}
 		R.when((dayOfWeek == 3) && (hour == 15 || hour == 16));
 	},
 	
 	consequence: function(R) {
-		this.discount.push(0.05);
+		this.discounts.push(0.05);
 		R.next();
 	}
 };
@@ -79,17 +81,19 @@ var ruleP4 = {
 	},
 	
 	consequence: function(R) {
-		this.cost -= 100;
+		this.cost = this.cost - 100;
 		R.next();
 	}
 };
 
 var ruleP5 = { 
 	condition: function(R) {
-		var tripDate = new Date(this.trip.start.timestamp)
-		var dayOfWeek = tripDate.getDay();
-		var hour = tripDate.getHours();
-		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 || hour <= 19));
+		if(this.userTrip.start.timestamp) {
+			var tripDate = new Date(this.userTrip.start.timestamp)
+			var dayOfWeek = tripDate.getUTCDay();
+			var hour = tripDate.getUTCHours();
+		}
+		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 && hour <= 19));
 	},
 	
 	consequence: function(R) {
@@ -100,23 +104,21 @@ var ruleP5 = {
 
 var ruleP6 = { 
 	condition: function(R) {
-		var tripDate = new Date(this.trip.start.timestamp);
-		var currentTime = tripDate.getTime();
-		
-		queryController.selectAll('trips')
-		.then(function(trips) {
-			var count = 0;
-			for(var i = 0; i < trips.length; i++) {
-				var startTimestamp = trip[i].start.timestamp;
+		var count = 0;
+		if(this.userTrip.start.timestamp) {
+			var tripDate = new Date(this.userTrip.start.timestamp);
+			var currentTime = tripDate.getTime();
+
+			for(var i = 0; i < this.trips.length; i++) {
+				var startTimestamp = this.trips[i].start.timestamp;
 				var otherTripDate = new Date(startTimestamp);
 				var timeBetween = currentTime - otherTripDate.getTime();
 				var thirtyMinutesInMs = 1800000;
 				if (timeBetween <= thirtyMinutesInMs)
 					count++;
 			}
-		})
+		}
 		R.when(count > 10)
-		
 	},
 	
 	consequence: function(R) {
@@ -127,7 +129,7 @@ var ruleP6 = {
 
 var ruleP7 = { 
 	condition: function(R) {
-		R.when(this.user.email.endsWith('@llevame.com'));
+		R.when(this.user.email && this.user.email.endsWith('@llevame.com'));
 	},
 	
 	consequence: function(R) {
@@ -140,7 +142,7 @@ var ruleP8 = {
 	condition: function(R) {
 		var negativeBalance = false;
 		for(var i = 0; i < this.user.balance.length; i++) {
-			if (this.user.balance[i].cost < 0)
+			if (this.user.balance[i].value < 0)
 				negativeBalance = true;
 		}
 		
@@ -155,29 +157,29 @@ var ruleP8 = {
 
 var ruleP9 = { 
 	condition: function(R) {
-		var tripDate = new Date(this.trip.start.timestamp);
-		var tripDay = tripDate.getDate();
-		var tripYear = tripDate.getFullYear();
-		var tripMonth = tripDate.getMonth();
-		
-		queryController.selectAllWhere('trips', {id: this.user.id})
-		.then(function(trips) {
-			var count = 0;
-			for(var i = 0; i < trips.length; i++) {
-				var startTimestamp = trip[i].start.timestamp;
+		var count = 0;
+		if(this.userTrip.start.timestamp) {
+			var tripDate = new Date(this.userTrip.start.timestamp);
+			var tripDay = tripDate.getUTCDate();
+			var tripYear = tripDate.getUTCFullYear();
+			var tripMonth = tripDate.getUTCMonth();
+
+			for(var i = 0; i < this.trips.length; i++) {
+				var startTimestamp = this.trips[i].start.timestamp;
 				var otherTripDate = new Date(startTimestamp);
-				var otherTripDay = otherTripDate.getDate();
-				var otherTripYear = otherTripDate.getFullYear();
-				var otherTripMonth = otherTripDate.getMonth();
-				if ((tripDay == otherTripDay) || (tripYear == otherTripYear) || (tripMonth == otherTripMonth))
+				var otherTripDay = otherTripDate.getUTCDate();
+				var otherTripYear = otherTripDate.getUTCFullYear();
+				var otherTripMonth = otherTripDate.getUTCMonth();
+				if ((tripDay == otherTripDay) && (tripYear == otherTripYear) && (tripMonth == otherTripMonth)) {
 					count++;
+				}
 			}
-		})
-		R.when(count >= 5)
+		}
+		R.when(count >= 4)
 	},
 	
 	consequence: function(R) {
-		this.discount.push(0.05);
+		this.discounts.push(0.05);
 		R.next();
 	}
 };
@@ -207,10 +209,12 @@ var ruleD2 = {
 
 var ruleD3 = { 
 	condition: function(R) {
-		var tripDate = new Date(this.trip.start.timestamp)
-		var dayOfWeek = tripDate.getDay();
-		var hour = tripDate.getHours();
-		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 || hour <= 19));
+		if(this.trip.start.timestamp) {
+			var tripDate = new Date(this.trip.start.timestamp)
+			var dayOfWeek = tripDate.getUTCDay();
+			var hour = tripDate.getUTCHours();
+		}
+		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 && hour <= 19));
 	},
 	
 	consequence: function(R) {
@@ -221,24 +225,26 @@ var ruleD3 = {
 
 var ruleD4 = { 
 	condition: function(R) {
-		var tripDate = new Date(this.trip.start.timestamp);
-		var tripDay = tripDate.getDate();
-		var tripYear = tripDate.getFullYear();
-		var tripMonth = tripDate.getMonth();
+		if(this.trip.start.timestamp) {
+			var tripDate = new Date(this.trip.start.timestamp);
+			var tripDay = tripDate.getUTCDate();
+			var tripYear = tripDate.getUTCFullYear();
+			var tripMonth = tripDate.getUTCMonth();
 		
-		queryController.selectAllWhere('trips', {id: this.user.id})
-		.then(function(trips) {
-			var count = 0;
-			for(var i = 0; i < trips.length; i++) {
-				var startTimestamp = trip[i].start.timestamp;
-				var otherTripDate = new Date(startTimestamp);
-				var otherTripDay = otherTripDate.getDate();
-				var otherTripYear = otherTripDate.getFullYear();
-				var otherTripMonth = otherTripDate.getMonth();
-				if ((tripDay == otherTripDay) || (tripYear == otherTripYear) || (tripMonth == otherTripMonth))
-					count++;
-			}
-		})
+			queryController.selectAllWhere('trips', {id: this.user.id})
+			.then(function(trips) {
+				var count = 0;
+				for(var i = 0; i < trips.length; i++) {
+					var startTimestamp = trip[i].start.timestamp;
+					var otherTripDate = new Date(startTimestamp);
+					var otherTripDay = otherTripDate.getUTCDate();
+					var otherTripYear = otherTripDate.getUTCFullYear();
+					var otherTripMonth = otherTripDate.getUTCMonth();
+					if ((tripDay == otherTripDay) && (tripYear == otherTripYear) && (tripMonth == otherTripMonth))
+						count++;
+				}
+			})
+		}
 		R.when(count > 10)
 	},
 	
@@ -340,6 +346,78 @@ exports.seed = function(knex, Promise) {
 				language: 'node-rules/javascript', 
 				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
 				blob: serialize(rule3),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P1',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP1),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P2',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP2),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P3',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP3),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P4',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP4),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P5',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP5),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P6',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP6),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P7',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP7),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P8',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP8),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'P9',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleP9),
 				active: true
 			});
 		}).then(function() {
@@ -447,10 +525,10 @@ exports.seed = function(knex, Promise) {
 				name: 'Paula',
 				surname: 'Dominguez',
 				country: 'Argentina',
-				email: 'pauliDom@gmail.com',
+				email: 'pauliDom@llevame.com',
 				birthdate: '23/03/1976',
 				images: ['my pic'],
-				balance: []
+				balance: [{currency: 'ARS', value: 100}]
 			});
 		}).then(function() {
 			return knex('application_users').insert({
@@ -468,6 +546,23 @@ exports.seed = function(knex, Promise) {
 				birthdate: '12/01/1999',
 				images: ['wooo'],
 				balance: []
+			});
+		}).then(function() {
+			return knex('application_users').insert({
+				_ref: uuidv4(),
+				applicationOwner: '4',
+				type: 'passenger',
+				cars: [],
+				username: 'badUser',
+				password: 'gg123',
+				fb: null,
+				name: 'Ian',
+				surname: 'Dimarco',
+				country: 'Argentina',
+				email: 'iandim@gmail.com',
+				birthdate: '05/06/1989',
+				images: ['wooo'],
+				balance: [{currency: 'ARS', value: -100}]
 			});
 		}).then(function() {
 			return Promise.all([
@@ -505,6 +600,51 @@ exports.seed = function(knex, Promise) {
 						travelTime: 960,
 						distance: 5600,
 						route: [{ location: {lat: -34.596448030, lon: -58.426966667 }, timestamp: '2017-10-28T21:45:12.000Z'}],
+						cost: { currency: 'ARS', value: 50},
+						paymethod: { paymethod: 'cash', parameters: {type: 'banknote'} }
+					});
+				}).then(function () {
+					return knex('trips').insert({
+						applicationOwner: '2',
+						driver: 5,
+						passenger: 2,
+						start: { address: {street: 'Av. Pepito', location: {lat: -34.595402353, lon: -58.398621082}}, timestamp: '2017-10-28T20:30:23.000Z'},
+						end: { address: {street: 'Av. Pirulo', location: {lat: -34.585093255, lon: -58.434187174}}, timestamp: '2017-10-28T20:51:10.000Z'},
+						totalTime: 1260, 
+						waitTime: 300,
+						travelTime: 960,
+						distance: 5600,
+						route: [{ location: {lat: -34.596448030, lon: -58.426966667 }, timestamp: '2017-10-28T20:45:12.000Z'}],
+						cost: { currency: 'ARS', value: 50},
+						paymethod: { paymethod: 'cash', parameters: {type: 'banknote'} }
+					});
+				}).then(function () {
+					return knex('trips').insert({
+						applicationOwner: '2',
+						driver: 5,
+						passenger: 2,
+						start: { address: {street: 'Av. Santa Fe', location: {lat: -34.595402353, lon: -58.398621082}}, timestamp: '2017-10-28T11:30:23.000Z'},
+						end: { address: {street: 'Av. Juan B. Justo', location: {lat: -34.585093255, lon: -58.434187174}}, timestamp: '2017-10-28T11:51:10.000Z'},
+						totalTime: 1260, 
+						waitTime: 300,
+						travelTime: 960,
+						distance: 5600,
+						route: [{ location: {lat: -34.596448030, lon: -58.426966667 }, timestamp: '2017-10-28T11:45:12.000Z'}],
+						cost: { currency: 'ARS', value: 50},
+						paymethod: { paymethod: 'cash', parameters: {type: 'banknote'} }
+					});
+				}).then(function () {
+					return knex('trips').insert({
+						applicationOwner: '2',
+						driver: 5,
+						passenger: 2,
+						start: { address: {street: 'Av. Santa Fe', location: {lat: -34.595402353, lon: -58.398621082}}, timestamp: '2017-10-28T15:30:23.000Z'},
+						end: { address: {street: 'Av. Juan B. Justo', location: {lat: -34.585093255, lon: -58.434187174}}, timestamp: '2017-10-28T15:51:10.000Z'},
+						totalTime: 1260, 
+						waitTime: 300,
+						travelTime: 960,
+						distance: 5600,
+						route: [{ location: {lat: -34.596448030, lon: -58.426966667 }, timestamp: '2017-10-28T15:45:12.000Z'}],
 						cost: { currency: 'ARS', value: 50},
 						paymethod: { paymethod: 'cash', parameters: {type: 'banknote'} }
 					});
