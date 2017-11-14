@@ -92,7 +92,7 @@ exports.up = function(knex, Promise) {
 	  		table.string('_ref');
 	  		table.string('language');
 	  		table.specificType('lastCommit', 'json');
-	  		table.string('blob');
+	  		table.text('blob');
 	  		table.boolean('active');
 	  }),
 	  

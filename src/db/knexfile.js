@@ -19,15 +19,12 @@ module.exports = {
     connection: dev_database,
     migrations: {
       directory: __dirname + '/migrations/development'
-    },
-    seeds: {
-      directory: __dirname + '/seeds/development'
     }
   },
 
   production: {
     client: 'postgresql',
-    connection: process.env.DATABASE_URL + '?ssl=true',
+    connection: 'postgres://udivnwonhaaoem:5c055f1fa9f8d5f9273904625f1126865902047ae46a4bb0841200bd6d3c3d72@ec2-107-20-193-89.compute-1.amazonaws.com:5432/dfdidieplcj3ne?ssl=true',
     migrations: {
       directory: __dirname + '/migrations/production'
     },
