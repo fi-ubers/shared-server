@@ -163,7 +163,7 @@ describe('API trips routes', function() {
 					totalTime: 1440, 
 					waitTime: 300,
 					travelTime: 1140,
-					distance: 6000,
+					distance: 2000,
 					route: [{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]
 				},
 				paymethod: { name: 'cash', parameters: { type: 'someType' } }
@@ -195,7 +195,7 @@ describe('API trips routes', function() {
 				res.body.trip.should.have.property('travelTime');
 				res.body.trip.travelTime.should.equal(1140);
 				res.body.trip.should.have.property('distance');
-				res.body.trip.distance.should.equal(6000);
+				res.body.trip.distance.should.equal(2000);
 				res.body.trip.should.have.property('route');
 				res.body.trip.route.should.deep.equal([{ location: {lat: -34.617867373, lon: -58.385875225 }, timestamp: '2017-10-30T10:24:30.000Z'}]);
 				res.body.trip.should.have.property('cost');
