@@ -1,5 +1,6 @@
 var logger = require('./../logger');
 var knex = require('../db/knex');
+var geolib = require('geolib');
 var Rules = require('../services/rulesService');
 var serialize = require('serialize-javascript');
 var deserialize = str => eval('(' + str + ')');
@@ -60,9 +61,67 @@ function calculateCost(userId, tripData) {
 
 					return parseFloat(cost.toFixed(2));
 				})
+				.catch(function(error) {
+					errorController.unexpectedError(res, error, request);
+				})
 			})
-			
+			.catch(function(error) {
+				errorController.unexpectedError(res, error, request);
+			})
 		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		})	
+	})
+	.catch(function(error) {
+		errorController.unexpectedError(res, error, request);
+	})
+}
+
+function calculateGain(userId, tripData) {
+	// Run 'active' rules
+	return queryController.selectAllWhere(ruleTable, {active: true})
+	.then(function(selectedRules) {
+		return queryController.selectAll(tripTable)
+		.then(function(trips) {
+			return queryController.selectOneWhere(userTable, {id: userId})
+			.then(function(userData) {
+				rules = selectedRules.map(rule => deserialize(rule.blob));
+				var fact = {
+					trips: trips,
+					userTrip: tripData,
+					user: userData,
+					gain: 0,
+					benefits: []
+				}
+				
+				return Rules.execute(fact, rules).then(function(result) {
+					var gain = result.gain;
+				
+					// Apply benefits
+					for(var i = 0; i < result.benefits.length; i++) {
+						gain = gain + (gain * result.benefits[i]);
+					}
+				
+					if (result.minPayment && (gain < result.minPayment))
+						return result.minPayment;
+
+					return parseFloat(gain.toFixed(2));
+				})
+				.catch(function(error) {
+					errorController.unexpectedError(res, error, request);
+				})
+			})
+			.catch(function(error) {
+				errorController.unexpectedError(res, error, request);
+			})
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		})	
+	})
+	.catch(function(error) {
+		errorController.unexpectedError(res, error, request);
 	})
 }
 
@@ -104,15 +163,17 @@ module.exports = {
 			
 			var promises = [];
 			promises.push(calculateCost(passenger, req.body.trip));
-			//promises.push(calculateGain(driver, req.body.trip));
+			promises.push(calculateGain(driver, req.body.trip));
 			Promise.all(promises)
 			.then(function(calculatedValues) {
 				var costValue = calculatedValues[0];
+				var gainValue = calculatedValues[1];
 				if (costValue == -1) {
-					return errorController.unauthorized(res, "User with negative balance " + request);
+					return errorController.negativeBalance(res, request);
 				}
+				
 				var cost = { currency: "ARS", value: costValue };
-			
+				var gain = { currency: "ARS", value: gainValue };
 				logger.info("Registering trip");	
 				queryController.insertAndReturnSome(tripTable, {
 					applicationOwner: req.user.id,
@@ -136,7 +197,7 @@ module.exports = {
 					var driverTransaction = {
 						trip: tripId,
 						timestamp: knex.fn.now(),
-						cost: cost,
+						cost: gain,
 						description: "Trip gain",
 						user: driver
 					};
@@ -155,7 +216,7 @@ module.exports = {
 					queryController.insertWithoutReturn(transactionTable, driverTransaction);			
 					queryController.insertWithoutReturn(transactionTable, passengerTransaction);
 				
-					balanceController.manageBalance(driver, cost, 'positive');
+					balanceController.manageBalance(driver, gain, 'positive');
 				
 					if (paymethod.name == "card") {
 						balanceController.manageBalance(passenger, cost, 'negative');
@@ -190,8 +251,8 @@ module.exports = {
 							})
 						})
 						.catch(function(error) {
-								logger.error("Payment token fail");	
-								errorController.unexpectedError(res, error, request);
+							logger.error("Payment token fail");	
+							errorController.unexpectedError(res, error, request);
 						})
 					
 					} else {
@@ -219,8 +280,43 @@ module.exports = {
 	
 	/** Estimates the value of a trip. */
 	estimateValue : function(req, res) {
-		//logger.info("POST at /trips/estimate");
-		// Estimate the value of a trip
+		var passenger = req.body.passenger;
+		var start = req.body.start;
+		var end = req.body.end;
+		var distance = req.body.distance;
+		var request = "POST at /api/trips/estimate";
+		logger.info(request);
+		
+		if (!passenger || !start || !end) { 
+			errorController.missingParameters(res, request);
+		} else {
+			if (!distance) {
+				var estimatedDistance = geolib.getDistance({ latitude: start.address.location.lat, longitude: start.address.location.lon }, { latitude: end.address.location.lat, longitude: end.address.location.lon });
+			}
+			var tripData = {
+				passenger: passenger,
+				driver: req.body.driver,
+				distance: distance || estimatedDistance,
+				start: start,
+				end: end,
+				totalTime: req.body.totalTime,
+				waitTime: req.body.waitTime,
+				travelTime: req.body.travelTime,
+				route: req.body.route
+			};
+			
+			calculateCost(passenger, tripData)
+			.then(function (estimatedCost) {
+				if (estimatedCost == -1) {
+					errorController.negativeBalance(res, request);
+				} else {
+					responseController.sendEstimation(res, { currency: "ARS", value: estimatedCost });
+				}
+			})
+			.catch(function(error) {
+				errorController.unexpectedError(res, error, request);
+			})
+		}
 	},
 	
 	/** Obtains the information of a trip. */

@@ -30,7 +30,7 @@ module.exports = {
 	/** Reports an 'unauthorized' error. */
 	unauthorized : (function(res, request) {
 		logger.error("Unauthorized: " + request);
-		res.status(401).send({code: 401, message: "Unauthorized " + request});
+		res.status(401).send({code: 401, message: "Unauthorized"});
 	}),
 	
 	/** Reports a 'failed validation' error. */
@@ -43,5 +43,11 @@ module.exports = {
 	paymentError : (function(res, error, request, transaction) {
 		logger.error("Create Payment Error: " + request);
 		res.status(500).send({code: 500, message: "Create Payment Error: " + error, transaction: transaction});
+	}),
+	
+	/** Reports an 'negative balance' error. */
+	negativeBalance : (function(res, request) {
+		logger.error("Negative balance: The user can't travel " + request);
+		res.status(402).send({code: 402, message: "Negative balance: The user can't travel"});
 	})
 }

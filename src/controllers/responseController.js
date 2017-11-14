@@ -165,6 +165,14 @@ module.exports = {
 		res.status(code).send(response);
 	}),
 	
+	/** Sends json with metadata and the estimated cost of a trip with code 200. */
+	sendEstimation : (function(res, cost) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.cost = cost;
+		res.status(200).send(response);
+	}),
+	
 	/** Sends json with metadata and a list of paymethods with code 200. */
 	sendPaymethods : (function(res, count, total, paymethodsList) {
 		var response = {};

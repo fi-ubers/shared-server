@@ -6,6 +6,7 @@ var server = require('./../index');
 var knex = require('./../db/knex');
 var jwt = require('jsonwebtoken');
 var uuidv4 = require('uuid/v4');
+var geolib = require('geolib');
 
 chai.should();
 chai.use(chaiHttp);
@@ -307,7 +308,7 @@ describe('API trips routes', function() {
 			});
 		});
 		
-		it('Register trip testing surcharges I', function(done) {
+		it('Register trip testing surcharges', function(done) {
 			chai.request(server)
 			.post('/api/trips?token=' + appToken)
 			.send({
@@ -351,7 +352,11 @@ describe('API trips routes', function() {
 				paymethod: { name: 'cash', parameters: { type: 'someType' } }
 			})
 			.end(function(err, res) {
-				res.should.have.status(401);
+				res.should.have.status(402);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(402);
+				res.body.should.have.property('message');
 				done();
 			});
 		});
@@ -400,6 +405,145 @@ describe('API trips routes', function() {
 				res.body.should.have.property('message');
 				res.body.message.should.include('Create Payment Error');
 				res.body.should.have.property('transaction');
+				done();
+			});
+		});
+	});
+	
+	describe('POST /api/trips', function() {
+
+		it('Estimate trip with code 200', function(done) {
+			chai.request(server)
+			.post('/api/trips/estimate?token=' + appToken)
+			.send({
+				passenger: 2,
+				start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-08T18:15:54.000Z'},
+				end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-11-08T18:39:10.000Z'},
+				distance: 10000
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.have.property('metadata');
+				res.body.metadata.should.have.property('version');
+				res.body.should.have.property('cost');
+				res.body.cost.should.deep.equal({ currency: "ARS", value: 165 });
+				done();
+			});
+		});
+		
+		it('Estimate free trip', function(done) {
+			chai.request(server)
+			.post('/api/trips/estimate?token=' + appToken)
+			.send({
+				passenger: 4,
+				start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-08T18:15:54.000Z'},
+				end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-11-08T18:39:10.000Z'}
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.have.property('metadata');
+				res.body.metadata.should.have.property('version');
+				res.body.should.have.property('cost');
+				res.body.cost.should.deep.equal({ currency: "ARS", value: 0 });
+				done();
+			});
+		});
+		
+		it('Estimate trip with first trip discount', function(done) {
+			chai.request(server)
+			.post('/api/trips/estimate?token=' + appToken)
+			.send({
+				passenger: 1,
+				start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-05T18:15:54.000Z'},
+				end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: null},
+				distance: 10000
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.have.property('metadata');
+				res.body.metadata.should.have.property('version');
+				res.body.should.have.property('cost');
+				res.body.cost.should.deep.equal({ currency: "ARS", value: 50 });
+				done();
+			});
+		});
+		
+		it('Estimate trip with estimated distance', function(done) {
+			chai.request(server)
+			.post('/api/trips/estimate?token=' + appToken)
+			.send({
+				passenger: 2,
+				start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-05T18:15:54.000Z'},
+				end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: null}
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.have.property('metadata');
+				res.body.metadata.should.have.property('version');
+				res.body.should.have.property('cost');
+				var estimatedDistance = geolib.getDistance({ latitude: -34.616213000, longitude: -58.369527000 }, { latitude: -34.586252120, longitude: -58.398663998 });
+				var cost = estimatedDistance/1000 * 15;
+				res.body.cost.should.deep.equal({ currency: "ARS", value: parseFloat(cost.toFixed(2)) });
+				done();
+			});
+		});
+		
+		it('Estimate trip with minimum cost', function(done) {
+			chai.request(server)
+			.post('/api/trips/estimate?token=' + appToken)
+			.send({
+				passenger: 1,
+				start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-05T18:15:54.000Z'},
+				end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: '2017-11-05T18:39:10.000Z'},
+				distance: 2000
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.have.property('metadata');
+				res.body.metadata.should.have.property('version');
+				res.body.should.have.property('cost');
+				res.body.cost.should.deep.equal({ currency: "ARS", value: 50 });
+				done();
+			});
+		});
+		
+		it('Estimate trip fail: Negative balance', function(done) {
+			chai.request(server)
+			.post('/api/trips/estimate?token=' + appToken)
+			.send({
+				passenger: 6,
+				start: { address: {street: 'Av. Paseo Colon', location: {lat: -34.616213000, lon: -58.369527000}}, timestamp: '2017-11-08T18:15:54.000Z'},
+				end: { address: {street: 'Av. Gral. Las Heras', location: {lat: -34.586252120, lon: -58.398663998}}, timestamp: null},
+				distance: 6000
+			})
+			.end(function(err, res) {
+				res.should.have.status(402);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(402);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+		
+		it('Estimate trip with code 400', function(done) {
+			chai.request(server)
+			.post('/api/trips/estimate?token=' + appToken)
+			.send({
+				driver: 3,
+				passenger: 1
+			})
+			.end(function(err, res) {
+				res.should.have.status(400);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(400);
+				res.body.should.have.property('message');
 				done();
 			});
 		});

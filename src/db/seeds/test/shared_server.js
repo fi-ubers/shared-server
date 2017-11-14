@@ -108,14 +108,14 @@ var ruleP6 = {
 		if(this.userTrip.start.timestamp) {
 			var tripDate = new Date(this.userTrip.start.timestamp);
 			var currentTime = tripDate.getTime();
-
 			for(var i = 0; i < this.trips.length; i++) {
 				var startTimestamp = this.trips[i].start.timestamp;
 				var otherTripDate = new Date(startTimestamp);
 				var timeBetween = currentTime - otherTripDate.getTime();
 				var thirtyMinutesInMs = 1800000;
-				if (timeBetween <= thirtyMinutesInMs)
+				if (timeBetween <= thirtyMinutesInMs) {
 					count++;
+				}
 			}
 		}
 		R.when((count > 10) && (this.user.type == "passenger"))
@@ -202,7 +202,7 @@ var ruleD2 = {
 	},
 	
 	consequence: function(R) {
-		this.cost += this.userTrip.distance/1000 * 5;
+		this.gain += this.userTrip.distance/1000 * 5;
 		R.next();
 	}
 };
@@ -218,7 +218,7 @@ var ruleD3 = {
 	},
 	
 	consequence: function(R) {
-		this.surcharges.push(0.03);
+		this.benefits.push(0.03);
 		R.next();
 	}
 };
@@ -238,15 +238,16 @@ var ruleD4 = {
 				var otherTripDay = otherTripDate.getUTCDate();
 				var otherTripYear = otherTripDate.getUTCFullYear();
 				var otherTripMonth = otherTripDate.getUTCMonth();
-				if ((this.trips[i].passenger == this.user.id) &&  (tripDay == otherTripDay) && (tripYear == otherTripYear) && (tripMonth == otherTripMonth))
+				if ((this.trips[i].driver == this.user.id) &&  (tripDay == otherTripDay) && (tripYear == otherTripYear) && (tripMonth == otherTripMonth)) {
 					count++;
+				}
 			}
 		}
-		R.when((count > 10) && (this.user.type == "passenger"))
+		R.when((count > 10) && (this.user.type == "driver"))
 	},
 	
 	consequence: function(R) {
-		this.surcharges.push(0.02);
+		this.benefits.push(0.02);
 		R.next();
 	}
 };

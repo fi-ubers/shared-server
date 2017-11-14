@@ -100,7 +100,7 @@ describe('API rules routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.rules.should.be.a('array');
-				res.body.rules.length.should.equal(12);
+				res.body.rules.length.should.equal(16);
 				res.body.rules[0].should.have.property('id');
 				res.body.rules[0].id.should.equal(1);
 				res.body.rules[0].should.have.property('_ref');
@@ -133,7 +133,7 @@ describe('API rules routes', function() {
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('rule');
 				res.body.rule.should.have.property('id');
-				res.body.rule.id.should.equal(13);
+				res.body.rule.id.should.equal(17);
 				res.body.rule.should.have.property('_ref');
 				res.body.rule.should.have.property('language');
 				res.body.rule.language.should.equal('node-rules/javascript');
@@ -430,7 +430,7 @@ describe('API rules routes', function() {
 			.end(function(err, res) {
 				res.should.have.status(201);
 				chai.request(server)
-				.put('/api/rules/13?token=' + businessToken)
+				.put('/api/rules/17?token=' + businessToken)
 				.send({
 					_ref: res.body.rule._ref,
 					language: 'node-rules/javascript',
@@ -440,7 +440,7 @@ describe('API rules routes', function() {
 				.end(function(err, res) {
 					res.should.have.status(200);
 					chai.request(server)
-					.get('/api/rules/13/commits?token=' + businessToken)
+					.get('/api/rules/17/commits?token=' + businessToken)
 					.end(function(err, res) {
 						res.should.have.status(200);
 						res.body.commits.should.be.a('array');
