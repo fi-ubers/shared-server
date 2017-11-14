@@ -39,7 +39,7 @@ var rule3 = {
 // Passenger rules
 var ruleP1 = { 
 	condition: function(R) {
-		R.when(this);
+		R.when(this && (this.user.type == "passenger"));
 	},
 	
 	consequence: function(R) {
@@ -50,7 +50,7 @@ var ruleP1 = {
 
 var ruleP2 = { 
 	condition: function(R) {
-		R.when(this.userTrip.distance);
+		R.when(this.userTrip.distance  && (this.user.type == "passenger"));
 	},
 	
 	consequence: function(R) {
@@ -66,7 +66,7 @@ var ruleP3 = {
 			var dayOfWeek = tripDate.getUTCDay();
 			var hour = tripDate.getUTCHours();
 		}
-		R.when((dayOfWeek == 3) && (hour == 15 || hour == 16));
+		R.when((dayOfWeek == 3) && (hour == 15 || hour == 16) && (this.user.type == "passenger"));
 	},
 	
 	consequence: function(R) {
@@ -77,7 +77,7 @@ var ruleP3 = {
 
 var ruleP4 = { 
 	condition: function(R) {
-		R.when(this.firstTrip);
+		R.when(this.firstTrip && (this.user.type == "passenger"));
 	},
 	
 	consequence: function(R) {
@@ -93,7 +93,7 @@ var ruleP5 = {
 			var dayOfWeek = tripDate.getUTCDay();
 			var hour = tripDate.getUTCHours();
 		}
-		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 && hour <= 19));
+		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 && hour <= 19) && (this.user.type == "passenger"));
 	},
 	
 	consequence: function(R) {
@@ -118,7 +118,7 @@ var ruleP6 = {
 					count++;
 			}
 		}
-		R.when(count > 10)
+		R.when((count > 10) && (this.user.type == "passenger"))
 	},
 	
 	consequence: function(R) {
@@ -129,7 +129,7 @@ var ruleP6 = {
 
 var ruleP7 = { 
 	condition: function(R) {
-		R.when(this.user.email && this.user.email.endsWith('@llevame.com'));
+		R.when(this.user.email && this.user.email.endsWith('@llevame.com') && (this.user.type == "passenger"));
 	},
 	
 	consequence: function(R) {
@@ -146,7 +146,7 @@ var ruleP8 = {
 				negativeBalance = true;
 		}
 		
-		R.when(negativeBalance);
+		R.when(negativeBalance && (this.user.type == "passenger"));
 	},
 	
 	consequence: function(R) {
@@ -170,12 +170,12 @@ var ruleP9 = {
 				var otherTripDay = otherTripDate.getUTCDate();
 				var otherTripYear = otherTripDate.getUTCFullYear();
 				var otherTripMonth = otherTripDate.getUTCMonth();
-				if ((tripDay == otherTripDay) && (tripYear == otherTripYear) && (tripMonth == otherTripMonth)) {
+				if ((this.trips[i].passenger == this.user.id) && (tripDay == otherTripDay) && (tripYear == otherTripYear) && (tripMonth == otherTripMonth)) {
 					count++;
 				}
 			}
 		}
-		R.when(count >= 4)
+		R.when((count >= 4) && (this.user.type == "passenger"))
 	},
 	
 	consequence: function(R) {
@@ -187,7 +187,7 @@ var ruleP9 = {
 // Driver rules
 var ruleD1 = { 
 	condition: function(R) {
-		R.when(this);
+		R.when(this && (this.user.type == "driver"));
 	},
 	
 	consequence: function(R) {
@@ -198,23 +198,23 @@ var ruleD1 = {
 
 var ruleD2 = { 
 	condition: function(R) {
-		R.when(this.trip.distance);
+		R.when(this.userTrip.distance && (this.user.type == "driver"));
 	},
 	
 	consequence: function(R) {
-		this.cost += this.trip.distance/1000 * 5;
+		this.cost += this.userTrip.distance/1000 * 5;
 		R.next();
 	}
 };
 
 var ruleD3 = { 
 	condition: function(R) {
-		if(this.trip.start.timestamp) {
-			var tripDate = new Date(this.trip.start.timestamp)
+		if(this.userTrip.start.timestamp) {
+			var tripDate = new Date(this.userTrip.start.timestamp)
 			var dayOfWeek = tripDate.getUTCDay();
 			var hour = tripDate.getUTCHours();
 		}
-		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 && hour <= 19));
+		R.when((dayOfWeek > 0 && dayOfWeek < 6) && (hour >= 17 && hour <= 19) && (this.user.type == "driver"));
 	},
 	
 	consequence: function(R) {
@@ -225,27 +225,24 @@ var ruleD3 = {
 
 var ruleD4 = { 
 	condition: function(R) {
-		if(this.trip.start.timestamp) {
-			var tripDate = new Date(this.trip.start.timestamp);
+		var count = 0;
+		if(this.userTrip.start.timestamp) {
+			var tripDate = new Date(this.userTrip.start.timestamp);
 			var tripDay = tripDate.getUTCDate();
 			var tripYear = tripDate.getUTCFullYear();
 			var tripMonth = tripDate.getUTCMonth();
 		
-			queryController.selectAllWhere('trips', {id: this.user.id})
-			.then(function(trips) {
-				var count = 0;
-				for(var i = 0; i < trips.length; i++) {
-					var startTimestamp = trip[i].start.timestamp;
-					var otherTripDate = new Date(startTimestamp);
-					var otherTripDay = otherTripDate.getUTCDate();
-					var otherTripYear = otherTripDate.getUTCFullYear();
-					var otherTripMonth = otherTripDate.getUTCMonth();
-					if ((tripDay == otherTripDay) && (tripYear == otherTripYear) && (tripMonth == otherTripMonth))
-						count++;
-				}
-			})
+			for(var i = 0; i < this.trips.length; i++) {
+				var startTimestamp = this.trips[i].start.timestamp;
+				var otherTripDate = new Date(startTimestamp);
+				var otherTripDay = otherTripDate.getUTCDate();
+				var otherTripYear = otherTripDate.getUTCFullYear();
+				var otherTripMonth = otherTripDate.getUTCMonth();
+				if ((this.trips[i].passenger == this.user.id) &&  (tripDay == otherTripDay) && (tripYear == otherTripYear) && (tripMonth == otherTripMonth))
+					count++;
+			}
 		}
-		R.when(count > 10)
+		R.when((count > 10) && (this.user.type == "passenger"))
 	},
 	
 	consequence: function(R) {
@@ -418,6 +415,38 @@ exports.seed = function(knex, Promise) {
 				language: 'node-rules/javascript', 
 				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
 				blob: serialize(ruleP9),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'D1',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleD1),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'D2',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleD2),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'D3',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleD3),
+				active: true
+			});
+		}).then(function() {
+			return knex('rules').insert({
+				_ref: 'D4',
+				language: 'node-rules/javascript', 
+				lastCommit: { author: {id: 2, _ref: 'test', username: 'cookie_monster', password: '1234', name: 'John', surname: 'Smith', roles: ['admin', 'manager']}, message: 'Create rule', timestamp: '2017-09-19T10:08:25.000Z' },
+				blob: serialize(ruleD4),
 				active: true
 			});
 		}).then(function() {
