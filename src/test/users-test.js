@@ -73,7 +73,7 @@ describe('API users routes', function() {
 			done();
 		});
 	});
-
+	
 	describe('GET /api/users', function() {
 		it('Get users with BusinessToken', function(done) {
 			chai.request(server)
@@ -89,7 +89,7 @@ describe('API users routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.users.should.be.a('array');
-				res.body.users.length.should.equal(5);
+				res.body.users.length.should.equal(6);
 				res.body.users[0].should.have.property('id');
 				res.body.users[0].id.should.equal(1);
 				res.body.users[0].should.have.property('_ref');
@@ -137,7 +137,7 @@ describe('API users routes', function() {
 				res.body.metadata.should.have.property('total');
 				res.body.metadata.should.have.property('version');
 				res.body.users.should.be.a('array');
-				res.body.users.length.should.equal(5);
+				res.body.users.length.should.equal(6);
 				res.body.users[2].should.have.property('id');
 				res.body.users[2].id.should.equal(3);
 				res.body.users[2].should.have.property('_ref');
@@ -234,7 +234,7 @@ describe('API users routes', function() {
 				res.body.should.have.property('metadata');
 				res.body.should.have.property('user');
 				res.body.user.should.have.property('id');
-				res.body.user.id.should.equal(6);
+				res.body.user.id.should.equal(7);
 				res.body.user.should.have.property('_ref');
 				res.body.user.should.have.property('applicationOwner');
 				res.body.user.applicationOwner.should.equal('15');
@@ -259,7 +259,7 @@ describe('API users routes', function() {
 				res.body.user.should.not.have.property('password');
 				res.body.user.should.not.have.property('fb');
 				chai.request(server)
-				.post('/api/users/6/cars?token=' + appToken)
+				.post('/api/users/7/cars?token=' + appToken)
 				.send({
 					properties: [{ name: 'Ford Focus', value: 'MNA872' }]
 				})
@@ -273,7 +273,7 @@ describe('API users routes', function() {
 					res.body.car.id.should.equal(4);
 					res.body.car.should.have.property('_ref');
 					res.body.car.should.have.property('owner');
-					res.body.car.owner.should.equal(6);
+					res.body.car.owner.should.equal(7);
 					res.body.car.should.have.property('properties');
 					res.body.car.properties[0].name.should.equal('Ford Focus');
 					res.body.car.properties[0].value.should.equal('MNA872');
@@ -284,7 +284,7 @@ describe('API users routes', function() {
 						res.should.be.json;
 						res.body.should.be.a('Object');
 						res.body.users.should.be.a('array');
-						res.body.users.length.should.equal(6);
+						res.body.users.length.should.equal(7);
 						res.body.users[5].should.have.property('cars');
 						done();
 					});
@@ -433,7 +433,7 @@ describe('API users routes', function() {
 			.end(function(err, res) {
 				res.should.have.status(204);
 				chai.request(server)
-				.get('/api/users/5?token=' + appToken)
+				.get('/api/users/7?token=' + appToken)
 				.end(function(err, res) {
 					res.should.have.status(404);
 					res.should.be.json;
@@ -442,7 +442,7 @@ describe('API users routes', function() {
 					res.body.should.have.property('message');
 					// Check the cars of the deleted user
 					chai.request(server)
-					.get('/api/users/5/cars?token=' + appToken)
+					.get('/api/users/6/cars?token=' + appToken)
 					.end(function(err, res) {
 						res.should.have.status(200);
 						res.should.be.json;
@@ -487,7 +487,7 @@ describe('API users routes', function() {
 		
 		it('Delete user by id with code 404', function(done) {
 			chai.request(server)
-			.delete('/api/users/6?token=' + managerToken)
+			.delete('/api/users/7?token=' + managerToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -541,7 +541,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/6?token=' + appToken)
+			.get('/api/users/7?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -660,7 +660,7 @@ describe('API users routes', function() {
 	
 		it('Update user by id with code 404', function(done) {
 			chai.request(server)
-			.put('/api/users/6?token=' + appToken)
+			.put('/api/users/7?token=' + appToken)
 			.send({
 				_ref: 'test',
 				type: 'passenger',
@@ -819,7 +819,7 @@ describe('API users routes', function() {
 			});
 		});
 		
-		it('Register user car with non-existent user with code 201', function(done) {
+		it('Register user car with non-existent user with code 500', function(done) {
 			chai.request(server)
 			.post('/api/users/7/cars?token=' + appToken)
 			.send({
@@ -1054,9 +1054,9 @@ describe('API users routes', function() {
 				res.body.transactions.should.be.a('array');
 				res.body.transactions.length.should.equal(2);
 				res.body.transactions[0].should.have.property('id');
-				res.body.transactions[0].id.should.equal(1);
+				res.body.transactions[0].id.should.equal(2);
 				res.body.transactions[0].should.have.property('trip');
-				res.body.transactions[0].trip.should.equal('5');
+				res.body.transactions[0].trip.should.equal(5);
 				res.body.transactions[0].should.have.property('timestamp');
 				res.body.transactions[0].timestamp.should.equal('2017-10-08T11:47:41.000Z');
 				res.body.transactions[0].should.have.property('cost');
@@ -1065,9 +1065,9 @@ describe('API users routes', function() {
 				res.body.transactions[0].description.should.equal('Another interesting description');
 				res.body.transactions[0].should.have.property('data');
 				res.body.transactions[1].should.have.property('id');
-				res.body.transactions[1].id.should.equal(1);
+				res.body.transactions[1].id.should.equal(3);
 				res.body.transactions[1].should.have.property('trip');
-				res.body.transactions[1].trip.should.equal('10');
+				res.body.transactions[1].trip.should.equal(10);
 				res.body.transactions[1].should.have.property('timestamp');
 				res.body.transactions[1].timestamp.should.equal('2017-10-09T18:11:23.000Z');
 				res.body.transactions[1].should.have.property('cost');
@@ -1081,7 +1081,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/6/transaction?token=' + appToken)
+			.get('/api/users/6/transactions?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -1092,4 +1092,93 @@ describe('API users routes', function() {
 			});
 		});
 	});
+	
+	describe('POST /api/users/4/transactions', function() {
+		it('Create a payment for the user by id with code 200', function(done) {
+			chai.request(server)
+			.post('/api/users/4/transactions?token=' + appToken)
+			.send({
+				trip: 1,
+				cost: { currency: "ARS", value: 50 }, 
+				description: "Trip card payment", 
+				paymethod: { name: 'card', parameters: { ccvv: '1234', expiration_month: '08', expiration_year: '2018', number: '656435362525', type: 'visa', method: 'card' }}
+			})
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('transaction');
+				res.body.transaction.should.have.property('id');
+				res.body.transaction.id.should.equal(4);
+				res.body.transaction.should.have.property('trip');
+				res.body.transaction.should.have.property('timestamp');
+				res.body.transaction.should.have.property('cost');
+				res.body.transaction.cost.should.deep.equal({ currency: "ARS", value: 50 });
+				res.body.transaction.should.have.property('description');
+				res.body.transaction.description.should.equal('Trip card payment');
+				res.body.transaction.should.have.property('data');
+				res.body.transaction.should.not.have.property('paymethod');
+				done();
+			});
+		});
+	});
+	
+	describe('GET /api/users/:id/trips', function() {
+		it('Get user trips by userId with code 200', function(done) {
+			chai.request(server)
+			.get('/api/users/2/trips?token=' + userToken)
+			.end(function(err, res) {
+				res.should.have.status(200);
+				res.should.be.json;
+				res.body.should.be.a('Object');
+				res.body.should.have.property('metadata');
+				res.body.should.have.property('trips');
+				res.body.metadata.should.be.a('Object');
+				res.body.metadata.should.have.property('count');
+				res.body.metadata.should.have.property('total');
+				res.body.metadata.should.have.property('version');
+				res.body.trips.should.be.a('array');
+				res.body.trips.length.should.equal(4);
+				res.body.trips[0].should.have.property('id');
+				res.body.trips[0].id.should.equal(1);
+				res.body.trips[0].should.have.property('applicationOwner');
+				res.body.trips[0].applicationOwner.should.equal('2');
+				res.body.trips[0].should.have.property('driver');
+				res.body.trips[0].driver.should.equal(5);
+				res.body.trips[0].should.have.property('passenger');
+				res.body.trips[0].passenger.should.equal(2);
+				res.body.trips[0].should.have.property('start');
+				res.body.trips[0].start.should.deep.equal({ address: {street: 'Av. Santa Fe', location: {lat: -34.595402353, lon: -58.398621082}}, timestamp: '2017-10-28T21:30:23.000Z'});
+				res.body.trips[0].should.have.property('end');
+				res.body.trips[0].end.should.deep.equal({ address: {street: 'Av. Juan B. Justo', location: {lat: -34.585093255, lon: -58.434187174}}, timestamp: '2017-10-28T21:51:10.000Z'});
+				res.body.trips[0].should.have.property('totalTime');
+				res.body.trips[0].totalTime.should.equal(1260);
+				res.body.trips[0].should.have.property('waitTime');
+				res.body.trips[0].waitTime.should.equal(300);
+				res.body.trips[0].should.have.property('travelTime');
+				res.body.trips[0].travelTime.should.equal(960);
+				res.body.trips[0].should.have.property('distance');
+				res.body.trips[0].distance.should.equal(5600);
+				res.body.trips[0].should.have.property('route');
+				res.body.trips[0].route.should.deep.equal([{ location: {lat: -34.596448030, lon: -58.426966667 }, timestamp: '2017-10-28T21:45:12.000Z'}]);
+				res.body.trips[0].should.have.property('cost');
+				res.body.trips[0].cost.should.deep.equal({ currency: 'ARS', value: 50 });
+				done();
+			});
+		});
+	
+		it('Get user by id with code 404', function(done) {
+			chai.request(server)
+			.get('/api/users/6/trips?token=' + appToken)
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+	})
 });

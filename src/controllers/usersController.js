@@ -1,14 +1,21 @@
 var logger = require('./../logger');
 var uuidv4 = require('uuid/v4');
+var knex = require('../db/knex');
 var userTable = 'application_users';
 var carTable = 'cars';
 var transactionTable = 'transactions';
+var tripTable = 'trips';
 var visibleUserFields = ['id', '_ref', 'applicationOwner', 'type', 'cars', 'username', 'name', 'surname', 'country', 'email', 'birthdate', 'images', 'balance'];
+var visibleTransactionFields = ['id', 'trip', 'timestamp', 'cost', 'description', 'data'];
+var visibleTripFields = ['id', 'applicationOwner', 'driver', 'passenger', 'start', 'end', 'totalTime', 'waitTime', 'travelTime', 'distance', 'route', 'cost'];
 
 var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');
-
+const paymentAPI = require('../../config/paymentAPI');
+var paymentController = require('./paymentController');
+const tokenController = require('./tokenController');
+var balanceController = require('./balanceController');
 
 /** @module usersController */
 module.exports = {
@@ -346,10 +353,14 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/transactions";
 		
 		logger.info(request);
-		queryController.selectAllWhere(transactionTable, {id: userId})
+		queryController.selectAllWhere(transactionTable, {user: userId}, visibleTransactionFields)
 		.then(function(transactions) {
-			logger.info("Showing transactions list");
-			responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+			if (transactions.length > 0) {
+				logger.info("Showing transactions list");
+				responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+			} else {
+				errorController.nonExistentResource(res, "user", request);
+			}
 		})
 		.catch(function(error) {
 			errorController.unexpectedError(res, error, request);
@@ -358,13 +369,65 @@ module.exports = {
 	
 	/** Makes a payment for the user. */
 	makePayment : function(req, res) {
-		//logger.info("POST at /users/" + req.params.userId + "/transactions");
 		
+		var userId = req.params.userId;
+		var request = "POST at /users/" + userId + "/transactions";
+		
+		// No hay body en la API, asumo que recibe los atributos de la transaccion del error
+		var cost = req.body.cost;
+		var tripId = req.body.trip;
+		var description = req.body.description;
+		var paymethod = req.body.paymethod;
+		
+		var paymentData = {
+			currency: cost.currency,
+			value: cost.value,
+			paymethod: paymethod.parameters
+		};
+		
+		tokenController.generatePaymentToken().then(function(body) {
+			logger.info("Making trip payment");	
+			paymentController.createPayment(body.access_token, paymentData)
+			.then(function(response) {
+				logger.info("Payment success");
+				logger.info("Creating payment transaction");
+				var transaction = {
+					trip: tripId,
+					timestamp: knex.fn.now(),
+					cost: cost,
+					description: description,
+					user: userId
+				};
+			
+				balanceController.manageBalance(userId, cost, 'positive');	
+				queryController.insertAndReturnSome(transactionTable, transaction, visibleTransactionFields)
+				.then(function(transaction) {
+					responseController.sendTransaction(res, 200, transaction[0]);
+				})
+			})
+		}).catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		})
 	},
 	
 	/** Lists all the trips of the user. */
 	getTrips : function(req, res) {
-		//logger.info("GET at /users/" + req.params.userId + "/trips");
+		var userId = req.params.userId;
+		var request = "GET at /api/users/" + userId + "/trips";
+		
+		logger.info(request);
+		queryController.selectAllWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, visibleTripFields)
+		.then(function(trips) {
+			if (trips.length > 0) {
+				logger.info("Showing trips list");
+				responseController.sendTrips(res, trips.length, trips.length, trips);
+			} else {
+				errorController.nonExistentResource(res, "user", request);
+			}
+		})
+		.catch(function(error) {
+			errorController.unexpectedError(res, error, request);
+		})
 	}
 
 }

@@ -37,5 +37,17 @@ module.exports = {
 	failedValidation : (function(res, request) {
 		logger.error("Failed validation: " + request);
 		res.status(400).send({code: 400, message: "Failed validation"});
+	}),
+	
+	/** Reports a 'create payment' error. */
+	paymentError : (function(res, error, request, transaction) {
+		logger.error("Create Payment Error: " + request);
+		res.status(500).send({code: 500, message: "Create Payment Error: " + error, transaction: transaction});
+	}),
+	
+	/** Reports an 'negative balance' error. */
+	negativeBalance : (function(res, request) {
+		logger.error("Negative balance: The user can't travel " + request);
+		res.status(402).send({code: 402, message: "Negative balance: The user can't travel"});
 	})
 }

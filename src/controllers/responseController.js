@@ -115,5 +115,77 @@ module.exports = {
 		response.metadata = collectionMetadata(count, total);
 		response.transactions = transactionsList;
 		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and information of a car with the given code. */
+	sendTransaction : (function(res, code, transaction) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.transaction = transaction;
+		res.status(code).send(response);
+	}),
+	
+	/** Sends json with metadata and a list of rules with code 200. */
+	sendRules : (function(res, count, total, rulesList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.rules = rulesList;
+		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and information of a rule with the given code. */
+	sendRule : (function(res, code, rule) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.rule = rule;
+		res.status(code).send(response);
+	}),
+	
+	/** Sends json with metadata and a list of commits with code 200. */
+	sendCommits : (function(res, count, total, commitsList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.commits = commitsList;
+		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and a list of trips with code 200. */
+	sendTrips : (function(res, count, total, tripsList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.trips = tripsList;
+		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and information of a trip with the given code. */
+	sendTrip : (function(res, code, trip) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.trip = trip;
+		res.status(code).send(response);
+	}),
+	
+	/** Sends json with metadata and the estimated cost of a trip with code 200. */
+	sendEstimation : (function(res, cost) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.cost = cost;
+		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and a list of paymethods with code 200. */
+	sendPaymethods : (function(res, count, total, paymethodsList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.paymethods = paymethodsList.map(paymethod => { return { name: paymethod.paymethod, parameters: paymethod.parameters} });
+		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and the results of the facts with the given code. */
+	sendFacts : (function(res, facts) {
+		var response = {};
+		response.metadata = entityMetadata;
+		response.facts = facts;
+		res.status(200).send(response);
 	})
 }

@@ -190,7 +190,7 @@ router.get('/users/:userId/transactions', verifyToken.businessVerify, authCheck(
  * @memberof module:router
  * @inner
  */
-router.post('/users/:userId/transactions', userController.makePayment);
+router.post('/users/:userId/transactions', verifyToken.appVerify, revokedTokenCheck, userController.makePayment);
 
 /**
  * @name get/users/:userId/trips
@@ -198,7 +198,7 @@ router.post('/users/:userId/transactions', userController.makePayment);
  * @memberof module:router
  * @inner
  */
-router.get('/users/:userId/trips', userController.getTrips);
+router.get('/users/:userId/trips', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, userController.getTrips);
 
 
 /* Defining /paymethods endpoint */
@@ -209,7 +209,7 @@ router.get('/users/:userId/trips', userController.getTrips);
  * @memberof module:router
  * @inner
  */
-router.get('/paymethods', paymethodsController.getPaymethods);
+router.get('/paymethods', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, paymethodsController.getPaymethods);
 
 
 /* Defining /trips endpoints */
@@ -220,7 +220,7 @@ router.get('/paymethods', paymethodsController.getPaymethods);
  * @memberof module:router
  * @inner
  */
-router.get('/trips', tripController.list);
+router.get('/trips', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, tripController.list);
 
 /**
  * @name post/trips
@@ -228,7 +228,7 @@ router.get('/trips', tripController.list);
  * @memberof module:router
  * @inner
  */
-router.post('/trips', tripController.register);
+router.post('/trips', verifyToken.appVerify, revokedTokenCheck, tripController.register);
 
 /**
  * @name post/trips/estimate
@@ -236,7 +236,7 @@ router.post('/trips', tripController.register);
  * @memberof module:router
  * @inner
  */
-router.post('/trips/estimate', tripController.estimateValue);
+router.post('/trips/estimate', verifyToken.appVerify, revokedTokenCheck, tripController.estimateValue);
 
 /**
  * @name get/trips/:tripId
@@ -244,7 +244,7 @@ router.post('/trips/estimate', tripController.estimateValue);
  * @memberof module:router
  * @inner
  */
-router.get('/trips/:tripId', tripController.getInformation);
+router.get('/trips/:tripId', verifyToken.businessVerify, authCheck('user'), verifyToken.checkSignatureError, revokedTokenCheck, tripController.getInformation);
 
 
 /* Defining /servers endpoints */
@@ -315,7 +315,7 @@ router.delete('/servers/:serverId', verifyToken.businessVerify, authCheck('manag
  * @memberof module:router
  * @inner
  */
-router.get('/rules', ruleController.list);
+router.get('/rules', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, ruleController.list);
 
 /**
  * @name post/rules
@@ -323,7 +323,7 @@ router.get('/rules', ruleController.list);
  * @memberof module:router
  * @inner
  */
-router.post('/rules', ruleController.register);
+router.post('/rules', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, ruleController.register);
 
 /**
  * @name post/rules/run
@@ -331,7 +331,7 @@ router.post('/rules', ruleController.register);
  * @memberof module:router
  * @inner
  */
-router.post('/rules/run', ruleController.executeRules);
+router.post('/rules/run', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, ruleController.executeRules);
 
 /**
  * @name delete/rules/:ruleId
@@ -339,7 +339,7 @@ router.post('/rules/run', ruleController.executeRules);
  * @memberof module:router
  * @inner
  */
-router.delete('/rules/:ruleId', ruleController.deleteRule);
+router.delete('/rules/:ruleId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, ruleController.deleteRule);
 
 /**
  * @name get/rules/:ruleId
@@ -347,7 +347,7 @@ router.delete('/rules/:ruleId', ruleController.deleteRule);
  * @memberof module:router
  * @inner
  */
-router.get('/rules/:ruleId', ruleController.getInformation);
+router.get('/rules/:ruleId', verifyToken.businessVerify, authCheck('user'), revokedTokenCheck, ruleController.getInformation);
 
 /**
  * @name put/rules/:ruleId
@@ -355,7 +355,7 @@ router.get('/rules/:ruleId', ruleController.getInformation);
  * @memberof module:router
  * @inner
  */
-router.put('/rules/:ruleId', ruleController.modifyRule);
+router.put('/rules/:ruleId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, ruleController.modifyRule);
 
 /**
  * @name post/rules/:ruleId/run
@@ -363,7 +363,7 @@ router.put('/rules/:ruleId', ruleController.modifyRule);
  * @memberof module:router
  * @inner
  */
-router.post('/rules/:ruleId/run', ruleController.run);
+router.post('/rules/:ruleId/run', verifyToken.businessVerify, authCheck('admin'), revokedTokenCheck, ruleController.run);
 
 /**
  * @name get/rules/:ruleId/commits
@@ -371,7 +371,7 @@ router.post('/rules/:ruleId/run', ruleController.run);
  * @memberof module:router
  * @inner
  */
-router.get('/rules/:ruleId/commits', ruleController.getCommits);
+router.get('/rules/:ruleId/commits', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, ruleController.getCommits);
 
 /**
  * @name get/rules/:ruleId/commits/:commitId
@@ -379,7 +379,7 @@ router.get('/rules/:ruleId/commits', ruleController.getCommits);
  * @memberof module:router
  * @inner
  */
-router.get('/rules/:ruleId/commits/:commitId', ruleController.getRuleInCommitState);
+router.get('/rules/:ruleId/commits/:commitId', verifyToken.businessVerify, authCheck('manager'), revokedTokenCheck, ruleController.getRuleInCommitState);
 
 
 /* Defining /token endpoint */
