@@ -14,10 +14,18 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthService } from './services/auth.service';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { Ng2OrderModule } from 'ng2-order-pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { RegisterComponent } from './components/register/register.component';
+import { ListComponent } from './components/business-users/list/list.component';
 
 const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
 	{path: 'login', component: LoginComponent},
+	{path: 'register', component: RegisterComponent, canActivate:[AuthGuard]},
+	{path: 'business-users/list', component: ListComponent, canActivate:[AuthGuard]},
 	{path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
 	{path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]}
 ]
@@ -29,14 +37,20 @@ const appRoutes: Routes = [
     LoginComponent,
     HomeComponent,
     DashboardComponent,
-    ProfileComponent
+    ProfileComponent,
+    RegisterComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),
-    FlashMessagesModule
+    FlashMessagesModule,
+    BsDropdownModule.forRoot(appRoutes),
+    Ng2SearchPipeModule,
+    Ng2OrderModule,
+    NgxPaginationModule
   ],
   providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
