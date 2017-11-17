@@ -24,6 +24,10 @@
     "angular2-flash-messages": "^1.0.8",
     "angular2-jwt": "^0.2.3",
     "core-js": "^2.4.1",
+    "ng2-order-pipe": "^0.1.5",
+    "ng2-search-filter": "^0.3.1",
+    "ngx-bootstrap": "^2.0.0-beta.8",
+    "ngx-pagination": "^3.0.3",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
   },
