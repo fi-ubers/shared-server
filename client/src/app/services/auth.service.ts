@@ -31,6 +31,9 @@ export class AuthService {
   
   roleLoggedIn(role) {
     const roles = localStorage.getItem('user_roles');
+    if (!roles) {
+      return false;
+    }
     return this.loggedIn && roles.includes(role);
   }
   
