@@ -9,6 +9,7 @@
           </button>
           <a class="navbar-brand" href="#">FIUBER Business Users</a>
         </div>
+        
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-left">
             <li [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a [routerLink]="['/']">Home</a></li>
@@ -18,8 +19,18 @@
             <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a [routerLink]="['/login']">Login</a></li>
             <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a [routerLink]="['/dashboard']">Dashboard</a></li>
             <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a [routerLink]="['/profile']">Profile</a></li>
+            
+            <li class="nav-item dropdown" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>Business Users <span class="caret"></span>
+            </a>
+            <ul *dropdownMenu class="dropdown-menu" role="menu">
+              <li *ngIf="authService.roleLoggedIn('admin')" role="menuitem"><a class="dropdown-item" [routerLink]="['/register']">Register business user</a></li>
+              <li *ngIf="authService.roleLoggedIn('admin')" role="menuitem"><a class="dropdown-item" [routerLink]="['/business-users/list']">Business users list</a></li>
+            </ul>
+            </li>
+            
             <li *ngIf="authService.loggedIn()"><a (click)="onLogoutClick()" href="#">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
-    </nav>
+</nav>

@@ -29,9 +29,34 @@ export class AuthService {
     return tokenNotExpired('id_token');
   }
   
+  roleLoggedIn(role) {
+    const roles = localStorage.getItem('user_roles');
+    return this.loggedIn && roles.includes(role);
+  }
+  
+  registerUser(user) {
+    //let uri = 'api/business-users/';
+    let uri = 'http://localhost:5000/api/business-users/';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(uri + '?token=' + this.authToken, user, {headers: headers})
+      .map(res => res.json());
+  }
+  
   getProfile() {
     //let uri = 'api/business-users/me';
     let uri = 'http://localhost:5000/api/business-users/me';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getBusinessUsersList() {
+    //let uri = 'api/business-users/';
+    let uri = 'http://localhost:5000/api/business-users/';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
