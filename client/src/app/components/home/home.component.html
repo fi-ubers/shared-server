@@ -1,7 +1,10 @@
 <div class="jumbotron text-center">
   <h1> FIUBER Business Users</h1>
-  <p class="lead">Welcome users!</p>
-  <div>
-    <a *ngIf="!authService.loggedIn()" class="btn btn-primary" [routerLink]="['/login']">Login</a>
+  <div *ngIf="!authService.loggedIn()">
+    <p class="lead">Welcome users!</p>
+    <a class="btn btn-primary" [routerLink]="['/login']">Login</a>
+  </div>
+  <div *ngIf="authService.loggedIn()">
+    <p class="lead">Welcome back {{username}}!</p>
   </div>
 </div>
