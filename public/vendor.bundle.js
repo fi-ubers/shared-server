@@ -621,6 +621,2256 @@ function toComment(sourceMap) {
 
 /***/ }),
 
+/***/ "../../../../ng2-order-pipe/dist/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+/**
+ * Created by vadimdez on 20/01/2017.
+ */
+__export(__webpack_require__("../../../../ng2-order-pipe/dist/src/ng2-order.module.js"));
+__export(__webpack_require__("../../../../ng2-order-pipe/dist/src/ng2-order.pipe.js"));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../../../../ng2-order-pipe/dist/src/ng2-order.module.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+/**
+ * Created by vadimdez on 20/01/2017.
+ */
+var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
+var ng2_order_pipe_1 = __webpack_require__("../../../../ng2-order-pipe/dist/src/ng2-order.pipe.js");
+var Ng2OrderModule = (function () {
+    function Ng2OrderModule() {
+    }
+    return Ng2OrderModule;
+}());
+Ng2OrderModule = __decorate([
+    core_1.NgModule({
+        declarations: [ng2_order_pipe_1.Ng2OrderPipe],
+        exports: [ng2_order_pipe_1.Ng2OrderPipe]
+    })
+], Ng2OrderModule);
+exports.Ng2OrderModule = Ng2OrderModule;
+//# sourceMappingURL=ng2-order.module.js.map
+
+/***/ }),
+
+/***/ "../../../../ng2-order-pipe/dist/src/ng2-order.pipe.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
+var Ng2OrderPipe = Ng2OrderPipe_1 = (function () {
+    function Ng2OrderPipe() {
+    }
+    Ng2OrderPipe.prototype.transform = function (value, expression, reverse) {
+        if (!value) {
+            return value;
+        }
+        var isArray = value instanceof Array;
+        if (isArray) {
+            return this.sortArray(value, expression, reverse);
+        }
+        if (typeof value === 'object') {
+            return this.transformObject(value, expression, reverse);
+        }
+        return value;
+    };
+    /**
+     * Sort array
+     *
+     * @param value
+     * @param expression
+     * @param reverse
+     * @returns {any[]}
+     */
+    Ng2OrderPipe.prototype.sortArray = function (value, expression, reverse) {
+        var array = value.sort(function (a, b) {
+            if (!expression) {
+                return a > b ? 1 : -1;
+            }
+            return a[expression] > b[expression] ? 1 : -1;
+        });
+        if (reverse) {
+            return array.reverse();
+        }
+        return array;
+    };
+    /**
+     * Transform Object
+     *
+     * @param value
+     * @param expression
+     * @param reverse
+     * @returns {any[]}
+     */
+    Ng2OrderPipe.prototype.transformObject = function (value, expression, reverse) {
+        var parsedExpression = Ng2OrderPipe_1.parseExpression(expression);
+        var lastPredicate = parsedExpression.pop();
+        var oldValue = Ng2OrderPipe_1.getValue(value, parsedExpression);
+        if (!(oldValue instanceof Array)) {
+            parsedExpression.push(lastPredicate);
+            lastPredicate = null;
+            oldValue = Ng2OrderPipe_1.getValue(value, parsedExpression);
+        }
+        if (!oldValue) {
+            return value;
+        }
+        var newValue = this.transform(oldValue, lastPredicate, reverse);
+        Ng2OrderPipe_1.setValue(value, newValue, parsedExpression);
+        return value;
+    };
+    /**
+     * Parse expression, split into items
+     * @param expression
+     * @returns {string[]}
+     */
+    Ng2OrderPipe.parseExpression = function (expression) {
+        expression = expression.replace(/\[(\w+)\]/g, '.$1');
+        expression = expression.replace(/^\./, '');
+        return expression.split('.');
+    };
+    /**
+     * Get value by expression
+     *
+     * @param object
+     * @param expression
+     * @returns {any}
+     */
+    Ng2OrderPipe.getValue = function (object, expression) {
+        for (var i = 0, n = expression.length; i < n; ++i) {
+            var k = expression[i];
+            if (!(k in object)) {
+                return;
+            }
+            object = object[k];
+        }
+        return object;
+    };
+    /**
+     * Set value by expression
+     *
+     * @param object
+     * @param value
+     * @param expression
+     */
+    Ng2OrderPipe.setValue = function (object, value, expression) {
+        var i;
+        for (i = 0; i < expression.length - 1; i++) {
+            object = object[expression[i]];
+        }
+        object[expression[i]] = value;
+    };
+    return Ng2OrderPipe;
+}());
+Ng2OrderPipe = Ng2OrderPipe_1 = __decorate([
+    core_1.Pipe({
+        name: 'orderBy'
+    })
+], Ng2OrderPipe);
+exports.Ng2OrderPipe = Ng2OrderPipe;
+var Ng2OrderPipe_1;
+//# sourceMappingURL=ng2-order.pipe.js.map
+
+/***/ }),
+
+/***/ "../../../../ng2-search-filter/dist/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__("../../../../ng2-search-filter/dist/src/ng2-filter.module.js"));
+__export(__webpack_require__("../../../../ng2-search-filter/dist/src/ng2-filter.pipe.js"));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../../../../ng2-search-filter/dist/src/ng2-filter.module.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
+var ng2_filter_pipe_1 = __webpack_require__("../../../../ng2-search-filter/dist/src/ng2-filter.pipe.js");
+var Ng2SearchPipeModule = (function () {
+    function Ng2SearchPipeModule() {
+    }
+    return Ng2SearchPipeModule;
+}());
+Ng2SearchPipeModule = __decorate([
+    core_1.NgModule({
+        declarations: [ng2_filter_pipe_1.Ng2SearchPipe],
+        exports: [ng2_filter_pipe_1.Ng2SearchPipe]
+    })
+], Ng2SearchPipeModule);
+exports.Ng2SearchPipeModule = Ng2SearchPipeModule;
+//# sourceMappingURL=ng2-filter.module.js.map
+
+/***/ }),
+
+/***/ "../../../../ng2-search-filter/dist/src/ng2-filter.pipe.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("../../../core/@angular/core.es5.js");
+var Ng2SearchPipe = (function () {
+    function Ng2SearchPipe() {
+    }
+    /**
+     * @items = object from array
+     * @term = term's search
+     */
+    Ng2SearchPipe.prototype.transform = function (items, term) {
+        if (term === undefined)
+            return items;
+        return items.filter(function (item) {
+            for (var property in item) {
+                if (item[property] === null) {
+                    continue;
+                }
+                if (item[property].toString().toLowerCase().includes(term.toLowerCase())) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    };
+    return Ng2SearchPipe;
+}());
+Ng2SearchPipe = __decorate([
+    core_1.Pipe({
+        name: 'filter',
+        pure: false
+    }),
+    core_1.Injectable()
+], Ng2SearchPipe);
+exports.Ng2SearchPipe = Ng2SearchPipe;
+//# sourceMappingURL=ng2-filter.pipe.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/component-loader/component-loader.class.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ComponentLoader; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_triggers__ = __webpack_require__("../../../../ngx-bootstrap/utils/triggers.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__content_ref_class__ = __webpack_require__("../../../../ngx-bootstrap/component-loader/content-ref.class.js");
+// tslint:disable:max-file-line-count
+// todo: add delay support
+// todo: merge events onShow, onShown, etc...
+// todo: add global positioning configuration?
+
+
+
+var ComponentLoader = (function () {
+    /**
+     * Do not use this directly, it should be instanced via
+     * `ComponentLoadFactory.attach`
+     * @internal
+     */
+    // tslint:disable-next-line
+    function ComponentLoader(_viewContainerRef, _renderer, _elementRef, _injector, _componentFactoryResolver, _ngZone, _applicationRef, _posService) {
+        this._viewContainerRef = _viewContainerRef;
+        this._renderer = _renderer;
+        this._elementRef = _elementRef;
+        this._injector = _injector;
+        this._componentFactoryResolver = _componentFactoryResolver;
+        this._ngZone = _ngZone;
+        this._applicationRef = _applicationRef;
+        this._posService = _posService;
+        this.onBeforeShow = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.onShown = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.onBeforeHide = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.onHidden = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this._providers = [];
+        this._isHiding = false;
+        this._listenOpts = {};
+        this._globalListener = Function.prototype;
+    }
+    Object.defineProperty(ComponentLoader.prototype, "isShown", {
+        get: function () {
+            if (this._isHiding) {
+                return false;
+            }
+            return !!this._componentRef;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ComponentLoader.prototype.attach = function (compType) {
+        this._componentFactory = this._componentFactoryResolver
+            .resolveComponentFactory(compType);
+        return this;
+    };
+    // todo: add behaviour: to target element, `body`, custom element
+    ComponentLoader.prototype.to = function (container) {
+        this.container = container || this.container;
+        return this;
+    };
+    ComponentLoader.prototype.position = function (opts) {
+        this.attachment = opts.attachment || this.attachment;
+        this._elementRef = opts.target || this._elementRef;
+        return this;
+    };
+    ComponentLoader.prototype.provide = function (provider) {
+        this._providers.push(provider);
+        return this;
+    };
+    // todo: appendChild to element or document.querySelector(this.container)
+    ComponentLoader.prototype.show = function (opts) {
+        if (opts === void 0) { opts = {}; }
+        this._subscribePositioning();
+        this._innerComponent = null;
+        if (!this._componentRef) {
+            this.onBeforeShow.emit();
+            this._contentRef = this._getContentRef(opts.content, opts.context);
+            var injector = __WEBPACK_IMPORTED_MODULE_0__angular_core__["ReflectiveInjector"].resolveAndCreate(this._providers, this._injector);
+            this._componentRef = this._componentFactory.create(injector, this._contentRef.nodes);
+            this._applicationRef.attachView(this._componentRef.hostView);
+            // this._componentRef = this._viewContainerRef
+            //   .createComponent(this._componentFactory, 0, injector, this._contentRef.nodes);
+            this.instance = this._componentRef.instance;
+            Object.assign(this._componentRef.instance, opts);
+            if (this.container instanceof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) {
+                this.container.nativeElement.appendChild(this._componentRef.location.nativeElement);
+            }
+            if (this.container === 'body' && typeof document !== 'undefined') {
+                document
+                    .querySelector(this.container)
+                    .appendChild(this._componentRef.location.nativeElement);
+            }
+            if (!this.container &&
+                this._elementRef &&
+                this._elementRef.nativeElement.parentElement) {
+                this._elementRef.nativeElement.parentElement.appendChild(this._componentRef.location.nativeElement);
+            }
+            // we need to manually invoke change detection since events registered
+            // via
+            // Renderer::listen() are not picked up by change detection with the
+            // OnPush strategy
+            if (this._contentRef.componentRef) {
+                this._innerComponent = this._contentRef.componentRef.instance;
+                this._contentRef.componentRef.changeDetectorRef.markForCheck();
+                this._contentRef.componentRef.changeDetectorRef.detectChanges();
+            }
+            this._componentRef.changeDetectorRef.markForCheck();
+            this._componentRef.changeDetectorRef.detectChanges();
+            this.onShown.emit(this._componentRef.instance);
+        }
+        this._registerOutsideClick();
+        return this._componentRef;
+    };
+    ComponentLoader.prototype.hide = function () {
+        if (!this._componentRef) {
+            return this;
+        }
+        this.onBeforeHide.emit(this._componentRef.instance);
+        var componentEl = this._componentRef.location.nativeElement;
+        componentEl.parentNode.removeChild(componentEl);
+        if (this._contentRef.componentRef) {
+            this._contentRef.componentRef.destroy();
+        }
+        this._componentRef.destroy();
+        if (this._viewContainerRef && this._contentRef.viewRef) {
+            this._viewContainerRef.remove(this._viewContainerRef.indexOf(this._contentRef.viewRef));
+        }
+        // this._viewContainerRef.remove(this._viewContainerRef.indexOf(this._componentRef.hostView));
+        //
+        // if (this._contentRef.viewRef && this._viewContainerRef.indexOf(this._contentRef.viewRef) !== -1) {
+        //   this._viewContainerRef.remove(this._viewContainerRef.indexOf(this._contentRef.viewRef));
+        // }
+        this._contentRef = null;
+        this._componentRef = null;
+        this._removeGlobalListener();
+        this.onHidden.emit();
+        return this;
+    };
+    ComponentLoader.prototype.toggle = function () {
+        if (this.isShown) {
+            this.hide();
+            return;
+        }
+        this.show();
+    };
+    ComponentLoader.prototype.dispose = function () {
+        if (this.isShown) {
+            this.hide();
+        }
+        this._unsubscribePositioning();
+        if (this._unregisterListenersFn) {
+            this._unregisterListenersFn();
+        }
+    };
+    ComponentLoader.prototype.listen = function (listenOpts) {
+        var _this = this;
+        this.triggers = listenOpts.triggers || this.triggers;
+        this._listenOpts.outsideClick = listenOpts.outsideClick;
+        listenOpts.target = listenOpts.target || this._elementRef.nativeElement;
+        var hide = (this._listenOpts.hide = function () {
+            return listenOpts.hide ? listenOpts.hide() : void _this.hide();
+        });
+        var show = (this._listenOpts.show = function (registerHide) {
+            listenOpts.show ? listenOpts.show(registerHide) : _this.show(registerHide);
+            registerHide();
+        });
+        var toggle = function (registerHide) {
+            _this.isShown ? hide() : show(registerHide);
+        };
+        this._unregisterListenersFn = Object(__WEBPACK_IMPORTED_MODULE_1__utils_triggers__["a" /* listenToTriggersV2 */])(this._renderer, {
+            target: listenOpts.target,
+            triggers: listenOpts.triggers,
+            show: show,
+            hide: hide,
+            toggle: toggle
+        });
+        return this;
+    };
+    ComponentLoader.prototype._removeGlobalListener = function () {
+        if (this._globalListener) {
+            this._globalListener();
+            this._globalListener = null;
+        }
+    };
+    ComponentLoader.prototype.attachInline = function (vRef, template) {
+        this._inlineViewRef = vRef.createEmbeddedView(template);
+        return this;
+    };
+    ComponentLoader.prototype._registerOutsideClick = function () {
+        var _this = this;
+        if (!this._componentRef || !this._componentRef.location) {
+            return;
+        }
+        // why: should run after first event bubble
+        if (this._listenOpts.outsideClick) {
+            var target_1 = this._componentRef.location.nativeElement;
+            setTimeout(function () {
+                _this._globalListener = Object(__WEBPACK_IMPORTED_MODULE_1__utils_triggers__["b" /* registerOutsideClick */])(_this._renderer, {
+                    targets: [target_1, _this._elementRef.nativeElement],
+                    outsideClick: _this._listenOpts.outsideClick,
+                    hide: function () { return _this._listenOpts.hide(); }
+                });
+            });
+        }
+    };
+    ComponentLoader.prototype.getInnerComponent = function () {
+        return this._innerComponent;
+    };
+    ComponentLoader.prototype._subscribePositioning = function () {
+        var _this = this;
+        if (this._zoneSubscription || !this.attachment) {
+            return;
+        }
+        this._zoneSubscription = this._ngZone.onStable.subscribe(function () {
+            if (!_this._componentRef) {
+                return;
+            }
+            _this._posService.position({
+                element: _this._componentRef.location,
+                target: _this._elementRef,
+                attachment: _this.attachment,
+                appendToBody: _this.container === 'body'
+            });
+        });
+    };
+    ComponentLoader.prototype._unsubscribePositioning = function () {
+        if (!this._zoneSubscription) {
+            return;
+        }
+        this._zoneSubscription.unsubscribe();
+        this._zoneSubscription = null;
+    };
+    ComponentLoader.prototype._getContentRef = function (content, context) {
+        if (!content) {
+            return new __WEBPACK_IMPORTED_MODULE_2__content_ref_class__["a" /* ContentRef */]([]);
+        }
+        if (content instanceof __WEBPACK_IMPORTED_MODULE_0__angular_core__["TemplateRef"]) {
+            if (this._viewContainerRef) {
+                var _viewRef = this._viewContainerRef
+                    .createEmbeddedView(content, context);
+                _viewRef.markForCheck();
+                return new __WEBPACK_IMPORTED_MODULE_2__content_ref_class__["a" /* ContentRef */]([_viewRef.rootNodes], _viewRef);
+            }
+            var viewRef = content.createEmbeddedView({});
+            this._applicationRef.attachView(viewRef);
+            return new __WEBPACK_IMPORTED_MODULE_2__content_ref_class__["a" /* ContentRef */]([viewRef.rootNodes], viewRef);
+        }
+        if (typeof content === 'function') {
+            var contentCmptFactory = this._componentFactoryResolver.resolveComponentFactory(content);
+            var modalContentInjector = __WEBPACK_IMPORTED_MODULE_0__angular_core__["ReflectiveInjector"].resolveAndCreate(this._providers.slice(), this._injector);
+            var componentRef = contentCmptFactory.create(modalContentInjector);
+            this._applicationRef.attachView(componentRef.hostView);
+            return new __WEBPACK_IMPORTED_MODULE_2__content_ref_class__["a" /* ContentRef */]([[componentRef.location.nativeElement]], componentRef.hostView, componentRef);
+        }
+        return new __WEBPACK_IMPORTED_MODULE_2__content_ref_class__["a" /* ContentRef */]([[this._renderer.createText("" + content)]]);
+    };
+    return ComponentLoader;
+}());
+
+//# sourceMappingURL=component-loader.class.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/component-loader/component-loader.factory.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ComponentLoaderFactory; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_loader_class__ = __webpack_require__("../../../../ngx-bootstrap/component-loader/component-loader.class.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__positioning__ = __webpack_require__("../../../../ngx-bootstrap/positioning/index.js");
+
+
+
+var ComponentLoaderFactory = (function () {
+    function ComponentLoaderFactory(_componentFactoryResolver, _ngZone, _injector, _posService, _applicationRef) {
+        this._componentFactoryResolver = _componentFactoryResolver;
+        this._ngZone = _ngZone;
+        this._injector = _injector;
+        this._posService = _posService;
+        this._applicationRef = _applicationRef;
+    }
+    /**
+     *
+     * @param _elementRef
+     * @param _viewContainerRef
+     * @param _renderer
+     * @returns {ComponentLoader}
+     */
+    ComponentLoaderFactory.prototype.createLoader = function (_elementRef, _viewContainerRef, _renderer) {
+        return new __WEBPACK_IMPORTED_MODULE_1__component_loader_class__["a" /* ComponentLoader */](_viewContainerRef, _renderer, _elementRef, this._injector, this._componentFactoryResolver, this._ngZone, this._applicationRef, this._posService);
+    };
+    ComponentLoaderFactory.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"] },
+    ];
+    /** @nocollapse */
+    ComponentLoaderFactory.ctorParameters = function () { return [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Injector"], },
+        { type: __WEBPACK_IMPORTED_MODULE_2__positioning__["a" /* PositioningService */], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ApplicationRef"], },
+    ]; };
+    return ComponentLoaderFactory;
+}());
+
+//# sourceMappingURL=component-loader.factory.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/component-loader/content-ref.class.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentRef; });
+/**
+ * @copyright Valor Software
+ * @copyright Angular ng-bootstrap team
+ */
+var ContentRef = (function () {
+    function ContentRef(nodes, viewRef, componentRef) {
+        this.nodes = nodes;
+        this.viewRef = viewRef;
+        this.componentRef = componentRef;
+    }
+    return ContentRef;
+}());
+
+//# sourceMappingURL=content-ref.class.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/component-loader/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_loader_class__ = __webpack_require__("../../../../ngx-bootstrap/component-loader/component-loader.class.js");
+/* unused harmony reexport ComponentLoader */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_loader_factory__ = __webpack_require__("../../../../ngx-bootstrap/component-loader/component-loader.factory.js");
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__component_loader_factory__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__content_ref_class__ = __webpack_require__("../../../../ngx-bootstrap/component-loader/content-ref.class.js");
+/* unused harmony reexport ContentRef */
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/dropdown/bs-dropdown-container.component.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BsDropdownContainerComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bs_dropdown_state__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.state.js");
+
+
+var BsDropdownContainerComponent = (function () {
+    function BsDropdownContainerComponent(_state, cd, _renderer, _element) {
+        var _this = this;
+        this._state = _state;
+        this.cd = cd;
+        this._renderer = _renderer;
+        this.isOpen = false;
+        this._subscription = _state.isOpenChange.subscribe(function (value) {
+            _this.isOpen = value;
+            var dropdown = _element.nativeElement.querySelector('.dropdown-menu');
+            if (dropdown) {
+                _this._renderer.addClass(dropdown, 'show');
+                if (dropdown.classList.contains('dropdown-menu-right')) {
+                    _this._renderer.setStyle(dropdown, 'left', 'auto');
+                    _this._renderer.setStyle(dropdown, 'right', '0');
+                }
+                if (_this.direction === 'up') {
+                    _this._renderer.setStyle(dropdown, 'top', 'auto');
+                    _this._renderer.setStyle(dropdown, 'transform', 'translateY(-101%)');
+                }
+            }
+            _this.cd.markForCheck();
+            _this.cd.detectChanges();
+        });
+    }
+    Object.defineProperty(BsDropdownContainerComponent.prototype, "direction", {
+        get: function () {
+            return this._state.direction;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BsDropdownContainerComponent.prototype.ngOnDestroy = function () {
+        this._subscription.unsubscribe();
+    };
+    BsDropdownContainerComponent.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"], args: [{
+                    selector: 'bs-dropdown-container',
+                    changeDetection: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectionStrategy"].OnPush,
+                    host: {
+                        style: 'display:block;position: absolute;'
+                    },
+                    template: "\n    <div [class.dropup]=\"direction === 'up'\"\n         [class.dropdown]=\"direction === 'down'\"\n         [class.show]=\"isOpen\"\n         [class.open]=\"isOpen\"><ng-content></ng-content></div>\n  "
+                },] },
+    ];
+    /** @nocollapse */
+    BsDropdownContainerComponent.ctorParameters = function () { return [
+        { type: __WEBPACK_IMPORTED_MODULE_1__bs_dropdown_state__["a" /* BsDropdownState */], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer2"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"], },
+    ]; };
+    return BsDropdownContainerComponent;
+}());
+
+//# sourceMappingURL=bs-dropdown-container.component.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/dropdown/bs-dropdown-menu.directive.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BsDropdownMenuDirective; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bs_dropdown_state__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.state.js");
+
+
+var BsDropdownMenuDirective = (function () {
+    function BsDropdownMenuDirective(_state, _viewContainer, _templateRef) {
+        _state.resolveDropdownMenu({
+            templateRef: _templateRef,
+            viewContainer: _viewContainer
+        });
+    }
+    BsDropdownMenuDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"], args: [{
+                    selector: '[bsDropdownMenu],[dropdownMenu]',
+                    exportAs: 'bs-dropdown-menu'
+                },] },
+    ];
+    /** @nocollapse */
+    BsDropdownMenuDirective.ctorParameters = function () { return [
+        { type: __WEBPACK_IMPORTED_MODULE_1__bs_dropdown_state__["a" /* BsDropdownState */], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["TemplateRef"], },
+    ]; };
+    return BsDropdownMenuDirective;
+}());
+
+//# sourceMappingURL=bs-dropdown-menu.directive.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/dropdown/bs-dropdown-toggle.directive.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BsDropdownToggleDirective; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bs_dropdown_state__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.state.js");
+
+
+var BsDropdownToggleDirective = (function () {
+    function BsDropdownToggleDirective(_state, _element) {
+        var _this = this;
+        this._state = _state;
+        this._element = _element;
+        this.isDisabled = null;
+        this._subscriptions = [];
+        // sync is open value with state
+        this._subscriptions.push(this._state.isOpenChange.subscribe(function (value) { return (_this.isOpen = value); }));
+        // populate disabled state
+        this._subscriptions.push(this._state.isDisabledChange.subscribe(function (value) { return (_this.isDisabled = value || null); }));
+    }
+    BsDropdownToggleDirective.prototype.onClick = function () {
+        if (this.isDisabled) {
+            return;
+        }
+        this._state.toggleClick.emit(true);
+    };
+    BsDropdownToggleDirective.prototype.onDocumentClick = function (event) {
+        if (this._state.autoClose &&
+            event.button !== 2 &&
+            !this._element.nativeElement.contains(event.target)) {
+            this._state.toggleClick.emit(false);
+        }
+    };
+    BsDropdownToggleDirective.prototype.onEsc = function () {
+        if (this._state.autoClose) {
+            this._state.toggleClick.emit(false);
+        }
+    };
+    BsDropdownToggleDirective.prototype.ngOnDestroy = function () {
+        for (var _i = 0, _a = this._subscriptions; _i < _a.length; _i++) {
+            var sub = _a[_i];
+            sub.unsubscribe();
+        }
+    };
+    BsDropdownToggleDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"], args: [{
+                    selector: '[bsDropdownToggle],[dropdownToggle]',
+                    exportAs: 'bs-dropdown-toggle',
+                    host: {
+                        '[attr.aria-haspopup]': 'true'
+                    }
+                },] },
+    ];
+    /** @nocollapse */
+    BsDropdownToggleDirective.ctorParameters = function () { return [
+        { type: __WEBPACK_IMPORTED_MODULE_1__bs_dropdown_state__["a" /* BsDropdownState */], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"], },
+    ]; };
+    BsDropdownToggleDirective.propDecorators = {
+        'isDisabled': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"], args: ['attr.disabled',] },],
+        'isOpen': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"], args: ['attr.aria-expanded',] },],
+        'onClick': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"], args: ['click', [],] },],
+        'onDocumentClick': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"], args: ['document:click', ['$event'],] },],
+        'onEsc': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"], args: ['keyup.esc',] },],
+    };
+    return BsDropdownToggleDirective;
+}());
+
+//# sourceMappingURL=bs-dropdown-toggle.directive.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/dropdown/bs-dropdown.config.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BsDropdownConfig; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+
+/** Default dropdown configuration */
+var BsDropdownConfig = (function () {
+    function BsDropdownConfig() {
+        /** default dropdown auto closing behavior */
+        this.autoClose = true;
+    }
+    BsDropdownConfig.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"] },
+    ];
+    /** @nocollapse */
+    BsDropdownConfig.ctorParameters = function () { return []; };
+    return BsDropdownConfig;
+}());
+
+//# sourceMappingURL=bs-dropdown.config.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/dropdown/bs-dropdown.directive.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BsDropdownDirective; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_filter__ = __webpack_require__("../../../../rxjs/add/operator/filter.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_filter__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__component_loader__ = __webpack_require__("../../../../ngx-bootstrap/component-loader/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bs_dropdown_config__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.config.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__bs_dropdown_container_component__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown-container.component.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__bs_dropdown_state__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.state.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_theme_provider__ = __webpack_require__("../../../../ngx-bootstrap/utils/theme-provider.js");
+// tslint:disable:max-file-line-count
+
+
+
+
+
+
+
+var BsDropdownDirective = (function () {
+    function BsDropdownDirective(_elementRef, _renderer, _viewContainerRef, _cis, _config, _state) {
+        this._elementRef = _elementRef;
+        this._renderer = _renderer;
+        this._viewContainerRef = _viewContainerRef;
+        this._cis = _cis;
+        this._config = _config;
+        this._state = _state;
+        // todo: move to component loader
+        this._isInlineOpen = false;
+        this._subscriptions = [];
+        this._isInited = false;
+        // set initial dropdown state from config
+        this._state.autoClose = this._config.autoClose;
+        // create dropdown component loader
+        this._dropdown = this._cis
+            .createLoader(this._elementRef, this._viewContainerRef, this._renderer)
+            .provide({ provide: __WEBPACK_IMPORTED_MODULE_5__bs_dropdown_state__["a" /* BsDropdownState */], useValue: this._state });
+        this.onShown = this._dropdown.onShown;
+        this.onHidden = this._dropdown.onHidden;
+        this.isOpenChange = this._state.isOpenChange;
+    }
+    Object.defineProperty(BsDropdownDirective.prototype, "autoClose", {
+        get: function () {
+            return this._state.autoClose;
+        },
+        /**
+         * Indicates that dropdown will be closed on item or document click,
+         * and after pressing ESC
+         */
+        set: function (value) {
+            this._state.autoClose = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BsDropdownDirective.prototype, "isDisabled", {
+        get: function () {
+            return this._isDisabled;
+        },
+        /**
+         * Disables dropdown toggle and hides dropdown menu if opened
+         */
+        set: function (value) {
+            this._isDisabled = value;
+            this._state.isDisabledChange.emit(value);
+            if (value) {
+                this.hide();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BsDropdownDirective.prototype, "isOpen", {
+        /**
+         * Returns whether or not the popover is currently being shown
+         */
+        get: function () {
+            if (this._showInline) {
+                return this._isInlineOpen;
+            }
+            return this._dropdown.isShown;
+        },
+        set: function (value) {
+            if (value) {
+                this.show();
+            }
+            else {
+                this.hide();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BsDropdownDirective.prototype, "isBs4", {
+        get: function () {
+            return !Object(__WEBPACK_IMPORTED_MODULE_6__utils_theme_provider__["a" /* isBs3 */])();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BsDropdownDirective.prototype, "_showInline", {
+        get: function () {
+            return !this.container;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BsDropdownDirective.prototype.ngOnInit = function () {
+        var _this = this;
+        // fix: seems there are an issue with `routerLinkActive`
+        // which result in duplicated call ngOnInit without call to ngOnDestroy
+        // read more: https://github.com/valor-software/ngx-bootstrap/issues/1885
+        if (this._isInited) {
+            return;
+        }
+        this._isInited = true;
+        // attach DOM listeners
+        this._dropdown.listen({
+            // because of dropdown inline mode
+            outsideClick: false,
+            triggers: this.triggers,
+            show: function () { return _this.show(); }
+        });
+        // toggle visibility on toggle element click
+        this._subscriptions.push(this._state.toggleClick.subscribe(function (value) { return _this.toggle(value); }));
+        // hide dropdown if set disabled while opened
+        this._subscriptions.push(this._state.isDisabledChange
+            .filter(function (value) { return value; })
+            .subscribe(function (value) { return _this.hide(); }));
+    };
+    /**
+     * Opens an element’s popover. This is considered a “manual” triggering of
+     * the popover.
+     */
+    BsDropdownDirective.prototype.show = function () {
+        var _this = this;
+        if (this.isOpen || this.isDisabled) {
+            return;
+        }
+        if (this._showInline) {
+            if (!this._inlinedMenu) {
+                this._state.dropdownMenu.then(function (dropdownMenu) {
+                    _this._dropdown.attachInline(dropdownMenu.viewContainer, dropdownMenu.templateRef);
+                    _this._inlinedMenu = _this._dropdown._inlineViewRef;
+                    _this.addBs4Polyfills();
+                })
+                    .catch();
+            }
+            this.addBs4Polyfills();
+            this._isInlineOpen = true;
+            this.onShown.emit(true);
+            this._state.isOpenChange.emit(true);
+            return;
+        }
+        this._state.dropdownMenu.then(function (dropdownMenu) {
+            // check direction in which dropdown should be opened
+            var _dropup = _this.dropup ||
+                (typeof _this.dropup !== 'undefined' && _this.dropup);
+            _this._state.direction = _dropup ? 'up' : 'down';
+            var _placement = _this.placement || (_dropup ? 'top left' : 'bottom left');
+            // show dropdown
+            _this._dropdown
+                .attach(__WEBPACK_IMPORTED_MODULE_4__bs_dropdown_container_component__["a" /* BsDropdownContainerComponent */])
+                .to(_this.container)
+                .position({ attachment: _placement })
+                .show({
+                content: dropdownMenu.templateRef,
+                placement: _placement
+            });
+            _this._state.isOpenChange.emit(true);
+        })
+            .catch();
+    };
+    /**
+     * Closes an element’s popover. This is considered a “manual” triggering of
+     * the popover.
+     */
+    BsDropdownDirective.prototype.hide = function () {
+        if (!this.isOpen) {
+            return;
+        }
+        if (this._showInline) {
+            this.removeShowClass();
+            this._isInlineOpen = false;
+            this.onHidden.emit(true);
+        }
+        else {
+            this._dropdown.hide();
+        }
+        this._state.isOpenChange.emit(false);
+    };
+    /**
+     * Toggles an element’s popover. This is considered a “manual” triggering of
+     * the popover.
+     */
+    BsDropdownDirective.prototype.toggle = function (value) {
+        if (this.isOpen || !value) {
+            return this.hide();
+        }
+        return this.show();
+    };
+    BsDropdownDirective.prototype.ngOnDestroy = function () {
+        // clean up subscriptions and destroy dropdown
+        for (var _i = 0, _a = this._subscriptions; _i < _a.length; _i++) {
+            var sub = _a[_i];
+            sub.unsubscribe();
+        }
+        this._dropdown.dispose();
+    };
+    BsDropdownDirective.prototype.addBs4Polyfills = function () {
+        if (!Object(__WEBPACK_IMPORTED_MODULE_6__utils_theme_provider__["a" /* isBs3 */])()) {
+            this.addShowClass();
+            this.checkRightAlignment();
+            this.checkDropup();
+        }
+    };
+    BsDropdownDirective.prototype.addShowClass = function () {
+        if (this._inlinedMenu && this._inlinedMenu.rootNodes[0]) {
+            this._renderer.addClass(this._inlinedMenu.rootNodes[0], 'show');
+        }
+    };
+    BsDropdownDirective.prototype.removeShowClass = function () {
+        if (this._inlinedMenu && this._inlinedMenu.rootNodes[0]) {
+            this._renderer.removeClass(this._inlinedMenu.rootNodes[0], 'show');
+        }
+    };
+    BsDropdownDirective.prototype.checkRightAlignment = function () {
+        if (this._inlinedMenu && this._inlinedMenu.rootNodes[0]) {
+            var isRightAligned = this._inlinedMenu.rootNodes[0].classList.contains('dropdown-menu-right');
+            this._renderer.setStyle(this._inlinedMenu.rootNodes[0], 'left', isRightAligned ? 'auto' : '0');
+            this._renderer.setStyle(this._inlinedMenu.rootNodes[0], 'right', isRightAligned ? '0' : 'auto');
+        }
+    };
+    BsDropdownDirective.prototype.checkDropup = function () {
+        if (this._inlinedMenu && this._inlinedMenu.rootNodes[0]) {
+            // a little hack to not break support of bootstrap 4 beta
+            var top_1 = getComputedStyle(this._inlinedMenu.rootNodes[0]).top;
+            var topAuto = top_1 === 'auto' || top_1 === '100%';
+            this._renderer.setStyle(this._inlinedMenu.rootNodes[0], 'top', this.dropup ? 'auto' : '100%');
+            this._renderer.setStyle(this._inlinedMenu.rootNodes[0], 'transform', this.dropup && !topAuto ? 'translateY(-101%)' : 'translateY(0)');
+        }
+    };
+    BsDropdownDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"], args: [{
+                    selector: '[bsDropdown],[dropdown]',
+                    exportAs: 'bs-dropdown',
+                    providers: [__WEBPACK_IMPORTED_MODULE_5__bs_dropdown_state__["a" /* BsDropdownState */]],
+                    host: {
+                        '[class.dropup]': 'dropup',
+                        '[class.open]': 'isOpen',
+                        '[class.show]': 'isOpen && isBs4'
+                    }
+                },] },
+    ];
+    /** @nocollapse */
+    BsDropdownDirective.ctorParameters = function () { return [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer2"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"], },
+        { type: __WEBPACK_IMPORTED_MODULE_2__component_loader__["a" /* ComponentLoaderFactory */], },
+        { type: __WEBPACK_IMPORTED_MODULE_3__bs_dropdown_config__["a" /* BsDropdownConfig */], },
+        { type: __WEBPACK_IMPORTED_MODULE_5__bs_dropdown_state__["a" /* BsDropdownState */], },
+    ]; };
+    BsDropdownDirective.propDecorators = {
+        'placement': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'triggers': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'container': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'dropup': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'autoClose': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'isDisabled': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'isOpen': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'isOpenChange': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"] },],
+        'onShown': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"] },],
+        'onHidden': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"] },],
+    };
+    return BsDropdownDirective;
+}());
+
+//# sourceMappingURL=bs-dropdown.directive.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/dropdown/bs-dropdown.module.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BsDropdownModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_loader__ = __webpack_require__("../../../../ngx-bootstrap/component-loader/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__positioning__ = __webpack_require__("../../../../ngx-bootstrap/positioning/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bs_dropdown_container_component__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown-container.component.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__bs_dropdown_menu_directive__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown-menu.directive.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__bs_dropdown_toggle_directive__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown-toggle.directive.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__bs_dropdown_config__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.config.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__bs_dropdown_directive__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.directive.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__bs_dropdown_state__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.state.js");
+
+
+
+
+
+
+
+
+
+var BsDropdownModule = (function () {
+    function BsDropdownModule() {
+    }
+    BsDropdownModule.forRoot = function (config) {
+        return {
+            ngModule: BsDropdownModule,
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_1__component_loader__["a" /* ComponentLoaderFactory */],
+                __WEBPACK_IMPORTED_MODULE_2__positioning__["a" /* PositioningService */],
+                __WEBPACK_IMPORTED_MODULE_8__bs_dropdown_state__["a" /* BsDropdownState */],
+                {
+                    provide: __WEBPACK_IMPORTED_MODULE_6__bs_dropdown_config__["a" /* BsDropdownConfig */],
+                    useValue: config ? config : { autoClose: true }
+                }
+            ]
+        };
+    };
+    BsDropdownModule.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"], args: [{
+                    declarations: [
+                        __WEBPACK_IMPORTED_MODULE_4__bs_dropdown_menu_directive__["a" /* BsDropdownMenuDirective */],
+                        __WEBPACK_IMPORTED_MODULE_5__bs_dropdown_toggle_directive__["a" /* BsDropdownToggleDirective */],
+                        __WEBPACK_IMPORTED_MODULE_3__bs_dropdown_container_component__["a" /* BsDropdownContainerComponent */],
+                        __WEBPACK_IMPORTED_MODULE_7__bs_dropdown_directive__["a" /* BsDropdownDirective */]
+                    ],
+                    exports: [
+                        __WEBPACK_IMPORTED_MODULE_4__bs_dropdown_menu_directive__["a" /* BsDropdownMenuDirective */],
+                        __WEBPACK_IMPORTED_MODULE_5__bs_dropdown_toggle_directive__["a" /* BsDropdownToggleDirective */],
+                        __WEBPACK_IMPORTED_MODULE_7__bs_dropdown_directive__["a" /* BsDropdownDirective */]
+                    ],
+                    entryComponents: [__WEBPACK_IMPORTED_MODULE_3__bs_dropdown_container_component__["a" /* BsDropdownContainerComponent */]]
+                },] },
+    ];
+    /** @nocollapse */
+    BsDropdownModule.ctorParameters = function () { return []; };
+    return BsDropdownModule;
+}());
+
+//# sourceMappingURL=bs-dropdown.module.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/dropdown/bs-dropdown.state.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BsDropdownState; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+
+var BsDropdownState = (function () {
+    function BsDropdownState() {
+        var _this = this;
+        this.direction = 'down';
+        this.isOpenChange = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.isDisabledChange = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.toggleClick = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.dropdownMenu = new Promise(function (resolve) {
+            _this.resolveDropdownMenu = resolve;
+        });
+    }
+    BsDropdownState.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"] },
+    ];
+    /** @nocollapse */
+    BsDropdownState.ctorParameters = function () { return []; };
+    return BsDropdownState;
+}());
+
+//# sourceMappingURL=bs-dropdown.state.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/dropdown/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bs_dropdown_directive__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.directive.js");
+/* unused harmony reexport BsDropdownDirective */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bs_dropdown_menu_directive__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown-menu.directive.js");
+/* unused harmony reexport BsDropdownMenuDirective */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bs_dropdown_toggle_directive__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown-toggle.directive.js");
+/* unused harmony reexport BsDropdownToggleDirective */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bs_dropdown_container_component__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown-container.component.js");
+/* unused harmony reexport BsDropdownContainerComponent */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__bs_dropdown_state__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.state.js");
+/* unused harmony reexport BsDropdownState */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__bs_dropdown_config__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.config.js");
+/* unused harmony reexport BsDropdownConfig */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__bs_dropdown_module__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/bs-dropdown.module.js");
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_6__bs_dropdown_module__["a"]; });
+
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/positioning/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ng_positioning__ = __webpack_require__("../../../../ngx-bootstrap/positioning/ng-positioning.js");
+/* unused harmony reexport positionElements */
+/* unused harmony reexport Positioning */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioning_service__ = __webpack_require__("../../../../ngx-bootstrap/positioning/positioning.service.js");
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__positioning_service__["a"]; });
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/positioning/ng-positioning.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Positioning */
+/* harmony export (immutable) */ __webpack_exports__["a"] = positionElements;
+/**
+ * @copyright Valor Software
+ * @copyright Angular ng-bootstrap team
+ */
+// previous version:
+// https://github.com/angular-ui/bootstrap/blob/07c31d0731f7cb068a1932b8e01d2312b796b4ec/src/position/position.js
+// tslint:disable
+var Positioning = (function () {
+    function Positioning() {
+    }
+    Positioning.prototype.position = function (element, round) {
+        if (round === void 0) { round = true; }
+        var elPosition;
+        var parentOffset = {
+            width: 0,
+            height: 0,
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+        };
+        if (this.getStyle(element, 'position') === 'fixed') {
+            var bcRect = element.getBoundingClientRect();
+            elPosition = {
+                width: bcRect.width,
+                height: bcRect.height,
+                top: bcRect.top,
+                bottom: bcRect.bottom,
+                left: bcRect.left,
+                right: bcRect.right
+            };
+        }
+        else {
+            var offsetParentEl = this.offsetParent(element);
+            elPosition = this.offset(element, false);
+            if (offsetParentEl !== document.documentElement) {
+                parentOffset = this.offset(offsetParentEl, false);
+            }
+            parentOffset.top += offsetParentEl.clientTop;
+            parentOffset.left += offsetParentEl.clientLeft;
+        }
+        elPosition.top -= parentOffset.top;
+        elPosition.bottom -= parentOffset.top;
+        elPosition.left -= parentOffset.left;
+        elPosition.right -= parentOffset.left;
+        if (round) {
+            elPosition.top = Math.round(elPosition.top);
+            elPosition.bottom = Math.round(elPosition.bottom);
+            elPosition.left = Math.round(elPosition.left);
+            elPosition.right = Math.round(elPosition.right);
+        }
+        return elPosition;
+    };
+    Positioning.prototype.offset = function (element, round) {
+        if (round === void 0) { round = true; }
+        var elBcr = element.getBoundingClientRect();
+        var viewportOffset = {
+            top: window.pageYOffset - document.documentElement.clientTop,
+            left: window.pageXOffset - document.documentElement.clientLeft
+        };
+        var elOffset = {
+            height: elBcr.height || element.offsetHeight,
+            width: elBcr.width || element.offsetWidth,
+            top: elBcr.top + viewportOffset.top,
+            bottom: elBcr.bottom + viewportOffset.top,
+            left: elBcr.left + viewportOffset.left,
+            right: elBcr.right + viewportOffset.left
+        };
+        if (round) {
+            elOffset.height = Math.round(elOffset.height);
+            elOffset.width = Math.round(elOffset.width);
+            elOffset.top = Math.round(elOffset.top);
+            elOffset.bottom = Math.round(elOffset.bottom);
+            elOffset.left = Math.round(elOffset.left);
+            elOffset.right = Math.round(elOffset.right);
+        }
+        return elOffset;
+    };
+    Positioning.prototype.positionElements = function (hostElement, targetElement, placement, appendToBody) {
+        var hostElPosition = appendToBody
+            ? this.offset(hostElement, false)
+            : this.position(hostElement, false);
+        var targetElStyles = this.getAllStyles(targetElement);
+        var shiftWidth = {
+            left: hostElPosition.left,
+            center: hostElPosition.left +
+                hostElPosition.width / 2 -
+                targetElement.offsetWidth / 2,
+            right: hostElPosition.left + hostElPosition.width
+        };
+        var shiftHeight = {
+            top: hostElPosition.top,
+            center: hostElPosition.top +
+                hostElPosition.height / 2 -
+                targetElement.offsetHeight / 2,
+            bottom: hostElPosition.top + hostElPosition.height
+        };
+        var targetElBCR = targetElement.getBoundingClientRect();
+        var placementPrimary = placement.split(' ')[0] || 'top';
+        var placementSecondary = placement.split(' ')[1] || 'center';
+        var targetElPosition = {
+            height: targetElBCR.height || targetElement.offsetHeight,
+            width: targetElBCR.width || targetElement.offsetWidth,
+            top: 0,
+            bottom: targetElBCR.height || targetElement.offsetHeight,
+            left: 0,
+            right: targetElBCR.width || targetElement.offsetWidth
+        };
+        if (placementPrimary === 'auto') {
+            var newPlacementPrimary = this.autoPosition(targetElPosition, hostElPosition, targetElement, placementSecondary);
+            if (!newPlacementPrimary)
+                newPlacementPrimary = this.autoPosition(targetElPosition, hostElPosition, targetElement);
+            if (newPlacementPrimary)
+                placementPrimary = newPlacementPrimary;
+            targetElement.classList.add(placementPrimary);
+        }
+        switch (placementPrimary) {
+            case 'top':
+                targetElPosition.top =
+                    hostElPosition.top -
+                        (targetElement.offsetHeight +
+                            parseFloat(targetElStyles.marginBottom));
+                targetElPosition.bottom +=
+                    hostElPosition.top - targetElement.offsetHeight;
+                targetElPosition.left = shiftWidth[placementSecondary];
+                targetElPosition.right += shiftWidth[placementSecondary];
+                break;
+            case 'bottom':
+                targetElPosition.top = shiftHeight[placementPrimary];
+                targetElPosition.bottom += shiftHeight[placementPrimary];
+                targetElPosition.left = shiftWidth[placementSecondary];
+                targetElPosition.right += shiftWidth[placementSecondary];
+                break;
+            case 'left':
+                targetElPosition.top = shiftHeight[placementSecondary];
+                targetElPosition.bottom += shiftHeight[placementSecondary];
+                targetElPosition.left =
+                    hostElPosition.left -
+                        (targetElement.offsetWidth + parseFloat(targetElStyles.marginRight));
+                targetElPosition.right +=
+                    hostElPosition.left - targetElement.offsetWidth;
+                break;
+            case 'right':
+                targetElPosition.top = shiftHeight[placementSecondary];
+                targetElPosition.bottom += shiftHeight[placementSecondary];
+                targetElPosition.left = shiftWidth[placementPrimary];
+                targetElPosition.right += shiftWidth[placementPrimary];
+                break;
+        }
+        targetElPosition.top = Math.round(targetElPosition.top);
+        targetElPosition.bottom = Math.round(targetElPosition.bottom);
+        targetElPosition.left = Math.round(targetElPosition.left);
+        targetElPosition.right = Math.round(targetElPosition.right);
+        return targetElPosition;
+    };
+    Positioning.prototype.autoPosition = function (targetElPosition, hostElPosition, targetElement, preferredPosition) {
+        if ((!preferredPosition || preferredPosition === 'right') &&
+            targetElPosition.left + hostElPosition.left - targetElement.offsetWidth <
+                0) {
+            return 'right';
+        }
+        else if ((!preferredPosition || preferredPosition === 'top') &&
+            targetElPosition.bottom +
+                hostElPosition.bottom +
+                targetElement.offsetHeight >
+                window.innerHeight) {
+            return 'top';
+        }
+        else if ((!preferredPosition || preferredPosition === 'bottom') &&
+            targetElPosition.top + hostElPosition.top - targetElement.offsetHeight < 0) {
+            return 'bottom';
+        }
+        else if ((!preferredPosition || preferredPosition === 'left') &&
+            targetElPosition.right +
+                hostElPosition.right +
+                targetElement.offsetWidth >
+                window.innerWidth) {
+            return 'left';
+        }
+        return null;
+    };
+    Positioning.prototype.getAllStyles = function (element) {
+        return window.getComputedStyle(element);
+    };
+    Positioning.prototype.getStyle = function (element, prop) {
+        return this.getAllStyles(element)[prop];
+    };
+    Positioning.prototype.isStaticPositioned = function (element) {
+        return (this.getStyle(element, 'position') || 'static') === 'static';
+    };
+    Positioning.prototype.offsetParent = function (element) {
+        var offsetParentEl = element.offsetParent || document.documentElement;
+        while (offsetParentEl &&
+            offsetParentEl !== document.documentElement &&
+            this.isStaticPositioned(offsetParentEl)) {
+            offsetParentEl = offsetParentEl.offsetParent;
+        }
+        return offsetParentEl || document.documentElement;
+    };
+    return Positioning;
+}());
+
+var positionService = new Positioning();
+function positionElements(hostElement, targetElement, placement, appendToBody) {
+    var pos = positionService.positionElements(hostElement, targetElement, placement, appendToBody);
+    targetElement.style.top = pos.top + "px";
+    targetElement.style.left = pos.left + "px";
+}
+//# sourceMappingURL=ng-positioning.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/positioning/positioning.service.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PositioningService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ng_positioning__ = __webpack_require__("../../../../ngx-bootstrap/positioning/ng-positioning.js");
+
+
+var PositioningService = (function () {
+    function PositioningService() {
+    }
+    PositioningService.prototype.position = function (options) {
+        var element = options.element, target = options.target, attachment = options.attachment, appendToBody = options.appendToBody;
+        Object(__WEBPACK_IMPORTED_MODULE_1__ng_positioning__["a" /* positionElements */])(_getHtmlElement(target), _getHtmlElement(element), attachment, appendToBody);
+    };
+    PositioningService.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"] },
+    ];
+    /** @nocollapse */
+    PositioningService.ctorParameters = function () { return []; };
+    return PositioningService;
+}());
+
+function _getHtmlElement(element) {
+    // it means that we got a selector
+    if (typeof element === 'string') {
+        return document.querySelector(element);
+    }
+    if (element instanceof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) {
+        return element.nativeElement;
+    }
+    return element;
+}
+//# sourceMappingURL=positioning.service.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/utils/facade/browser.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return win; });
+/* unused harmony export document */
+/* unused harmony export location */
+/* unused harmony export gc */
+/* unused harmony export performance */
+/* unused harmony export Event */
+/* unused harmony export MouseEvent */
+/* unused harmony export KeyboardEvent */
+/* unused harmony export EventTarget */
+/* unused harmony export History */
+/* unused harmony export Location */
+/* unused harmony export EventListener */
+/*tslint:disable */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * JS version of browser APIs. This library can only run in the browser.
+ */
+var win = (typeof window !== 'undefined' && window) || {};
+
+var document = win.document;
+var location = win.location;
+var gc = win['gc'] ? function () { return win['gc'](); } : function () { return null; };
+var performance = win['performance'] ? win['performance'] : null;
+var Event = win['Event'];
+var MouseEvent = win['MouseEvent'];
+var KeyboardEvent = win['KeyboardEvent'];
+var EventTarget = win['EventTarget'];
+var History = win['History'];
+var Location = win['Location'];
+var EventListener = win['EventListener'];
+//# sourceMappingURL=browser.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/utils/theme-provider.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export setTheme */
+/* harmony export (immutable) */ __webpack_exports__["a"] = isBs3;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__facade_browser__ = __webpack_require__("../../../../ngx-bootstrap/utils/facade/browser.js");
+
+var guessedVersion;
+function _guessBsVersion() {
+    if (typeof document === 'undefined') {
+        return null;
+    }
+    var spanEl = document.createElement('span');
+    spanEl.innerText = 'test bs version';
+    document.body.appendChild(spanEl);
+    spanEl.classList.add('d-none');
+    var rect = spanEl.getBoundingClientRect();
+    document.body.removeChild(spanEl);
+    if (!rect) {
+        return 'bs3';
+    }
+    return rect.top === 0 ? 'bs4' : 'bs3';
+}
+function setTheme(theme) {
+    guessedVersion = theme;
+}
+// todo: in ngx-bootstrap, bs4 will became a default one
+function isBs3() {
+    if (typeof __WEBPACK_IMPORTED_MODULE_0__facade_browser__["a" /* window */] === 'undefined') {
+        return true;
+    }
+    if (typeof __WEBPACK_IMPORTED_MODULE_0__facade_browser__["a" /* window */].__theme === 'undefined') {
+        if (guessedVersion) {
+            return guessedVersion === 'bs3';
+        }
+        guessedVersion = _guessBsVersion();
+        return guessedVersion === 'bs3';
+    }
+    return __WEBPACK_IMPORTED_MODULE_0__facade_browser__["a" /* window */].__theme !== 'bs4';
+}
+//# sourceMappingURL=theme-provider.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/utils/trigger.class.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Trigger; });
+/**
+ * @copyright Valor Software
+ * @copyright Angular ng-bootstrap team
+ */
+var Trigger = (function () {
+    function Trigger(open, close) {
+        this.open = open;
+        this.close = close || open;
+    }
+    Trigger.prototype.isManual = function () {
+        return this.open === 'manual' || this.close === 'manual';
+    };
+    return Trigger;
+}());
+
+//# sourceMappingURL=trigger.class.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-bootstrap/utils/triggers.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export parseTriggers */
+/* unused harmony export listenToTriggers */
+/* harmony export (immutable) */ __webpack_exports__["a"] = listenToTriggersV2;
+/* harmony export (immutable) */ __webpack_exports__["b"] = registerOutsideClick;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__trigger_class__ = __webpack_require__("../../../../ngx-bootstrap/utils/trigger.class.js");
+
+var DEFAULT_ALIASES = {
+    hover: ['mouseover', 'mouseout'],
+    focus: ['focusin', 'focusout']
+};
+function parseTriggers(triggers, aliases) {
+    if (aliases === void 0) { aliases = DEFAULT_ALIASES; }
+    var trimmedTriggers = (triggers || '').trim();
+    if (trimmedTriggers.length === 0) {
+        return [];
+    }
+    var parsedTriggers = trimmedTriggers
+        .split(/\s+/)
+        .map(function (trigger) { return trigger.split(':'); })
+        .map(function (triggerPair) {
+        var alias = aliases[triggerPair[0]] || triggerPair;
+        return new __WEBPACK_IMPORTED_MODULE_0__trigger_class__["a" /* Trigger */](alias[0], alias[1]);
+    });
+    var manualTriggers = parsedTriggers.filter(function (triggerPair) {
+        return triggerPair.isManual();
+    });
+    if (manualTriggers.length > 1) {
+        throw new Error('Triggers parse error: only one manual trigger is allowed');
+    }
+    if (manualTriggers.length === 1 && parsedTriggers.length > 1) {
+        throw new Error('Triggers parse error: manual trigger can\'t be mixed with other triggers');
+    }
+    return parsedTriggers;
+}
+function listenToTriggers(renderer, target, triggers, showFn, hideFn, toggleFn) {
+    var parsedTriggers = parseTriggers(triggers);
+    var listeners = [];
+    if (parsedTriggers.length === 1 && parsedTriggers[0].isManual()) {
+        return Function.prototype;
+    }
+    parsedTriggers.forEach(function (trigger) {
+        if (trigger.open === trigger.close) {
+            listeners.push(renderer.listen(target, trigger.open, toggleFn));
+            return;
+        }
+        listeners.push(renderer.listen(target, trigger.open, showFn), renderer.listen(target, trigger.close, hideFn));
+    });
+    return function () {
+        listeners.forEach(function (unsubscribeFn) { return unsubscribeFn(); });
+    };
+}
+function listenToTriggersV2(renderer, options) {
+    var parsedTriggers = parseTriggers(options.triggers);
+    var target = options.target;
+    // do nothing
+    if (parsedTriggers.length === 1 && parsedTriggers[0].isManual()) {
+        return Function.prototype;
+    }
+    // all listeners
+    var listeners = [];
+    // lazy listeners registration
+    var _registerHide = [];
+    var registerHide = function () {
+        // add hide listeners to unregister array
+        _registerHide.forEach(function (fn) { return listeners.push(fn()); });
+        // register hide events only once
+        _registerHide.length = 0;
+    };
+    // register open\close\toggle listeners
+    parsedTriggers.forEach(function (trigger) {
+        var useToggle = trigger.open === trigger.close;
+        var showFn = useToggle ? options.toggle : options.show;
+        if (!useToggle) {
+            _registerHide.push(function () {
+                return renderer.listen(target, trigger.close, options.hide);
+            });
+        }
+        listeners.push(renderer.listen(target, trigger.open, function () { return showFn(registerHide); }));
+    });
+    return function () {
+        listeners.forEach(function (unsubscribeFn) { return unsubscribeFn(); });
+    };
+}
+function registerOutsideClick(renderer, options) {
+    if (!options.outsideClick) {
+        return Function.prototype;
+    }
+    return renderer.listen('document', 'click', function (event) {
+        if (options.target && options.target.contains(event.target)) {
+            return;
+        }
+        if (options.targets &&
+            options.targets.some(function (target) { return target.contains(event.target); })) {
+            return;
+        }
+        options.hide();
+    });
+}
+//# sourceMappingURL=triggers.js.map
+
+/***/ }),
+
+/***/ "../../../../ngx-pagination/dist/ngx-pagination.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export ɵb */
+/* unused harmony export ɵa */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NgxPaginationModule; });
+/* unused harmony export PaginationService */
+/* unused harmony export PaginationControlsComponent */
+/* unused harmony export PaginationControlsDirective */
+/* unused harmony export PaginatePipe */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
+
+
+
+var PaginationService = (function () {
+    function PaginationService() {
+        this.change = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.instances = {};
+        this.DEFAULT_ID = 'DEFAULT_PAGINATION_ID';
+    }
+    PaginationService.prototype.defaultId = function () { return this.DEFAULT_ID; };
+    PaginationService.prototype.register = function (instance) {
+        if (!instance.id) {
+            instance.id = this.DEFAULT_ID;
+        }
+        if (!this.instances[instance.id]) {
+            this.instances[instance.id] = instance;
+            this.change.emit(instance.id);
+        }
+        else {
+            var changed = this.updateInstance(instance);
+            if (changed) {
+                this.change.emit(instance.id);
+            }
+        }
+    };
+    /**
+     * Check each property of the instance and update any that have changed. Return
+     * true if any changes were made, else return false.
+     */
+    PaginationService.prototype.updateInstance = function (instance) {
+        var changed = false;
+        for (var prop in this.instances[instance.id]) {
+            if (instance[prop] !== this.instances[instance.id][prop]) {
+                this.instances[instance.id][prop] = instance[prop];
+                changed = true;
+            }
+        }
+        return changed;
+    };
+    /**
+     * Returns the current page number.
+     */
+    PaginationService.prototype.getCurrentPage = function (id) {
+        if (this.instances[id]) {
+            return this.instances[id].currentPage;
+        }
+    };
+    /**
+     * Sets the current page number.
+     */
+    PaginationService.prototype.setCurrentPage = function (id, page) {
+        if (this.instances[id]) {
+            var instance = this.instances[id];
+            var maxPage = Math.ceil(instance.totalItems / instance.itemsPerPage);
+            if (page <= maxPage && 1 <= page) {
+                this.instances[id].currentPage = page;
+                this.change.emit(id);
+            }
+        }
+    };
+    /**
+     * Sets the value of instance.totalItems
+     */
+    PaginationService.prototype.setTotalItems = function (id, totalItems) {
+        if (this.instances[id] && 0 <= totalItems) {
+            this.instances[id].totalItems = totalItems;
+            this.change.emit(id);
+        }
+    };
+    /**
+     * Sets the value of instance.itemsPerPage.
+     */
+    PaginationService.prototype.setItemsPerPage = function (id, itemsPerPage) {
+        if (this.instances[id]) {
+            this.instances[id].itemsPerPage = itemsPerPage;
+            this.change.emit(id);
+        }
+    };
+    /**
+     * Returns a clone of the pagination instance object matching the id. If no
+     * id specified, returns the instance corresponding to the default id.
+     */
+    PaginationService.prototype.getInstance = function (id) {
+        if (id === void 0) { id = this.DEFAULT_ID; }
+        if (this.instances[id]) {
+            return this.clone(this.instances[id]);
+        }
+        return {};
+    };
+    /**
+     * Perform a shallow clone of an object.
+     */
+    PaginationService.prototype.clone = function (obj) {
+        var target = {};
+        for (var i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                target[i] = obj[i];
+            }
+        }
+        return target;
+    };
+    return PaginationService;
+}());
+
+var LARGE_NUMBER = Number.MAX_SAFE_INTEGER;
+var PaginatePipe = (function () {
+    function PaginatePipe(service) {
+        this.service = service;
+        // store the values from the last time the pipe was invoked
+        this.state = {};
+    }
+    PaginatePipe.prototype.transform = function (collection, args) {
+        // When an observable is passed through the AsyncPipe, it will output
+        // `null` until the subscription resolves. In this case, we want to
+        // use the cached data from the `state` object to prevent the NgFor
+        // from flashing empty until the real values arrive.
+        if (args instanceof Array) {
+            // compatible with angular2 before beta16
+            args = args[0];
+        }
+        if (!(collection instanceof Array)) {
+            var _id = args.id || this.service.defaultId;
+            if (this.state[_id]) {
+                return this.state[_id].slice;
+            }
+            else {
+                return collection;
+            }
+        }
+        var serverSideMode = args.totalItems && args.totalItems !== collection.length;
+        var instance = this.createInstance(collection, args);
+        var id = instance.id;
+        var start, end;
+        var perPage = instance.itemsPerPage;
+        this.service.register(instance);
+        if (!serverSideMode && collection instanceof Array) {
+            perPage = +perPage || LARGE_NUMBER;
+            start = (instance.currentPage - 1) * perPage;
+            end = start + perPage;
+            var isIdentical = this.stateIsIdentical(id, collection, start, end);
+            if (isIdentical) {
+                return this.state[id].slice;
+            }
+            else {
+                var slice = collection.slice(start, end);
+                this.saveState(id, collection, slice, start, end);
+                this.service.change.emit(id);
+                return slice;
+            }
+        }
+        // save the state for server-side collection to avoid null
+        // flash as new data loads.
+        this.saveState(id, collection, collection, start, end);
+        return collection;
+    };
+    /**
+     * Create an PaginationInstance object, using defaults for any optional properties not supplied.
+     */
+    PaginatePipe.prototype.createInstance = function (collection, args) {
+        var config = args;
+        this.checkConfig(config);
+        return {
+            id: config.id || this.service.defaultId(),
+            itemsPerPage: +config.itemsPerPage || 0,
+            currentPage: +config.currentPage || 1,
+            totalItems: +config.totalItems || collection.length
+        };
+    };
+    /**
+     * Ensure the argument passed to the filter contains the required properties.
+     */
+    PaginatePipe.prototype.checkConfig = function (config) {
+        var required = ['itemsPerPage', 'currentPage'];
+        var missing = required.filter(function (prop) { return !(prop in config); });
+        if (0 < missing.length) {
+            throw new Error("PaginatePipe: Argument is missing the following required properties: " + missing.join(', '));
+        }
+    };
+    /**
+     * To avoid returning a brand new array each time the pipe is run, we store the state of the sliced
+     * array for a given id. This means that the next time the pipe is run on this collection & id, we just
+     * need to check that the collection, start and end points are all identical, and if so, return the
+     * last sliced array.
+     */
+    PaginatePipe.prototype.saveState = function (id, collection, slice, start, end) {
+        this.state[id] = {
+            collection: collection,
+            size: collection.length,
+            slice: slice,
+            start: start,
+            end: end
+        };
+    };
+    /**
+     * For a given id, returns true if the collection, size, start and end values are identical.
+     */
+    PaginatePipe.prototype.stateIsIdentical = function (id, collection, start, end) {
+        var state = this.state[id];
+        if (!state) {
+            return false;
+        }
+        var isMetaDataIdentical = state.size === collection.length &&
+            state.start === start &&
+            state.end === end;
+        if (!isMetaDataIdentical) {
+            return false;
+        }
+        return state.slice.every(function (element, index) { return element === collection[start + index]; });
+    };
+    PaginatePipe.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"], args: [{
+                    name: 'paginate',
+                    pure: false
+                },] },
+    ];
+    /** @nocollapse */
+    PaginatePipe.ctorParameters = function () { return [
+        { type: PaginationService, },
+    ]; };
+    return PaginatePipe;
+}());
+
+/**
+ * The default template and styles for the pagination links are borrowed directly
+ * from Zurb Foundation 6: http://foundation.zurb.com/sites/docs/pagination.html
+ */
+var DEFAULT_TEMPLATE = "\n    <pagination-template  #p=\"paginationApi\"\n                         [id]=\"id\"\n                         [maxSize]=\"maxSize\"\n                         (pageChange)=\"pageChange.emit($event)\">\n    <ul class=\"ngx-pagination\" \n        role=\"navigation\" \n        [attr.aria-label]=\"screenReaderPaginationLabel\" \n        *ngIf=\"!(autoHide && p.pages.length <= 1)\">\n\n        <li class=\"pagination-previous\" [class.disabled]=\"p.isFirstPage()\" *ngIf=\"directionLinks\"> \n            <a *ngIf=\"1 < p.getCurrent()\" (click)=\"p.previous()\" [attr.aria-label]=\"previousLabel + ' ' + screenReaderPageLabel\">\n                {{ previousLabel }} <span class=\"show-for-sr\">{{ screenReaderPageLabel }}</span>\n            </a>\n            <span *ngIf=\"p.isFirstPage()\">\n                {{ previousLabel }} <span class=\"show-for-sr\">{{ screenReaderPageLabel }}</span>\n            </span>\n        </li>\n\n        <li [class.current]=\"p.getCurrent() === page.value\" *ngFor=\"let page of p.pages\">\n            <a (click)=\"p.setCurrent(page.value)\" *ngIf=\"p.getCurrent() !== page.value\">\n                <span class=\"show-for-sr\">{{ screenReaderPageLabel }} </span>\n                <span>{{ page.label }}</span>\n            </a>\n            <div *ngIf=\"p.getCurrent() === page.value\">\n                <span class=\"show-for-sr\">{{ screenReaderCurrentLabel }} </span>\n                <span>{{ page.label }}</span> \n            </div>\n        </li>\n\n        <li class=\"pagination-next\" [class.disabled]=\"p.isLastPage()\" *ngIf=\"directionLinks\">\n            <a *ngIf=\"!p.isLastPage()\" (click)=\"p.next()\" [attr.aria-label]=\"nextLabel + ' ' + screenReaderPageLabel\">\n                 {{ nextLabel }} <span class=\"show-for-sr\">{{ screenReaderPageLabel }}</span>\n            </a>\n            <span *ngIf=\"p.isLastPage()\">\n                 {{ nextLabel }} <span class=\"show-for-sr\">{{ screenReaderPageLabel }}</span>\n            </span>\n        </li>\n\n    </ul>\n    </pagination-template>\n    ";
+var DEFAULT_STYLES = "\n.ngx-pagination {\n  margin-left: 0;\n  margin-bottom: 1rem; }\n  .ngx-pagination::before, .ngx-pagination::after {\n    content: ' ';\n    display: table; }\n  .ngx-pagination::after {\n    clear: both; }\n  .ngx-pagination li {\n    -moz-user-select: none;\n    -webkit-user-select: none;\n    -ms-user-select: none;\n    margin-right: 0.0625rem;\n    border-radius: 0; }\n  .ngx-pagination li {\n    display: inline-block; }\n  .ngx-pagination a,\n  .ngx-pagination button {\n    color: #0a0a0a; \n    display: block;\n    padding: 0.1875rem 0.625rem;\n    border-radius: 0; }\n    .ngx-pagination a:hover,\n    .ngx-pagination button:hover {\n      background: #e6e6e6; }\n  .ngx-pagination .current {\n    padding: 0.1875rem 0.625rem;\n    background: #2199e8;\n    color: #fefefe;\n    cursor: default; }\n  .ngx-pagination .disabled {\n    padding: 0.1875rem 0.625rem;\n    color: #cacaca;\n    cursor: default; } \n    .ngx-pagination .disabled:hover {\n      background: transparent; }\n  .ngx-pagination .ellipsis::after {\n    content: '\u2026';\n    padding: 0.1875rem 0.625rem;\n    color: #0a0a0a; }\n  .ngx-pagination a, .ngx-pagination button {\n    cursor: pointer; }\n\n.ngx-pagination .pagination-previous a::before,\n.ngx-pagination .pagination-previous.disabled::before { \n  content: '\u00AB';\n  display: inline-block;\n  margin-right: 0.5rem; }\n\n.ngx-pagination .pagination-next a::after,\n.ngx-pagination .pagination-next.disabled::after {\n  content: '\u00BB';\n  display: inline-block;\n  margin-left: 0.5rem; }\n\n.ngx-pagination .show-for-sr {\n  position: absolute !important;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0); }";
+
+/**
+ * The default pagination controls component. Actually just a default implementation of a custom template.
+ */
+var PaginationControlsComponent = (function () {
+    function PaginationControlsComponent() {
+        this.maxSize = 7;
+        this.previousLabel = 'Previous';
+        this.nextLabel = 'Next';
+        this.screenReaderPaginationLabel = 'Pagination';
+        this.screenReaderPageLabel = 'page';
+        this.screenReaderCurrentLabel = "You're on page";
+        this.pageChange = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this._directionLinks = true;
+        this._autoHide = false;
+    }
+    Object.defineProperty(PaginationControlsComponent.prototype, "directionLinks", {
+        get: function () {
+            return this._directionLinks;
+        },
+        set: function (value) {
+            this._directionLinks = !!value && value !== 'false';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PaginationControlsComponent.prototype, "autoHide", {
+        get: function () {
+            return this._autoHide;
+        },
+        set: function (value) {
+            this._autoHide = !!value && value !== 'false';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PaginationControlsComponent.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"], args: [{
+                    selector: 'pagination-controls',
+                    template: DEFAULT_TEMPLATE,
+                    styles: [DEFAULT_STYLES],
+                    changeDetection: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectionStrategy"].OnPush,
+                    encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None
+                },] },
+    ];
+    /** @nocollapse */
+    PaginationControlsComponent.ctorParameters = function () { return []; };
+    PaginationControlsComponent.propDecorators = {
+        'id': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'maxSize': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'directionLinks': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'autoHide': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'previousLabel': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'nextLabel': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'screenReaderPaginationLabel': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'screenReaderPageLabel': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'screenReaderCurrentLabel': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'pageChange': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"] },],
+    };
+    return PaginationControlsComponent;
+}());
+
+/**
+ * This directive is what powers all pagination controls components, including the default one.
+ * It exposes an API which is hooked up to the PaginationService to keep the PaginatePipe in sync
+ * with the pagination controls.
+ */
+var PaginationControlsDirective = (function () {
+    function PaginationControlsDirective(service, changeDetectorRef) {
+        var _this = this;
+        this.service = service;
+        this.changeDetectorRef = changeDetectorRef;
+        this.maxSize = 7;
+        this.pageChange = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.pages = [];
+        this.changeSub = this.service.change
+            .subscribe(function (id) {
+            if (_this.id === id) {
+                _this.updatePageLinks();
+                _this.changeDetectorRef.markForCheck();
+                _this.changeDetectorRef.detectChanges();
+            }
+        });
+    }
+    PaginationControlsDirective.prototype.ngOnInit = function () {
+        if (this.id === undefined) {
+            this.id = this.service.defaultId();
+        }
+        this.updatePageLinks();
+    };
+    PaginationControlsDirective.prototype.ngOnChanges = function (changes) {
+        this.updatePageLinks();
+    };
+    PaginationControlsDirective.prototype.ngOnDestroy = function () {
+        this.changeSub.unsubscribe();
+    };
+    /**
+     * Go to the previous page
+     */
+    PaginationControlsDirective.prototype.previous = function () {
+        this.checkValidId();
+        this.setCurrent(this.getCurrent() - 1);
+    };
+    /**
+     * Go to the next page
+     */
+    PaginationControlsDirective.prototype.next = function () {
+        this.checkValidId();
+        this.setCurrent(this.getCurrent() + 1);
+    };
+    /**
+     * Returns true if current page is first page
+     */
+    PaginationControlsDirective.prototype.isFirstPage = function () {
+        return this.getCurrent() === 1;
+    };
+    /**
+     * Returns true if current page is last page
+     */
+    PaginationControlsDirective.prototype.isLastPage = function () {
+        return this.getLastPage() === this.getCurrent();
+    };
+    /**
+     * Set the current page number.
+     */
+    PaginationControlsDirective.prototype.setCurrent = function (page) {
+        this.pageChange.emit(page);
+    };
+    /**
+     * Get the current page number.
+     */
+    PaginationControlsDirective.prototype.getCurrent = function () {
+        return this.service.getCurrentPage(this.id);
+    };
+    /**
+     * Returns the last page number
+     */
+    PaginationControlsDirective.prototype.getLastPage = function () {
+        var inst = this.service.getInstance(this.id);
+        if (inst.totalItems < 1) {
+            // when there are 0 or fewer (an error case) items, there are no "pages" as such,
+            // but it makes sense to consider a single, empty page as the last page.
+            return 1;
+        }
+        return Math.ceil(inst.totalItems / inst.itemsPerPage);
+    };
+    PaginationControlsDirective.prototype.checkValidId = function () {
+        if (!this.service.getInstance(this.id).id) {
+            console.warn("PaginationControlsDirective: the specified id \"" + this.id + "\" does not match any registered PaginationInstance");
+        }
+    };
+    /**
+     * Updates the page links and checks that the current page is valid. Should run whenever the
+     * PaginationService.change stream emits a value matching the current ID, or when any of the
+     * input values changes.
+     */
+    PaginationControlsDirective.prototype.updatePageLinks = function () {
+        var _this = this;
+        var inst = this.service.getInstance(this.id);
+        var correctedCurrentPage = this.outOfBoundCorrection(inst);
+        if (correctedCurrentPage !== inst.currentPage) {
+            setTimeout(function () {
+                _this.setCurrent(correctedCurrentPage);
+                _this.pages = _this.createPageArray(inst.currentPage, inst.itemsPerPage, inst.totalItems, _this.maxSize);
+            });
+        }
+        else {
+            this.pages = this.createPageArray(inst.currentPage, inst.itemsPerPage, inst.totalItems, this.maxSize);
+        }
+    };
+    /**
+     * Checks that the instance.currentPage property is within bounds for the current page range.
+     * If not, return a correct value for currentPage, or the current value if OK.
+     */
+    PaginationControlsDirective.prototype.outOfBoundCorrection = function (instance) {
+        var totalPages = Math.ceil(instance.totalItems / instance.itemsPerPage);
+        if (totalPages < instance.currentPage && 0 < totalPages) {
+            return totalPages;
+        }
+        else if (instance.currentPage < 1) {
+            return 1;
+        }
+        return instance.currentPage;
+    };
+    /**
+     * Returns an array of Page objects to use in the pagination controls.
+     */
+    PaginationControlsDirective.prototype.createPageArray = function (currentPage, itemsPerPage, totalItems, paginationRange) {
+        // paginationRange could be a string if passed from attribute, so cast to number.
+        paginationRange = +paginationRange;
+        var pages = [];
+        var totalPages = Math.ceil(totalItems / itemsPerPage);
+        var halfWay = Math.ceil(paginationRange / 2);
+        var isStart = currentPage <= halfWay;
+        var isEnd = totalPages - halfWay < currentPage;
+        var isMiddle = !isStart && !isEnd;
+        var ellipsesNeeded = paginationRange < totalPages;
+        var i = 1;
+        while (i <= totalPages && i <= paginationRange) {
+            var label = void 0;
+            var pageNumber = this.calculatePageNumber(i, currentPage, paginationRange, totalPages);
+            var openingEllipsesNeeded = (i === 2 && (isMiddle || isEnd));
+            var closingEllipsesNeeded = (i === paginationRange - 1 && (isMiddle || isStart));
+            if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
+                label = '...';
+            }
+            else {
+                label = pageNumber;
+            }
+            pages.push({
+                label: label,
+                value: pageNumber
+            });
+            i++;
+        }
+        return pages;
+    };
+    /**
+     * Given the position in the sequence of pagination links [i],
+     * figure out what page number corresponds to that position.
+     */
+    PaginationControlsDirective.prototype.calculatePageNumber = function (i, currentPage, paginationRange, totalPages) {
+        var halfWay = Math.ceil(paginationRange / 2);
+        if (i === paginationRange) {
+            return totalPages;
+        }
+        else if (i === 1) {
+            return i;
+        }
+        else if (paginationRange < totalPages) {
+            if (totalPages - halfWay < currentPage) {
+                return totalPages - paginationRange + i;
+            }
+            else if (halfWay < currentPage) {
+                return currentPage - halfWay + i;
+            }
+            else {
+                return i;
+            }
+        }
+        else {
+            return i;
+        }
+    };
+    PaginationControlsDirective.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"], args: [{
+                    selector: 'pagination-template,[pagination-template]',
+                    exportAs: 'paginationApi'
+                },] },
+    ];
+    /** @nocollapse */
+    PaginationControlsDirective.ctorParameters = function () { return [
+        { type: PaginationService, },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"], },
+    ]; };
+    PaginationControlsDirective.propDecorators = {
+        'id': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'maxSize': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'pageChange': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"] },],
+    };
+    return PaginationControlsDirective;
+}());
+
+var NgxPaginationModule = (function () {
+    function NgxPaginationModule() {
+    }
+    NgxPaginationModule.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"], args: [{
+                    imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["CommonModule"]],
+                    declarations: [
+                        PaginatePipe,
+                        PaginationControlsComponent,
+                        PaginationControlsDirective
+                    ],
+                    providers: [PaginationService],
+                    exports: [PaginatePipe, PaginationControlsComponent, PaginationControlsDirective]
+                },] },
+    ];
+    /** @nocollapse */
+    NgxPaginationModule.ctorParameters = function () { return []; };
+    return NgxPaginationModule;
+}());
+
+/**
+ * Generated bundle index. Do not edit.
+ */
+
+
+
+
+/***/ }),
+
 /***/ "../../../../rxjs/BehaviorSubject.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1932,6 +4182,18 @@ var Observable_1 = __webpack_require__("../../../../rxjs/Observable.js");
 var fromPromise_1 = __webpack_require__("../../../../rxjs/observable/fromPromise.js");
 Observable_1.Observable.fromPromise = fromPromise_1.fromPromise;
 //# sourceMappingURL=fromPromise.js.map
+
+/***/ }),
+
+/***/ "../../../../rxjs/add/operator/filter.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var Observable_1 = __webpack_require__("../../../../rxjs/Observable.js");
+var filter_1 = __webpack_require__("../../../../rxjs/operator/filter.js");
+Observable_1.Observable.prototype.filter = filter_1.filter;
+//# sourceMappingURL=filter.js.map
 
 /***/ }),
 
