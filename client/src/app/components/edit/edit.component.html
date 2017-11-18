@@ -1,0 +1,40 @@
+<div *ngIf="!result">
+  <h2 class="page-header">Edit my information </h2>
+  <form (submit)="onUpdateSubmit()">
+    <div class="form-group">
+      <label>_ref</label>
+      <input type="text" [(ngModel)]="_ref" name="_ref" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" [(ngModel)]="username" name="username" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" [(ngModel)]="password" name="password" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" [(ngModel)]="name" name="name" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Surname</label>
+      <input type="text" [(ngModel)]="surname" name="surname" class="form-control">
+    </div>
+    <input type="submit" class="btn btn-primary" value="Submit">
+  </form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Updated information </h2>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.id}}</li>
+    <li class="list-group-item">_ref: {{result._ref}}</li>
+    <li class="list-group-item">Username: {{result.username}}</li>
+    <li class="list-group-item">Password: {{result.password}}</li>
+    <li class="list-group-item">Name: {{result.name}}</li>
+    <li class="list-group-item">Surname: {{result.surname}}</li>
+    <li class="list-group-item">Roles: {{result.roles.join(', ')}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onUpdateClick()">Edit again</a>
+</div>
