@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -15,15 +14,13 @@ export class ListComponent implements OnInit {
   total: number;
   
   constructor(
-    private authService:AuthService,
-    private router:Router
+    private authService:AuthService
   ) { }
 
   ngOnInit() {
     this.authService.getBusinessUsersList().subscribe(list => {
       this.businessUsersList = list.businessUser;
       this.total = list.metadata.total;
-      console.log(this.total)
     },
     err => {
       console.log(err);
