@@ -792,6 +792,19 @@ describe('API users routes', function() {
 				done();
 			});
 		});
+		
+		it('Get cars of user by id with code 404', function(done) {
+			chai.request(server)
+			.get('/api/users/8/cars?token=' + userToken)
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
 	});
 	
 	describe('POST /api/users/4/cars', function() {
@@ -1081,7 +1094,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/6/transactions?token=' + appToken)
+			.get('/api/users/8/transactions?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -1170,7 +1183,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/6/trips?token=' + appToken)
+			.get('/api/users/8/trips?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;

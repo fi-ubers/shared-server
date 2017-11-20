@@ -231,10 +231,20 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/cars";
 		
 		logger.info(request);
-		queryController.selectAllWhere(carTable, {owner: userId})
-		.then(function(cars) {
-			logger.info("Showing cars list");
-			responseController.sendCars(res, cars.length, cars.length, cars);
+		queryController.selectOneWhere(userTable, {id: userId})
+		.then(function(user) {
+			if (user) {
+				queryController.selectAllWhere(carTable, {owner: userId})
+				.then(function(cars) {
+					logger.info("Showing cars list");
+					responseController.sendCars(res, cars.length, cars.length, cars);
+				})
+				.catch(function(error) {
+					errorController.unexpectedError(res, error, request);
+				})
+			} else {
+				errorController.nonExistentResource(res, "user", request);
+			}
 		})
 		.catch(function(error) {
 			errorController.unexpectedError(res, error, request);
@@ -353,11 +363,17 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/transactions";
 		
 		logger.info(request);
-		queryController.selectAllWhere(transactionTable, {user: userId}, visibleTransactionFields)
-		.then(function(transactions) {
-			if (transactions.length > 0) {
-				logger.info("Showing transactions list");
-				responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+		queryController.selectOneWhere(userTable, {id: userId})
+		.then(function(user) {
+			if (user) {
+				queryController.selectAllWhere(transactionTable, {user: userId}, visibleTransactionFields)
+				.then(function(transactions) {
+					logger.info("Showing transactions list");
+					responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+				})
+				.catch(function(error) {
+					errorController.unexpectedError(res, error, request);
+				})
 			} else {
 				errorController.nonExistentResource(res, "user", request);
 			}
@@ -416,11 +432,14 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/trips";
 		
 		logger.info(request);
-		queryController.selectAllWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, visibleTripFields)
-		.then(function(trips) {
-			if (trips.length > 0) {
-				logger.info("Showing trips list");
-				responseController.sendTrips(res, trips.length, trips.length, trips);
+		queryController.selectOneWhere(userTable, {id: userId})
+		.then(function(user) {
+			if (user) {
+				queryController.selectAllWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, visibleTripFields)
+				.then(function(trips) {
+					logger.info("Showing trips list");
+					responseController.sendTrips(res, trips.length, trips.length, trips);
+				})
 			} else {
 				errorController.nonExistentResource(res, "user", request);
 			}
