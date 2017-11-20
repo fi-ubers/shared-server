@@ -30,6 +30,17 @@ import { EditComponent } from './components/edit/edit.component';
 import { InformationComponent } from './components/business-users/information/information.component';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
 import { UserInformationComponent } from './components/users/user-information/user-information.component';
+import { CarsListComponent } from './components/users/cars-list/cars-list.component';
+import { CarsInformationComponent } from './components/users/cars-information/cars-information.component';
+import { TransactionsListComponent } from './components/users/transactions-list/transactions-list.component';
+import { UserTripsListComponent } from './components/users/user-trips-list/user-trips-list.component';
+import { PaymethodsComponent } from './components/paymethods/paymethods.component';
+import { TripsListComponent } from './components/trips/trips-list/trips-list.component';
+import { TripInformationComponent } from './components/trips/trip-information/trip-information.component';
+import { ServersListComponent } from './components/servers/servers-list/servers-list.component';
+import { ServerInformationComponent } from './components/servers/server-information/server-information.component';
+import { RulesListComponent } from './components/rules/rules-list/rules-list.component';
+import { RuleInformationComponent } from './components/rules/rule-information/rule-information.component';
 
 const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
@@ -43,11 +54,22 @@ const appRoutes: Routes = [
 	{path: 'users/list', component: UsersListComponent, canActivate:[AuthGuard]},
 	{path: 'users/information', component: UserInformationComponent, canActivate:[AuthGuard]},
 	{path: 'users/cars/delete', component: DeleteCarComponent, canActivate:[AuthGuard]},
+	{path: 'users/cars/list', component: CarsListComponent, canActivate:[AuthGuard]},
+	{path: 'users/cars/information', component: CarsInformationComponent, canActivate:[AuthGuard]},
+	{path: 'users/transactions/list', component: TransactionsListComponent, canActivate:[AuthGuard]},
+	{path: 'users/trips/list', component: UserTripsListComponent, canActivate:[AuthGuard]},
+	{path: 'servers/list', component: ServersListComponent, canActivate:[AuthGuard]},
+	{path: 'servers/information', component: ServerInformationComponent, canActivate:[AuthGuard]},
+	{path: 'trips/list', component: TripsListComponent, canActivate:[AuthGuard]},
+	{path: 'trips/information', component: TripInformationComponent, canActivate:[AuthGuard]},
 	{path: 'rules/run-all-rules', component: RunAllRulesComponent, canActivate:[AuthGuard]},
-	{path: 'rules/run-individual-rules', component: RunIndividualRuleComponent, canActivate:[AuthGuard]},
+	{path: 'rules/run-individual-rule', component: RunIndividualRuleComponent, canActivate:[AuthGuard]},
+	{path: 'rules/list', component: RulesListComponent, canActivate:[AuthGuard]},
+	{path: 'rules/information', component: RuleInformationComponent, canActivate:[AuthGuard]},
 	{path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
 	{path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]},
-	{path: 'profile/edit', component: EditComponent, canActivate:[AuthGuard]}
+	{path: 'profile/edit', component: EditComponent, canActivate:[AuthGuard]},
+	{path: 'paymethods', component: PaymethodsComponent, canActivate:[AuthGuard]}
 ]
 
 @NgModule({
@@ -69,7 +91,18 @@ const appRoutes: Routes = [
     EditComponent,
     InformationComponent,
     UsersListComponent,
-    UserInformationComponent
+    UserInformationComponent,
+    CarsListComponent,
+    CarsInformationComponent,
+    TransactionsListComponent,
+    UserTripsListComponent,
+    PaymethodsComponent,
+    TripsListComponent,
+    TripInformationComponent,
+    ServersListComponent,
+    ServerInformationComponent,
+    RulesListComponent,
+    RuleInformationComponent
   ],
   imports: [
     BrowserModule,
