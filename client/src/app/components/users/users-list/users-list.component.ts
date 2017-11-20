@@ -34,11 +34,11 @@ export class UsersListComponent implements OnInit {
   }
   
   obtainUserCars(cars) {
-    return cars.map(car => JSON.stringify(car)).join(', ');
+    return cars.map(car => JSON.stringify(car, undefined, 2)).join(', ');
   }
   
   obtainUserBalance(balance) {
-    return balance.map(cost => JSON.stringify(cost)).join(', ');
+    return balance.map(cost => JSON.stringify(cost, undefined, 2)).join(', ');
   }
 
 }
