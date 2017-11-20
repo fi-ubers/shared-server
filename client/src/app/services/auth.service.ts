@@ -12,8 +12,8 @@ export class AuthService {
   constructor(private http:Http) { }
   
   authenticateUser(user) {
-    let uri = 'api/token';
-    //let uri = 'http://localhost:5000/api/token';
+    //let uri = 'api/token';
+    let uri = 'http://localhost:5000/api/token';
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.post(uri, user, {headers: headers})
@@ -38,8 +38,8 @@ export class AuthService {
   }
   
   registerBusinessUser(user) {
-    let uri = 'api/business-users/';
-    //let uri = 'http://localhost:5000/api/business-users/';
+    //let uri = 'api/business-users/';
+    let uri = 'http://localhost:5000/api/business-users/';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -48,8 +48,8 @@ export class AuthService {
   }
   
   deleteBusinessUser(id) {
-    let uri = 'api/business-users/' + id;
-    //let uri = 'http://localhost:5000/api/business-users/' + id;
+    //let uri = 'api/business-users/' + id;
+    let uri = 'http://localhost:5000/api/business-users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -58,8 +58,8 @@ export class AuthService {
   }
   
   updateBusinessUser(id, user) {
-    let uri = 'api/business-users/' + id;
-    //let uri = 'http://localhost:5000/api/business-users/' + id;
+    //let uri = 'api/business-users/' + id;
+    let uri = 'http://localhost:5000/api/business-users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -68,8 +68,8 @@ export class AuthService {
   }
   
   getBusinessUser(id) {
-    let uri = 'api/business-users/' + id;
-    //let uri = 'http://localhost:5000/api/business-users/' + id;
+    //let uri = 'api/business-users/' + id;
+    let uri = 'http://localhost:5000/api/business-users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -78,8 +78,8 @@ export class AuthService {
   }
   
   getUser(id) {
-    let uri = 'api/users/' + id;
-    //let uri = 'http://localhost:5000/api/users/' + id;
+    //let uri = 'api/users/' + id;
+    let uri = 'http://localhost:5000/api/users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -88,8 +88,8 @@ export class AuthService {
   }
   
   deleteUser(id) {
-    let uri = 'api/users/' + id;
-    //let uri = 'http://localhost:5000/api/users/' + id;
+    //let uri = 'api/users/' + id;
+    let uri = 'http://localhost:5000/api/users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -97,9 +97,19 @@ export class AuthService {
       .map(res => res.json());
   }
   
+  getCar(userId, carId) {
+    //let uri = 'api/users/' + userId + '/cars/' + carId;
+    let uri = 'http://localhost:5000/api/users/' + userId + '/cars/' + carId;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
   deleteCar(userId, carId) {
-    let uri = 'api/users/' + userId + '/cars/' + carId;
-    //let uri = 'http://localhost:5000/api/users/' + userId + '/cars/' + carId;
+    //let uri = 'api/users/' + userId + '/cars/' + carId;
+    let uri = 'http://localhost:5000/api/users/' + userId + '/cars/' + carId;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -108,8 +118,8 @@ export class AuthService {
   }
   
   getProfile() {
-    let uri = 'api/business-users/me';
-    //let uri = 'http://localhost:5000/api/business-users/me';
+    //let uri = 'api/business-users/me';
+    let uri = 'http://localhost:5000/api/business-users/me';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -118,8 +128,8 @@ export class AuthService {
   }
   
   editMyInformation(user) {
-    let uri = 'api/business-users/me';
-    //let uri = 'http://localhost:5000/api/business-users/me';
+    //let uri = 'api/business-users/me';
+    let uri = 'http://localhost:5000/api/business-users/me';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -128,8 +138,8 @@ export class AuthService {
   }
   
   getBusinessUsersList() {
-    let uri = 'api/business-users/';
-    //let uri = 'http://localhost:5000/api/business-users/';
+    //let uri = 'api/business-users/';
+    let uri = 'http://localhost:5000/api/business-users/';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -138,8 +148,108 @@ export class AuthService {
   }
   
   getUsersList() {
-    let uri = 'api/users/';
-    //let uri = 'http://localhost:5000/api/users/';
+    //let uri = 'api/users/';
+    let uri = 'http://localhost:5000/api/users/';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getUserCarsList(id) {
+    //let uri = 'api/users/' + id + '/cars';
+    let uri = 'http://localhost:5000/api/users/' + id + '/cars';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getUserTransactionsList(id) {
+    //let uri = 'api/users/' + id + '/transactions';
+    let uri = 'http://localhost:5000/api/users/' + id + '/transactions';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getUserTripsList(id) {
+    //let uri = 'api/users/' + id + '/trips';
+    let uri = 'http://localhost:5000/api/users/' + id + '/trips';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getServersList() {
+    //let uri = 'api/servers';
+    let uri = 'http://localhost:5000/api/servers';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getServer(id) {
+    //let uri = 'api/servers/' + id;
+    let uri = 'http://localhost:5000/api/servers/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getRulesList() {
+    //let uri = 'api/rules';
+    let uri = 'http://localhost:5000/api/rules';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getRule(id) {
+    //let uri = 'api/rules/' + id;
+    let uri = 'http://localhost:5000/api/rules/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getTripsList() {
+    //let uri = 'api/trips';
+    let uri = 'http://localhost:5000/api/trips';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getTrip(id) {
+    //let uri = 'api/trips/' + id;
+    let uri = 'http://localhost:5000/api/trips/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getPaymethodsList() {
+    //let uri = 'api/paymethods';
+    let uri = 'http://localhost:5000/api/paymethods';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
