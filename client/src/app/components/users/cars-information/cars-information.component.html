@@ -1,0 +1,29 @@
+<div *ngIf="!result">
+<h2 class="page-header">Application user car information</h2>
+<form (submit)="onGetInfoSubmit()">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label>Application user id</label>
+      <input type="text" [(ngModel)]="userId" name="userId" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Application user car id</label>
+      <input type="text" [(ngModel)]="carId" name="carId" class="form-control">
+    </div>
+  </div>
+  <div class="col-md-12">
+  <input type="submit" class="btn btn-primary" value="Get car information">
+  </div>
+</form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Car {{carId}} information </h2>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.id}}</li>
+    <li class="list-group-item">_ref: {{result._ref}}</li>
+    <li class="list-group-item">Owner: {{result.owner}}</li>
+    <li class="list-group-item">Cars: [ {{getCarProperties(result.properties)}} ]</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onGetInfoClick()">Get information about another car</a>
+</div>
