@@ -1,0 +1,27 @@
+<div *ngIf="!result">
+<h2 class="page-header">Server information</h2>
+<form (submit)="onGetInfoSubmit()">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label>Server id</label>
+      <input type="text" [(ngModel)]="id" name="id" class="form-control">
+    </div>
+  </div>
+  <div class="col-md-12">
+  <input type="submit" class="btn btn-primary" value="Get information">
+  </div>
+</form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Server {{id}} information </h2>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.id}}</li>
+    <li class="list-group-item">_ref: {{result._ref}}</li>
+    <li class="list-group-item">Created by: {{result.createdBy}}</li>
+    <li class="list-group-item">Created time: {{result.createdTime}}</li>
+    <li class="list-group-item">Name: {{result.name}}</li>
+    <li class="list-group-item">Last connection: {{result.lastConnection}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onGetInfoClick()">Get information about another server</a>
+</div>
