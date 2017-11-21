@@ -41,6 +41,15 @@ import { ServersListComponent } from './components/servers/servers-list/servers-
 import { ServerInformationComponent } from './components/servers/server-information/server-information.component';
 import { RulesListComponent } from './components/rules/rules-list/rules-list.component';
 import { RuleInformationComponent } from './components/rules/rule-information/rule-information.component';
+import { RegisterServerComponent } from './components/servers/register-server/register-server.component';
+import { UpdateServerComponent } from './components/servers/update-server/update-server.component';
+import { ServerResetTokenComponent } from './components/servers/server-reset-token/server-reset-token.component';
+import { DeleteServerComponent } from './components/servers/delete-server/delete-server.component';
+import { CreateRuleComponent } from './components/rules/create-rule/create-rule.component';
+import { DeleteRuleComponent } from './components/rules/delete-rule/delete-rule.component';
+import { UpdateRuleComponent } from './components/rules/update-rule/update-rule.component';
+import { CommitsListComponent } from './components/rules/commits-list/commits-list.component';
+import { RuleAtCommitComponent } from './components/rules/rule-at-commit/rule-at-commit.component';
 
 const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
@@ -60,12 +69,21 @@ const appRoutes: Routes = [
 	{path: 'users/trips/list', component: UserTripsListComponent, canActivate:[AuthGuard]},
 	{path: 'servers/list', component: ServersListComponent, canActivate:[AuthGuard]},
 	{path: 'servers/information', component: ServerInformationComponent, canActivate:[AuthGuard]},
+	{path: 'servers/register', component: RegisterServerComponent, canActivate:[AuthGuard]},
+	{path: 'servers/update', component: UpdateServerComponent, canActivate:[AuthGuard]},
+	{path: 'servers/reset-token', component: ServerResetTokenComponent, canActivate:[AuthGuard]},
+	{path: 'servers/delete', component: DeleteServerComponent, canActivate:[AuthGuard]},
 	{path: 'trips/list', component: TripsListComponent, canActivate:[AuthGuard]},
 	{path: 'trips/information', component: TripInformationComponent, canActivate:[AuthGuard]},
 	{path: 'rules/run-all-rules', component: RunAllRulesComponent, canActivate:[AuthGuard]},
 	{path: 'rules/run-individual-rule', component: RunIndividualRuleComponent, canActivate:[AuthGuard]},
 	{path: 'rules/list', component: RulesListComponent, canActivate:[AuthGuard]},
+	{path: 'rules/create', component: CreateRuleComponent, canActivate:[AuthGuard]},
+	{path: 'rules/update', component: UpdateRuleComponent, canActivate:[AuthGuard]},
+	{path: 'rules/delete', component: DeleteRuleComponent, canActivate:[AuthGuard]},
 	{path: 'rules/information', component: RuleInformationComponent, canActivate:[AuthGuard]},
+	{path: 'rules/commits/list', component: CommitsListComponent, canActivate:[AuthGuard]},
+	{path: 'rules/commits/rule-at-commit', component: RuleAtCommitComponent, canActivate:[AuthGuard]},
 	{path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
 	{path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]},
 	{path: 'profile/edit', component: EditComponent, canActivate:[AuthGuard]},
@@ -102,7 +120,16 @@ const appRoutes: Routes = [
     ServersListComponent,
     ServerInformationComponent,
     RulesListComponent,
-    RuleInformationComponent
+    RuleInformationComponent,
+    RegisterServerComponent,
+    UpdateServerComponent,
+    ServerResetTokenComponent,
+    DeleteServerComponent,
+    CreateRuleComponent,
+    DeleteRuleComponent,
+    UpdateRuleComponent,
+    CommitsListComponent,
+    RuleAtCommitComponent
   ],
   imports: [
     BrowserModule,

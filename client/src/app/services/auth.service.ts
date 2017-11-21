@@ -207,6 +207,46 @@ export class AuthService {
       .map(res => res.json());
   }
   
+  registerServer(server) {
+    //let uri = 'api/servers/';
+    let uri = 'http://localhost:5000/api/servers/';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(uri + '?token=' + this.authToken, server, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  updateServer(id, server) {
+    //let uri = 'api/servers/' + id;
+    let uri = 'http://localhost:5000/api/servers/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.put(uri + '?token=' + this.authToken, server, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  deleteServer(id) {
+    //let uri = 'api/servers/' + id;
+    let uri = 'http://localhost:5000/api/servers/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.delete(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  resetServerToken(id) {
+    //let uri = 'api/servers/' + id;
+    let uri = 'http://localhost:5000/api/servers/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
   getRulesList() {
     //let uri = 'api/rules';
     let uri = 'http://localhost:5000/api/rules';
@@ -217,9 +257,69 @@ export class AuthService {
       .map(res => res.json());
   }
   
+  createRule(rule) {
+    //let uri = 'api/rules/';
+    let uri = 'http://localhost:5000/api/rules/';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(uri + '?token=' + this.authToken, rule, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  updateRule(id, rule) {
+    //let uri = 'api/rules/' + id;
+    let uri = 'http://localhost:5000/api/rules/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.put(uri + '?token=' + this.authToken, rule, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  deleteRule(id) {
+    //let uri = 'api/rules/' + id;
+    let uri = 'http://localhost:5000/api/rules/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.delete(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  runAllRules(data) {
+    //let uri = 'api/rules/run';
+    let uri = 'http://localhost:5000/api/rules/run';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(uri + '?token=' + this.authToken, data, {headers: headers})
+      .map(res => res.json());
+  }
+  
   getRule(id) {
     //let uri = 'api/rules/' + id;
     let uri = 'http://localhost:5000/api/rules/' + id;
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getCommitsList(id) {
+    //let uri = 'api/rules/' + id + '/commits';
+    let uri = 'http://localhost:5000/api/rules/' + id + '/commits';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri + '?token=' + this.authToken, {headers: headers})
+      .map(res => res.json());
+  }
+  
+  getRuleAtCommit(ruleId, commitId) {
+    //let uri = 'api/rules/' + ruleId + '/commits/' + commitId;
+    let uri = 'http://localhost:5000/api/rules/' + ruleId + '/commits/' + commitId;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
