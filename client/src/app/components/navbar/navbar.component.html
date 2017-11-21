@@ -61,6 +61,10 @@
             <ul *dropdownMenu class="dropdown-menu" role="menu">
               <li *ngIf="authService.roleLoggedIn('user')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/list']">Servers list</a></li>
               <li *ngIf="authService.roleLoggedIn('user')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/information']">Server information</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/register']">Register server</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/update']">Update server</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/reset-token']">Reset server token</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/delete']">Delete server</a></li>
             </ul>
             </li>
             
@@ -83,6 +87,11 @@
               <li *ngIf="authService.roleLoggedIn('admin')" role="menuitem"><a class="dropdown-item" [routerLink]="['/rules/run-individual-rule']">Run individual rule</a></li>
               <li *ngIf="authService.roleLoggedIn('user')" role="menuitem"><a class="dropdown-item" [routerLink]="['/rules/list']">Rules list</a></li>
               <li *ngIf="authService.roleLoggedIn('user')" role="menuitem"><a class="dropdown-item" [routerLink]="['/rules/information']">Rule information</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/rules/create']">Create rule</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/rules/update']">Update rule</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/rules/delete']">Delete rule</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/rules/commits/list']">Commits list</a></li>
+              <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/rules/commits/rule-at-commit']">Get rule in commit state</a></li>
             </ul>
             </li>
             
