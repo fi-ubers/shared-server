@@ -84,6 +84,10 @@ module.exports = {
 				rules = selectedRules.map(rule => deserialize(rule.blob));
 				
 				var factsPromise = facts.map(fact => {
+					/*if (typeof fact == 'string') {
+						fact = deserialize(fact);
+						fact = fact.blob;
+					}*/
 					fact = deserialize(fact.blob);
 					return Rules.execute(fact, rules).then(function(result) {
 						return { language: 'node-rules/javascript', blob: serialize(result) };
@@ -261,17 +265,27 @@ module.exports = {
 		var request = "GET at /rules/" + ruleId + "/commits/" + commitId;
 		
 		logger.info(request);
-		queryController.selectOneWhere(commitTable, {id: commitId, ruleId: ruleId})
-		.then(function(commit) {
-			if (commit) {
-				commit.rule.lastCommit.id = commitId;
-				responseController.sendRule(res, 200, commit.rule);
+		queryController.selectOneWhere(ruleTable, {id: ruleId})
+		.then(function(rule) {
+			if (rule) {
+				queryController.selectOneWhere(commitTable, {id: commitId, ruleId: ruleId})
+				.then(function(commit) {
+					if (commit) {
+						commit.rule.lastCommit.id = commitId;
+						responseController.sendRule(res, 200, commit.rule);
+					} else {
+						errorController.nonExistentResource(res, "commit", request);
+					}
+				})
+				.catch(function(error) {
+					errorController.unexpectedError(res, error, request);
+				});
 			} else {
 				errorController.nonExistentResource(res, "rule", request);
 			}
 		})
 		.catch(function(error) {
 			errorController.unexpectedError(res, error, request);
-		});
+		})
 	}
 }
