@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
@@ -22,7 +21,6 @@ export class UpdateComponent implements OnInit {
   
   constructor(
     private authService:AuthService,
-    private router:Router,
     private flashMessage:FlashMessagesService
   ) { }
 
@@ -56,20 +54,25 @@ export class UpdateComponent implements OnInit {
       roles: this.createRolesArray()
     }
     
-    this.authService.updateBusinessUser(this.id, businessUser).subscribe(data => {
-      this.flashMessage.show('Business user updated!', {
-        cssClass: 'alert-success',
-        timeout: 5000
-      });
+    if (!this.id) {
+      this.flashMessage.show('Missing parameters', {
+          cssClass: 'alert-danger',
+          timeout: 5000});
+    } else {
+      this.authService.updateBusinessUser(this.id, businessUser).subscribe(data => {
+        this.flashMessage.show('Business user updated!', {
+          cssClass: 'alert-success',
+          timeout: 5000
+        });
       
-      this.result = data.businessUser;
-      this.router.navigate(['update']);
-    },
-    err => {
-      this.flashMessage.show(err.json().message, {
-        cssClass: 'alert-danger',
-        timeout: 5000});
-    });
+        this.result = data.businessUser;
+      },
+      err => {
+        this.flashMessage.show(err.json().message, {
+          cssClass: 'alert-danger',
+          timeout: 5000});
+      });
+    }
   }
   
   clearForm() {
@@ -87,7 +90,6 @@ export class UpdateComponent implements OnInit {
   
   onUpdateClick() {
     this.clearForm();
-    //this.router.navigate(['update']);
   }
 
 }

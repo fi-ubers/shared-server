@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
@@ -20,7 +19,6 @@ export class RegisterComponent implements OnInit {
   
   constructor(
     private authService:AuthService,
-    private router:Router,
     private flashMessage:FlashMessagesService
   ) { }
 
@@ -60,7 +58,6 @@ export class RegisterComponent implements OnInit {
       });
       
       this.result = data.businessUser;
-      this.router.navigate(['register']);
     },
     err => {
       this.flashMessage.show(err.json().message, {
@@ -82,6 +79,5 @@ export class RegisterComponent implements OnInit {
   
   onRegisterClick() {
     this.clearForm();
-    //this.router.navigate(['register']);
   }
 }

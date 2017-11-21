@@ -19,17 +19,22 @@ export class DeleteComponent implements OnInit {
   }
   
   onDeleteSubmit() {
-    this.authService.deleteBusinessUser(this.id).subscribe(data => {
-      this.flashMessage.show('Business user ' + this.id +' removed!', {
-        cssClass: 'alert-success',
-        timeout: 5000
+    if (!this.id) {
+      this.flashMessage.show('Missing parameters', {
+          cssClass: 'alert-danger',
+          timeout: 5000});
+    } else {
+      this.authService.deleteBusinessUser(this.id).subscribe(data => {
+        this.flashMessage.show('Business user ' + this.id +' removed!', {
+          cssClass: 'alert-success',
+          timeout: 5000
+        });
+      },
+      err => {
+        this.flashMessage.show(err.json().message, {
+          cssClass: 'alert-danger',
+          timeout: 5000});
       });
-    },
-    err => {
-      this.flashMessage.show(err.json().message, {
-        cssClass: 'alert-danger',
-        timeout: 5000});
-    });
+    }
   }
-
 }
