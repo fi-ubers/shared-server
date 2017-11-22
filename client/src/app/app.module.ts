@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
 import { AuthService } from './services/auth.service';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
+import { ManagerAuthGuard } from './guards/manager-auth.guard';
+import { UserAuthGuard } from './guards/user-auth.guard';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { Ng2OrderModule } from 'ng2-order-pipe';
@@ -50,44 +52,45 @@ import { DeleteRuleComponent } from './components/rules/delete-rule/delete-rule.
 import { UpdateRuleComponent } from './components/rules/update-rule/update-rule.component';
 import { CommitsListComponent } from './components/rules/commits-list/commits-list.component';
 import { RuleAtCommitComponent } from './components/rules/rule-at-commit/rule-at-commit.component';
+import { CurrentStateComponent } from './components/servers/current-state/current-state.component';
 
 const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
 	{path: 'login', component: LoginComponent},
-	{path: 'business-users/register', component: RegisterComponent, canActivate:[AuthGuard]},
-	{path: 'business-users/list', component: ListComponent, canActivate:[AuthGuard]},
-	{path: 'business-users/delete', component: DeleteComponent, canActivate:[AuthGuard]},
-	{path: 'business-users/update', component: UpdateComponent, canActivate:[AuthGuard]},
-	{path: 'business-users/information', component: InformationComponent, canActivate:[AuthGuard]},
-	{path: 'users/delete', component: DeleteUserComponent, canActivate:[AuthGuard]},
-	{path: 'users/list', component: UsersListComponent, canActivate:[AuthGuard]},
-	{path: 'users/information', component: UserInformationComponent, canActivate:[AuthGuard]},
-	{path: 'users/cars/delete', component: DeleteCarComponent, canActivate:[AuthGuard]},
-	{path: 'users/cars/list', component: CarsListComponent, canActivate:[AuthGuard]},
-	{path: 'users/cars/information', component: CarsInformationComponent, canActivate:[AuthGuard]},
-	{path: 'users/transactions/list', component: TransactionsListComponent, canActivate:[AuthGuard]},
-	{path: 'users/trips/list', component: UserTripsListComponent, canActivate:[AuthGuard]},
-	{path: 'servers/list', component: ServersListComponent, canActivate:[AuthGuard]},
-	{path: 'servers/information', component: ServerInformationComponent, canActivate:[AuthGuard]},
-	{path: 'servers/register', component: RegisterServerComponent, canActivate:[AuthGuard]},
-	{path: 'servers/update', component: UpdateServerComponent, canActivate:[AuthGuard]},
-	{path: 'servers/reset-token', component: ServerResetTokenComponent, canActivate:[AuthGuard]},
-	{path: 'servers/delete', component: DeleteServerComponent, canActivate:[AuthGuard]},
-	{path: 'trips/list', component: TripsListComponent, canActivate:[AuthGuard]},
-	{path: 'trips/information', component: TripInformationComponent, canActivate:[AuthGuard]},
-	{path: 'rules/run-all-rules', component: RunAllRulesComponent, canActivate:[AuthGuard]},
-	{path: 'rules/run-individual-rule', component: RunIndividualRuleComponent, canActivate:[AuthGuard]},
-	{path: 'rules/list', component: RulesListComponent, canActivate:[AuthGuard]},
-	{path: 'rules/create', component: CreateRuleComponent, canActivate:[AuthGuard]},
-	{path: 'rules/update', component: UpdateRuleComponent, canActivate:[AuthGuard]},
-	{path: 'rules/delete', component: DeleteRuleComponent, canActivate:[AuthGuard]},
-	{path: 'rules/information', component: RuleInformationComponent, canActivate:[AuthGuard]},
-	{path: 'rules/commits/list', component: CommitsListComponent, canActivate:[AuthGuard]},
-	{path: 'rules/commits/rule-at-commit', component: RuleAtCommitComponent, canActivate:[AuthGuard]},
-	{path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
-	{path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]},
-	{path: 'profile/edit', component: EditComponent, canActivate:[AuthGuard]},
-	{path: 'paymethods', component: PaymethodsComponent, canActivate:[AuthGuard]}
+	{path: 'business-users/register', component: RegisterComponent, canActivate:[AdminAuthGuard]},
+	{path: 'business-users/list', component: ListComponent, canActivate:[AdminAuthGuard]},
+	{path: 'business-users/delete', component: DeleteComponent, canActivate:[AdminAuthGuard]},
+	{path: 'business-users/update', component: UpdateComponent, canActivate:[AdminAuthGuard]},
+	{path: 'business-users/information', component: InformationComponent, canActivate:[UserAuthGuard]},
+	{path: 'users/delete', component: DeleteUserComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'users/list', component: UsersListComponent, canActivate:[UserAuthGuard]},
+	{path: 'users/information', component: UserInformationComponent, canActivate:[UserAuthGuard]},
+	{path: 'users/cars/delete', component: DeleteCarComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'users/cars/list', component: CarsListComponent, canActivate:[UserAuthGuard]},
+	{path: 'users/cars/information', component: CarsInformationComponent, canActivate:[UserAuthGuard]},
+	{path: 'users/transactions/list', component: TransactionsListComponent, canActivate:[UserAuthGuard]},
+	{path: 'users/trips/list', component: UserTripsListComponent, canActivate:[UserAuthGuard]},
+	{path: 'servers/list', component: ServersListComponent, canActivate:[UserAuthGuard]},
+	{path: 'servers/current-state', component: CurrentStateComponent, canActivate:[UserAuthGuard]},
+	{path: 'servers/information', component: ServerInformationComponent, canActivate:[UserAuthGuard]},
+	{path: 'servers/register', component: RegisterServerComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'servers/update', component: UpdateServerComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'servers/reset-token', component: ServerResetTokenComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'servers/delete', component: DeleteServerComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'trips/list', component: TripsListComponent, canActivate:[UserAuthGuard]},
+	{path: 'trips/information', component: TripInformationComponent, canActivate:[UserAuthGuard]},
+	{path: 'rules/run-all-rules', component: RunAllRulesComponent, canActivate:[AdminAuthGuard]},
+	{path: 'rules/run-individual-rule', component: RunIndividualRuleComponent, canActivate:[AdminAuthGuard]},
+	{path: 'rules/list', component: RulesListComponent, canActivate:[UserAuthGuard]},
+	{path: 'rules/create', component: CreateRuleComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'rules/update', component: UpdateRuleComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'rules/delete', component: DeleteRuleComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'rules/information', component: RuleInformationComponent, canActivate:[UserAuthGuard]},
+	{path: 'rules/commits/list', component: CommitsListComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'rules/commits/rule-at-commit', component: RuleAtCommitComponent, canActivate:[ManagerAuthGuard]},
+	{path: 'profile', component: ProfileComponent, canActivate:[UserAuthGuard]},
+	{path: 'profile/edit', component: EditComponent, canActivate:[UserAuthGuard]},
+	{path: 'paymethods', component: PaymethodsComponent, canActivate:[UserAuthGuard]}
 ]
 
 @NgModule({
@@ -96,7 +99,6 @@ const appRoutes: Routes = [
     NavbarComponent,
     LoginComponent,
     HomeComponent,
-    DashboardComponent,
     ProfileComponent,
     RegisterComponent,
     ListComponent,
@@ -129,7 +131,8 @@ const appRoutes: Routes = [
     DeleteRuleComponent,
     UpdateRuleComponent,
     CommitsListComponent,
-    RuleAtCommitComponent
+    RuleAtCommitComponent,
+    CurrentStateComponent
   ],
   imports: [
     BrowserModule,
@@ -142,7 +145,7 @@ const appRoutes: Routes = [
     Ng2OrderModule,
     NgxPaginationModule
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService, AuthGuard, AdminAuthGuard, ManagerAuthGuard, UserAuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

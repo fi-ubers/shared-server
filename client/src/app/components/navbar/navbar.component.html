@@ -17,7 +17,6 @@
           
           <ul class="nav navbar-nav navbar-right">
             <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a [routerLink]="['/login']">Login</a></li>
-            <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a [routerLink]="['/dashboard']">Dashboard</a></li>
             
             <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown>
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>Profile <span class="caret"></span>
@@ -65,6 +64,7 @@
               <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/update']">Update server</a></li>
               <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/reset-token']">Reset server token</a></li>
               <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/delete']">Delete server</a></li>
+              <li *ngIf="authService.roleLoggedIn('user')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/current-state']">Current state</a></li>
             </ul>
             </li>
             

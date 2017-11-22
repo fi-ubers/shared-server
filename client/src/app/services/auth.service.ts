@@ -270,6 +270,15 @@ export class AuthService {
       .map(res => res.json());
   }
   
+  runIndividualRule(id, data) {
+    let uri = 'api/rules/' + id +'/run';
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(uri + '?token=' + this.authToken, data, {headers: headers})
+      .map(res => res.json());
+  }
+  
   getRule(id) {
     let uri = 'api/rules/' + id;
     let headers = new Headers();
