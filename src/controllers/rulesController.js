@@ -81,23 +81,28 @@ module.exports = {
 		} else {
 			queryController.selectWhereIn(ruleTable, 'id', rules)
 			.then(function(selectedRules) {
-				rules = selectedRules.map(rule => deserialize(rule.blob));
+				if (selectedRules.length > 0) {
+					rules = selectedRules.map(rule => deserialize(rule.blob));
 				
-				var factsPromise = facts.map(fact => {
-					/*if (typeof fact == 'string') {
-						fact = deserialize(fact);
-						fact = fact.blob;
-					}*/
-					fact = deserialize(fact.blob);
-					return Rules.execute(fact, rules).then(function(result) {
-						return { language: 'node-rules/javascript', blob: serialize(result) };
+					var factsPromise = facts.map(fact => {
+						if (typeof fact == 'string') {
+							fact = deserialize(fact);
+							fact = fact.blob;
+						} else {
+							fact = deserialize(fact.blob);
+						}
+						return Rules.execute(fact, rules).then(function(result) {
+							return { language: 'node-rules/javascript', blob: serialize(result) };
 						
+						});
 					});
-				});
 				
-				Promise.all(factsPromise).then(function(factsResult) {
-					responseController.sendFacts(res, factsResult);	
-				});
+					Promise.all(factsPromise).then(function(factsResult) {
+						responseController.sendFacts(res, factsResult);	
+					});
+				} else {
+					errorController.nonExistentResource(res, "rules", request);
+				}
 			})
 			.catch(function(error) {
 				errorController.unexpectedError(res, error, request);
@@ -219,19 +224,28 @@ module.exports = {
 		} else {
 			queryController.selectOneWhere(ruleTable, {id: ruleId})
 			.then(function(rule) {
-				rule = deserialize(rule.blob);
+				if (rule) {
+					rule = deserialize(rule.blob);
 				
-				var factsPromise = facts.map(fact => {
-					fact = deserialize(fact.blob);
-					return Rules.execute(fact, rule).then(function(result) {
-						return { language: 'node-rules/javascript', blob: serialize(result) };
+					var factsPromise = facts.map(fact => {
+						if (typeof fact == 'string') {
+							fact = deserialize(fact);
+							fact = fact.blob;
+						} else {
+							fact = deserialize(fact.blob);
+						}
+						return Rules.execute(fact, rule).then(function(result) {
+							return { language: 'node-rules/javascript', blob: serialize(result) };
 						
+						});
 					});
-				});
 				
-				Promise.all(factsPromise).then(function(factsResult) {
-					responseController.sendFacts(res, factsResult);	
-				});
+					Promise.all(factsPromise).then(function(factsResult) {
+						responseController.sendFacts(res, factsResult);	
+					});
+				} else {
+					errorController.nonExistentResource(res, "rule", request);
+				}
 				
 			}).catch(function(error) {
 				errorController.unexpectedError(res, error, request);
