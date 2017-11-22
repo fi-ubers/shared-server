@@ -1,3 +1,22 @@
-<p>
-  run-all-rules works!
-</p>
+<div *ngIf="!result">
+  <h2 class="page-header">Run selected rules and facts </h2>
+  <form (submit)="onRunSubmit()">
+    <div class="form-group">
+      <label>Rules id separated by one space</label>
+      <input type="text" [(ngModel)]="rules" name="rules" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Facts separated by '#'</label>
+      <textarea rows="5" [(ngModel)]="facts" name="facts" class="form-control"></textarea>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Run">
+  </form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Results </h2>
+  <ul class="list-group">
+    <li *ngFor="let fact of result" class="list-group-item">{{fact}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onRunClick()">Run different set of rules and facts</a>
+</div>
