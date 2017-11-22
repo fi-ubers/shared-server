@@ -87,50 +87,53 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_navbar_navbar_component__ = __webpack_require__("../../../../../src/app/components/navbar/navbar.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_login_login_component__ = __webpack_require__("../../../../../src/app/components/login/login.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_home_home_component__ = __webpack_require__("../../../../../src/app/components/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_dashboard_dashboard_component__ = __webpack_require__("../../../../../src/app/components/dashboard/dashboard.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_profile_profile_component__ = __webpack_require__("../../../../../src/app/components/profile/profile.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_angular2_flash_messages__ = __webpack_require__("../../../../angular2-flash-messages/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_angular2_flash_messages___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_angular2_flash_messages__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__ = __webpack_require__("../../../../../src/app/guards/auth.guard.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_ngx_bootstrap_dropdown__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ng2_search_filter__ = __webpack_require__("../../../../ng2-search-filter/dist/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ng2_search_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_ng2_search_filter__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_ng2_order_pipe__ = __webpack_require__("../../../../ng2-order-pipe/dist/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_ng2_order_pipe___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_ng2_order_pipe__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ngx_pagination__ = __webpack_require__("../../../../ngx-pagination/dist/ngx-pagination.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_business_users_register_register_component__ = __webpack_require__("../../../../../src/app/components/business-users/register/register.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_business_users_list_list_component__ = __webpack_require__("../../../../../src/app/components/business-users/list/list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_business_users_delete_delete_component__ = __webpack_require__("../../../../../src/app/components/business-users/delete/delete.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_business_users_update_update_component__ = __webpack_require__("../../../../../src/app/components/business-users/update/update.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_rules_run_all_rules_run_all_rules_component__ = __webpack_require__("../../../../../src/app/components/rules/run-all-rules/run-all-rules.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_rules_run_individual_rule_run_individual_rule_component__ = __webpack_require__("../../../../../src/app/components/rules/run-individual-rule/run-individual-rule.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_users_delete_user_delete_user_component__ = __webpack_require__("../../../../../src/app/components/users/delete-user/delete-user.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_users_delete_car_delete_car_component__ = __webpack_require__("../../../../../src/app/components/users/delete-car/delete-car.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_edit_edit_component__ = __webpack_require__("../../../../../src/app/components/edit/edit.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__components_business_users_information_information_component__ = __webpack_require__("../../../../../src/app/components/business-users/information/information.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__components_users_users_list_users_list_component__ = __webpack_require__("../../../../../src/app/components/users/users-list/users-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__components_users_user_information_user_information_component__ = __webpack_require__("../../../../../src/app/components/users/user-information/user-information.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__components_users_cars_list_cars_list_component__ = __webpack_require__("../../../../../src/app/components/users/cars-list/cars-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__components_users_cars_information_cars_information_component__ = __webpack_require__("../../../../../src/app/components/users/cars-information/cars-information.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__components_users_transactions_list_transactions_list_component__ = __webpack_require__("../../../../../src/app/components/users/transactions-list/transactions-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__components_users_user_trips_list_user_trips_list_component__ = __webpack_require__("../../../../../src/app/components/users/user-trips-list/user-trips-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__components_paymethods_paymethods_component__ = __webpack_require__("../../../../../src/app/components/paymethods/paymethods.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__components_trips_trips_list_trips_list_component__ = __webpack_require__("../../../../../src/app/components/trips/trips-list/trips-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__components_trips_trip_information_trip_information_component__ = __webpack_require__("../../../../../src/app/components/trips/trip-information/trip-information.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__components_servers_servers_list_servers_list_component__ = __webpack_require__("../../../../../src/app/components/servers/servers-list/servers-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__components_servers_server_information_server_information_component__ = __webpack_require__("../../../../../src/app/components/servers/server-information/server-information.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__components_rules_rules_list_rules_list_component__ = __webpack_require__("../../../../../src/app/components/rules/rules-list/rules-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__components_rules_rule_information_rule_information_component__ = __webpack_require__("../../../../../src/app/components/rules/rule-information/rule-information.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__components_servers_register_server_register_server_component__ = __webpack_require__("../../../../../src/app/components/servers/register-server/register-server.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__components_servers_update_server_update_server_component__ = __webpack_require__("../../../../../src/app/components/servers/update-server/update-server.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__components_servers_server_reset_token_server_reset_token_component__ = __webpack_require__("../../../../../src/app/components/servers/server-reset-token/server-reset-token.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__components_servers_delete_server_delete_server_component__ = __webpack_require__("../../../../../src/app/components/servers/delete-server/delete-server.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__components_rules_create_rule_create_rule_component__ = __webpack_require__("../../../../../src/app/components/rules/create-rule/create-rule.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__components_rules_delete_rule_delete_rule_component__ = __webpack_require__("../../../../../src/app/components/rules/delete-rule/delete-rule.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__components_rules_update_rule_update_rule_component__ = __webpack_require__("../../../../../src/app/components/rules/update-rule/update-rule.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__components_rules_commits_list_commits_list_component__ = __webpack_require__("../../../../../src/app/components/rules/commits-list/commits-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__components_rules_rule_at_commit_rule_at_commit_component__ = __webpack_require__("../../../../../src/app/components/rules/rule-at-commit/rule-at-commit.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_profile_profile_component__ = __webpack_require__("../../../../../src/app/components/profile/profile.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_angular2_flash_messages__ = __webpack_require__("../../../../angular2-flash-messages/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_angular2_flash_messages___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_angular2_flash_messages__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__guards_auth_guard__ = __webpack_require__("../../../../../src/app/guards/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__guards_admin_auth_guard__ = __webpack_require__("../../../../../src/app/guards/admin-auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__ = __webpack_require__("../../../../../src/app/guards/manager-auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__ = __webpack_require__("../../../../../src/app/guards/user-auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_ngx_bootstrap_dropdown__ = __webpack_require__("../../../../ngx-bootstrap/dropdown/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ng2_search_filter__ = __webpack_require__("../../../../ng2-search-filter/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ng2_search_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17_ng2_search_filter__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_ng2_order_pipe__ = __webpack_require__("../../../../ng2-order-pipe/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_ng2_order_pipe___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18_ng2_order_pipe__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_ngx_pagination__ = __webpack_require__("../../../../ngx-pagination/dist/ngx-pagination.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_business_users_register_register_component__ = __webpack_require__("../../../../../src/app/components/business-users/register/register.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_business_users_list_list_component__ = __webpack_require__("../../../../../src/app/components/business-users/list/list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_business_users_delete_delete_component__ = __webpack_require__("../../../../../src/app/components/business-users/delete/delete.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_business_users_update_update_component__ = __webpack_require__("../../../../../src/app/components/business-users/update/update.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_rules_run_all_rules_run_all_rules_component__ = __webpack_require__("../../../../../src/app/components/rules/run-all-rules/run-all-rules.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_rules_run_individual_rule_run_individual_rule_component__ = __webpack_require__("../../../../../src/app/components/rules/run-individual-rule/run-individual-rule.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_users_delete_user_delete_user_component__ = __webpack_require__("../../../../../src/app/components/users/delete-user/delete-user.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__components_users_delete_car_delete_car_component__ = __webpack_require__("../../../../../src/app/components/users/delete-car/delete-car.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__components_edit_edit_component__ = __webpack_require__("../../../../../src/app/components/edit/edit.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__components_business_users_information_information_component__ = __webpack_require__("../../../../../src/app/components/business-users/information/information.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__components_users_users_list_users_list_component__ = __webpack_require__("../../../../../src/app/components/users/users-list/users-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__components_users_user_information_user_information_component__ = __webpack_require__("../../../../../src/app/components/users/user-information/user-information.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__components_users_cars_list_cars_list_component__ = __webpack_require__("../../../../../src/app/components/users/cars-list/cars-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__components_users_cars_information_cars_information_component__ = __webpack_require__("../../../../../src/app/components/users/cars-information/cars-information.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__components_users_transactions_list_transactions_list_component__ = __webpack_require__("../../../../../src/app/components/users/transactions-list/transactions-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__components_users_user_trips_list_user_trips_list_component__ = __webpack_require__("../../../../../src/app/components/users/user-trips-list/user-trips-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__components_paymethods_paymethods_component__ = __webpack_require__("../../../../../src/app/components/paymethods/paymethods.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__components_trips_trips_list_trips_list_component__ = __webpack_require__("../../../../../src/app/components/trips/trips-list/trips-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__components_trips_trip_information_trip_information_component__ = __webpack_require__("../../../../../src/app/components/trips/trip-information/trip-information.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__components_servers_servers_list_servers_list_component__ = __webpack_require__("../../../../../src/app/components/servers/servers-list/servers-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__components_servers_server_information_server_information_component__ = __webpack_require__("../../../../../src/app/components/servers/server-information/server-information.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__components_rules_rules_list_rules_list_component__ = __webpack_require__("../../../../../src/app/components/rules/rules-list/rules-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__components_rules_rule_information_rule_information_component__ = __webpack_require__("../../../../../src/app/components/rules/rule-information/rule-information.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__components_servers_register_server_register_server_component__ = __webpack_require__("../../../../../src/app/components/servers/register-server/register-server.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__components_servers_update_server_update_server_component__ = __webpack_require__("../../../../../src/app/components/servers/update-server/update-server.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__components_servers_server_reset_token_server_reset_token_component__ = __webpack_require__("../../../../../src/app/components/servers/server-reset-token/server-reset-token.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__components_servers_delete_server_delete_server_component__ = __webpack_require__("../../../../../src/app/components/servers/delete-server/delete-server.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__components_rules_create_rule_create_rule_component__ = __webpack_require__("../../../../../src/app/components/rules/create-rule/create-rule.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__components_rules_delete_rule_delete_rule_component__ = __webpack_require__("../../../../../src/app/components/rules/delete-rule/delete-rule.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__components_rules_update_rule_update_rule_component__ = __webpack_require__("../../../../../src/app/components/rules/update-rule/update-rule.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__components_rules_commits_list_commits_list_component__ = __webpack_require__("../../../../../src/app/components/rules/commits-list/commits-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__components_rules_rule_at_commit_rule_at_commit_component__ = __webpack_require__("../../../../../src/app/components/rules/rule-at-commit/rule-at-commit.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__components_servers_current_state_current_state_component__ = __webpack_require__("../../../../../src/app/components/servers/current-state/current-state.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -187,43 +190,46 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
+
 var appRoutes = [
     { path: '', component: __WEBPACK_IMPORTED_MODULE_8__components_home_home_component__["a" /* HomeComponent */] },
     { path: 'login', component: __WEBPACK_IMPORTED_MODULE_7__components_login_login_component__["a" /* LoginComponent */] },
-    { path: 'business-users/register', component: __WEBPACK_IMPORTED_MODULE_18__components_business_users_register_register_component__["a" /* RegisterComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'business-users/list', component: __WEBPACK_IMPORTED_MODULE_19__components_business_users_list_list_component__["a" /* ListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'business-users/delete', component: __WEBPACK_IMPORTED_MODULE_20__components_business_users_delete_delete_component__["a" /* DeleteComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'business-users/update', component: __WEBPACK_IMPORTED_MODULE_21__components_business_users_update_update_component__["a" /* UpdateComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'business-users/information', component: __WEBPACK_IMPORTED_MODULE_27__components_business_users_information_information_component__["a" /* InformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'users/delete', component: __WEBPACK_IMPORTED_MODULE_24__components_users_delete_user_delete_user_component__["a" /* DeleteUserComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'users/list', component: __WEBPACK_IMPORTED_MODULE_28__components_users_users_list_users_list_component__["a" /* UsersListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'users/information', component: __WEBPACK_IMPORTED_MODULE_29__components_users_user_information_user_information_component__["a" /* UserInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'users/cars/delete', component: __WEBPACK_IMPORTED_MODULE_25__components_users_delete_car_delete_car_component__["a" /* DeleteCarComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'users/cars/list', component: __WEBPACK_IMPORTED_MODULE_30__components_users_cars_list_cars_list_component__["a" /* CarsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'users/cars/information', component: __WEBPACK_IMPORTED_MODULE_31__components_users_cars_information_cars_information_component__["a" /* CarsInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'users/transactions/list', component: __WEBPACK_IMPORTED_MODULE_32__components_users_transactions_list_transactions_list_component__["a" /* TransactionsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'users/trips/list', component: __WEBPACK_IMPORTED_MODULE_33__components_users_user_trips_list_user_trips_list_component__["a" /* UserTripsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'servers/list', component: __WEBPACK_IMPORTED_MODULE_37__components_servers_servers_list_servers_list_component__["a" /* ServersListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'servers/information', component: __WEBPACK_IMPORTED_MODULE_38__components_servers_server_information_server_information_component__["a" /* ServerInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'servers/register', component: __WEBPACK_IMPORTED_MODULE_41__components_servers_register_server_register_server_component__["a" /* RegisterServerComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'servers/update', component: __WEBPACK_IMPORTED_MODULE_42__components_servers_update_server_update_server_component__["a" /* UpdateServerComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'servers/reset-token', component: __WEBPACK_IMPORTED_MODULE_43__components_servers_server_reset_token_server_reset_token_component__["a" /* ServerResetTokenComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'servers/delete', component: __WEBPACK_IMPORTED_MODULE_44__components_servers_delete_server_delete_server_component__["a" /* DeleteServerComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'trips/list', component: __WEBPACK_IMPORTED_MODULE_35__components_trips_trips_list_trips_list_component__["a" /* TripsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'trips/information', component: __WEBPACK_IMPORTED_MODULE_36__components_trips_trip_information_trip_information_component__["a" /* TripInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/run-all-rules', component: __WEBPACK_IMPORTED_MODULE_22__components_rules_run_all_rules_run_all_rules_component__["a" /* RunAllRulesComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/run-individual-rule', component: __WEBPACK_IMPORTED_MODULE_23__components_rules_run_individual_rule_run_individual_rule_component__["a" /* RunIndividualRuleComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/list', component: __WEBPACK_IMPORTED_MODULE_39__components_rules_rules_list_rules_list_component__["a" /* RulesListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/create', component: __WEBPACK_IMPORTED_MODULE_45__components_rules_create_rule_create_rule_component__["a" /* CreateRuleComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/update', component: __WEBPACK_IMPORTED_MODULE_47__components_rules_update_rule_update_rule_component__["a" /* UpdateRuleComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/delete', component: __WEBPACK_IMPORTED_MODULE_46__components_rules_delete_rule_delete_rule_component__["a" /* DeleteRuleComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/information', component: __WEBPACK_IMPORTED_MODULE_40__components_rules_rule_information_rule_information_component__["a" /* RuleInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/commits/list', component: __WEBPACK_IMPORTED_MODULE_48__components_rules_commits_list_commits_list_component__["a" /* CommitsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'rules/commits/rule-at-commit', component: __WEBPACK_IMPORTED_MODULE_49__components_rules_rule_at_commit_rule_at_commit_component__["a" /* RuleAtCommitComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_9__components_dashboard_dashboard_component__["a" /* DashboardComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'profile', component: __WEBPACK_IMPORTED_MODULE_10__components_profile_profile_component__["a" /* ProfileComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'profile/edit', component: __WEBPACK_IMPORTED_MODULE_26__components_edit_edit_component__["a" /* EditComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] },
-    { path: 'paymethods', component: __WEBPACK_IMPORTED_MODULE_34__components_paymethods_paymethods_component__["a" /* PaymethodsComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]] }
+    { path: 'business-users/register', component: __WEBPACK_IMPORTED_MODULE_20__components_business_users_register_register_component__["a" /* RegisterComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_admin_auth_guard__["a" /* AdminAuthGuard */]] },
+    { path: 'business-users/list', component: __WEBPACK_IMPORTED_MODULE_21__components_business_users_list_list_component__["a" /* ListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_admin_auth_guard__["a" /* AdminAuthGuard */]] },
+    { path: 'business-users/delete', component: __WEBPACK_IMPORTED_MODULE_22__components_business_users_delete_delete_component__["a" /* DeleteComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_admin_auth_guard__["a" /* AdminAuthGuard */]] },
+    { path: 'business-users/update', component: __WEBPACK_IMPORTED_MODULE_23__components_business_users_update_update_component__["a" /* UpdateComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_admin_auth_guard__["a" /* AdminAuthGuard */]] },
+    { path: 'business-users/information', component: __WEBPACK_IMPORTED_MODULE_29__components_business_users_information_information_component__["a" /* InformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'users/delete', component: __WEBPACK_IMPORTED_MODULE_26__components_users_delete_user_delete_user_component__["a" /* DeleteUserComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'users/list', component: __WEBPACK_IMPORTED_MODULE_30__components_users_users_list_users_list_component__["a" /* UsersListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'users/information', component: __WEBPACK_IMPORTED_MODULE_31__components_users_user_information_user_information_component__["a" /* UserInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'users/cars/delete', component: __WEBPACK_IMPORTED_MODULE_27__components_users_delete_car_delete_car_component__["a" /* DeleteCarComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'users/cars/list', component: __WEBPACK_IMPORTED_MODULE_32__components_users_cars_list_cars_list_component__["a" /* CarsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'users/cars/information', component: __WEBPACK_IMPORTED_MODULE_33__components_users_cars_information_cars_information_component__["a" /* CarsInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'users/transactions/list', component: __WEBPACK_IMPORTED_MODULE_34__components_users_transactions_list_transactions_list_component__["a" /* TransactionsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'users/trips/list', component: __WEBPACK_IMPORTED_MODULE_35__components_users_user_trips_list_user_trips_list_component__["a" /* UserTripsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'servers/list', component: __WEBPACK_IMPORTED_MODULE_39__components_servers_servers_list_servers_list_component__["a" /* ServersListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'servers/current-state', component: __WEBPACK_IMPORTED_MODULE_52__components_servers_current_state_current_state_component__["a" /* CurrentStateComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'servers/information', component: __WEBPACK_IMPORTED_MODULE_40__components_servers_server_information_server_information_component__["a" /* ServerInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'servers/register', component: __WEBPACK_IMPORTED_MODULE_43__components_servers_register_server_register_server_component__["a" /* RegisterServerComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'servers/update', component: __WEBPACK_IMPORTED_MODULE_44__components_servers_update_server_update_server_component__["a" /* UpdateServerComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'servers/reset-token', component: __WEBPACK_IMPORTED_MODULE_45__components_servers_server_reset_token_server_reset_token_component__["a" /* ServerResetTokenComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'servers/delete', component: __WEBPACK_IMPORTED_MODULE_46__components_servers_delete_server_delete_server_component__["a" /* DeleteServerComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'trips/list', component: __WEBPACK_IMPORTED_MODULE_37__components_trips_trips_list_trips_list_component__["a" /* TripsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'trips/information', component: __WEBPACK_IMPORTED_MODULE_38__components_trips_trip_information_trip_information_component__["a" /* TripInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'rules/run-all-rules', component: __WEBPACK_IMPORTED_MODULE_24__components_rules_run_all_rules_run_all_rules_component__["a" /* RunAllRulesComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_admin_auth_guard__["a" /* AdminAuthGuard */]] },
+    { path: 'rules/run-individual-rule', component: __WEBPACK_IMPORTED_MODULE_25__components_rules_run_individual_rule_run_individual_rule_component__["a" /* RunIndividualRuleComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_13__guards_admin_auth_guard__["a" /* AdminAuthGuard */]] },
+    { path: 'rules/list', component: __WEBPACK_IMPORTED_MODULE_41__components_rules_rules_list_rules_list_component__["a" /* RulesListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'rules/create', component: __WEBPACK_IMPORTED_MODULE_47__components_rules_create_rule_create_rule_component__["a" /* CreateRuleComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'rules/update', component: __WEBPACK_IMPORTED_MODULE_49__components_rules_update_rule_update_rule_component__["a" /* UpdateRuleComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'rules/delete', component: __WEBPACK_IMPORTED_MODULE_48__components_rules_delete_rule_delete_rule_component__["a" /* DeleteRuleComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'rules/information', component: __WEBPACK_IMPORTED_MODULE_42__components_rules_rule_information_rule_information_component__["a" /* RuleInformationComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'rules/commits/list', component: __WEBPACK_IMPORTED_MODULE_50__components_rules_commits_list_commits_list_component__["a" /* CommitsListComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'rules/commits/rule-at-commit', component: __WEBPACK_IMPORTED_MODULE_51__components_rules_rule_at_commit_rule_at_commit_component__["a" /* RuleAtCommitComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */]] },
+    { path: 'profile', component: __WEBPACK_IMPORTED_MODULE_9__components_profile_profile_component__["a" /* ProfileComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'profile/edit', component: __WEBPACK_IMPORTED_MODULE_28__components_edit_edit_component__["a" /* EditComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] },
+    { path: 'paymethods', component: __WEBPACK_IMPORTED_MODULE_36__components_paymethods_paymethods_component__["a" /* PaymethodsComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]] }
 ];
 var AppModule = (function () {
     function AppModule() {
@@ -237,53 +243,53 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_6__components_navbar_navbar_component__["a" /* NavbarComponent */],
             __WEBPACK_IMPORTED_MODULE_7__components_login_login_component__["a" /* LoginComponent */],
             __WEBPACK_IMPORTED_MODULE_8__components_home_home_component__["a" /* HomeComponent */],
-            __WEBPACK_IMPORTED_MODULE_9__components_dashboard_dashboard_component__["a" /* DashboardComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__components_profile_profile_component__["a" /* ProfileComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__components_business_users_register_register_component__["a" /* RegisterComponent */],
-            __WEBPACK_IMPORTED_MODULE_19__components_business_users_list_list_component__["a" /* ListComponent */],
-            __WEBPACK_IMPORTED_MODULE_20__components_business_users_delete_delete_component__["a" /* DeleteComponent */],
-            __WEBPACK_IMPORTED_MODULE_21__components_business_users_update_update_component__["a" /* UpdateComponent */],
-            __WEBPACK_IMPORTED_MODULE_22__components_rules_run_all_rules_run_all_rules_component__["a" /* RunAllRulesComponent */],
-            __WEBPACK_IMPORTED_MODULE_23__components_rules_run_individual_rule_run_individual_rule_component__["a" /* RunIndividualRuleComponent */],
-            __WEBPACK_IMPORTED_MODULE_24__components_users_delete_user_delete_user_component__["a" /* DeleteUserComponent */],
-            __WEBPACK_IMPORTED_MODULE_25__components_users_delete_car_delete_car_component__["a" /* DeleteCarComponent */],
-            __WEBPACK_IMPORTED_MODULE_26__components_edit_edit_component__["a" /* EditComponent */],
-            __WEBPACK_IMPORTED_MODULE_27__components_business_users_information_information_component__["a" /* InformationComponent */],
-            __WEBPACK_IMPORTED_MODULE_28__components_users_users_list_users_list_component__["a" /* UsersListComponent */],
-            __WEBPACK_IMPORTED_MODULE_29__components_users_user_information_user_information_component__["a" /* UserInformationComponent */],
-            __WEBPACK_IMPORTED_MODULE_30__components_users_cars_list_cars_list_component__["a" /* CarsListComponent */],
-            __WEBPACK_IMPORTED_MODULE_31__components_users_cars_information_cars_information_component__["a" /* CarsInformationComponent */],
-            __WEBPACK_IMPORTED_MODULE_32__components_users_transactions_list_transactions_list_component__["a" /* TransactionsListComponent */],
-            __WEBPACK_IMPORTED_MODULE_33__components_users_user_trips_list_user_trips_list_component__["a" /* UserTripsListComponent */],
-            __WEBPACK_IMPORTED_MODULE_34__components_paymethods_paymethods_component__["a" /* PaymethodsComponent */],
-            __WEBPACK_IMPORTED_MODULE_35__components_trips_trips_list_trips_list_component__["a" /* TripsListComponent */],
-            __WEBPACK_IMPORTED_MODULE_36__components_trips_trip_information_trip_information_component__["a" /* TripInformationComponent */],
-            __WEBPACK_IMPORTED_MODULE_37__components_servers_servers_list_servers_list_component__["a" /* ServersListComponent */],
-            __WEBPACK_IMPORTED_MODULE_38__components_servers_server_information_server_information_component__["a" /* ServerInformationComponent */],
-            __WEBPACK_IMPORTED_MODULE_39__components_rules_rules_list_rules_list_component__["a" /* RulesListComponent */],
-            __WEBPACK_IMPORTED_MODULE_40__components_rules_rule_information_rule_information_component__["a" /* RuleInformationComponent */],
-            __WEBPACK_IMPORTED_MODULE_41__components_servers_register_server_register_server_component__["a" /* RegisterServerComponent */],
-            __WEBPACK_IMPORTED_MODULE_42__components_servers_update_server_update_server_component__["a" /* UpdateServerComponent */],
-            __WEBPACK_IMPORTED_MODULE_43__components_servers_server_reset_token_server_reset_token_component__["a" /* ServerResetTokenComponent */],
-            __WEBPACK_IMPORTED_MODULE_44__components_servers_delete_server_delete_server_component__["a" /* DeleteServerComponent */],
-            __WEBPACK_IMPORTED_MODULE_45__components_rules_create_rule_create_rule_component__["a" /* CreateRuleComponent */],
-            __WEBPACK_IMPORTED_MODULE_46__components_rules_delete_rule_delete_rule_component__["a" /* DeleteRuleComponent */],
-            __WEBPACK_IMPORTED_MODULE_47__components_rules_update_rule_update_rule_component__["a" /* UpdateRuleComponent */],
-            __WEBPACK_IMPORTED_MODULE_48__components_rules_commits_list_commits_list_component__["a" /* CommitsListComponent */],
-            __WEBPACK_IMPORTED_MODULE_49__components_rules_rule_at_commit_rule_at_commit_component__["a" /* RuleAtCommitComponent */]
+            __WEBPACK_IMPORTED_MODULE_9__components_profile_profile_component__["a" /* ProfileComponent */],
+            __WEBPACK_IMPORTED_MODULE_20__components_business_users_register_register_component__["a" /* RegisterComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__components_business_users_list_list_component__["a" /* ListComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__components_business_users_delete_delete_component__["a" /* DeleteComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__components_business_users_update_update_component__["a" /* UpdateComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__components_rules_run_all_rules_run_all_rules_component__["a" /* RunAllRulesComponent */],
+            __WEBPACK_IMPORTED_MODULE_25__components_rules_run_individual_rule_run_individual_rule_component__["a" /* RunIndividualRuleComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__components_users_delete_user_delete_user_component__["a" /* DeleteUserComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__components_users_delete_car_delete_car_component__["a" /* DeleteCarComponent */],
+            __WEBPACK_IMPORTED_MODULE_28__components_edit_edit_component__["a" /* EditComponent */],
+            __WEBPACK_IMPORTED_MODULE_29__components_business_users_information_information_component__["a" /* InformationComponent */],
+            __WEBPACK_IMPORTED_MODULE_30__components_users_users_list_users_list_component__["a" /* UsersListComponent */],
+            __WEBPACK_IMPORTED_MODULE_31__components_users_user_information_user_information_component__["a" /* UserInformationComponent */],
+            __WEBPACK_IMPORTED_MODULE_32__components_users_cars_list_cars_list_component__["a" /* CarsListComponent */],
+            __WEBPACK_IMPORTED_MODULE_33__components_users_cars_information_cars_information_component__["a" /* CarsInformationComponent */],
+            __WEBPACK_IMPORTED_MODULE_34__components_users_transactions_list_transactions_list_component__["a" /* TransactionsListComponent */],
+            __WEBPACK_IMPORTED_MODULE_35__components_users_user_trips_list_user_trips_list_component__["a" /* UserTripsListComponent */],
+            __WEBPACK_IMPORTED_MODULE_36__components_paymethods_paymethods_component__["a" /* PaymethodsComponent */],
+            __WEBPACK_IMPORTED_MODULE_37__components_trips_trips_list_trips_list_component__["a" /* TripsListComponent */],
+            __WEBPACK_IMPORTED_MODULE_38__components_trips_trip_information_trip_information_component__["a" /* TripInformationComponent */],
+            __WEBPACK_IMPORTED_MODULE_39__components_servers_servers_list_servers_list_component__["a" /* ServersListComponent */],
+            __WEBPACK_IMPORTED_MODULE_40__components_servers_server_information_server_information_component__["a" /* ServerInformationComponent */],
+            __WEBPACK_IMPORTED_MODULE_41__components_rules_rules_list_rules_list_component__["a" /* RulesListComponent */],
+            __WEBPACK_IMPORTED_MODULE_42__components_rules_rule_information_rule_information_component__["a" /* RuleInformationComponent */],
+            __WEBPACK_IMPORTED_MODULE_43__components_servers_register_server_register_server_component__["a" /* RegisterServerComponent */],
+            __WEBPACK_IMPORTED_MODULE_44__components_servers_update_server_update_server_component__["a" /* UpdateServerComponent */],
+            __WEBPACK_IMPORTED_MODULE_45__components_servers_server_reset_token_server_reset_token_component__["a" /* ServerResetTokenComponent */],
+            __WEBPACK_IMPORTED_MODULE_46__components_servers_delete_server_delete_server_component__["a" /* DeleteServerComponent */],
+            __WEBPACK_IMPORTED_MODULE_47__components_rules_create_rule_create_rule_component__["a" /* CreateRuleComponent */],
+            __WEBPACK_IMPORTED_MODULE_48__components_rules_delete_rule_delete_rule_component__["a" /* DeleteRuleComponent */],
+            __WEBPACK_IMPORTED_MODULE_49__components_rules_update_rule_update_rule_component__["a" /* UpdateRuleComponent */],
+            __WEBPACK_IMPORTED_MODULE_50__components_rules_commits_list_commits_list_component__["a" /* CommitsListComponent */],
+            __WEBPACK_IMPORTED_MODULE_51__components_rules_rule_at_commit_rule_at_commit_component__["a" /* RuleAtCommitComponent */],
+            __WEBPACK_IMPORTED_MODULE_52__components_servers_current_state_current_state_component__["a" /* CurrentStateComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["HttpModule"],
             __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* RouterModule */].forRoot(appRoutes),
-            __WEBPACK_IMPORTED_MODULE_12_angular2_flash_messages__["FlashMessagesModule"],
-            __WEBPACK_IMPORTED_MODULE_14_ngx_bootstrap_dropdown__["a" /* BsDropdownModule */].forRoot(appRoutes),
-            __WEBPACK_IMPORTED_MODULE_15_ng2_search_filter__["Ng2SearchPipeModule"],
-            __WEBPACK_IMPORTED_MODULE_16_ng2_order_pipe__["Ng2OrderModule"],
-            __WEBPACK_IMPORTED_MODULE_17_ngx_pagination__["a" /* NgxPaginationModule */]
+            __WEBPACK_IMPORTED_MODULE_11_angular2_flash_messages__["FlashMessagesModule"],
+            __WEBPACK_IMPORTED_MODULE_16_ngx_bootstrap_dropdown__["a" /* BsDropdownModule */].forRoot(appRoutes),
+            __WEBPACK_IMPORTED_MODULE_17_ng2_search_filter__["Ng2SearchPipeModule"],
+            __WEBPACK_IMPORTED_MODULE_18_ng2_order_pipe__["Ng2OrderModule"],
+            __WEBPACK_IMPORTED_MODULE_19_ngx_pagination__["a" /* NgxPaginationModule */]
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_11__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_13__guards_auth_guard__["a" /* AuthGuard */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_10__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_12__guards_auth_guard__["a" /* AuthGuard */], __WEBPACK_IMPORTED_MODULE_13__guards_admin_auth_guard__["a" /* AdminAuthGuard */], __WEBPACK_IMPORTED_MODULE_14__guards_manager_auth_guard__["a" /* ManagerAuthGuard */], __WEBPACK_IMPORTED_MODULE_15__guards_user_auth_guard__["a" /* UserAuthGuard */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
     })
 ], AppModule);
@@ -792,67 +798,6 @@ var _a, _b;
 
 /***/ }),
 
-/***/ "../../../../../src/app/components/dashboard/dashboard.component.css":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/components/dashboard/dashboard.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<h2 class=\"page-header\">Dashboard</h2>\n<p>Welcome to your dashboard</p>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/components/dashboard/dashboard.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DashboardComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var DashboardComponent = (function () {
-    function DashboardComponent() {
-    }
-    DashboardComponent.prototype.ngOnInit = function () {
-    };
-    return DashboardComponent;
-}());
-DashboardComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'app-dashboard',
-        template: __webpack_require__("../../../../../src/app/components/dashboard/dashboard.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/components/dashboard/dashboard.component.css")]
-    }),
-    __metadata("design:paramtypes", [])
-], DashboardComponent);
-
-//# sourceMappingURL=dashboard.component.js.map
-
-/***/ }),
-
 /***/ "../../../../../src/app/components/edit/edit.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -985,7 +930,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"jumbotron text-center\">\n  <h1> FIUBER Business Users</h1>\n  <div *ngIf=\"!authService.loggedIn()\">\n    <p class=\"lead\">Welcome users!</p>\n    <a class=\"btn btn-primary\" [routerLink]=\"['/login']\">Login</a>\n  </div>\n  <div *ngIf=\"authService.loggedIn()\">\n    <p class=\"lead\">Welcome back {{username}}!</p>\n  </div>\n</div>\n"
+module.exports = "<div>\n  <div class=\"jumbotron text-center\" style=\"background: url(../../../assets/path.jpg) no-repeat center bottom fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; -background-size: cover;\">\n  </div>\n  <div class=\"jumbotron text-center\" >\n    <h1> FIUBER Business Users</h1>\n    <div *ngIf=\"!authService.loggedIn()\">\n      <p class=\"lead\">Welcome users!</p>\n      <a class=\"btn btn-primary\" [routerLink]=\"['/login']\">Login</a>\n    </div>\n    <div *ngIf=\"authService.loggedIn()\">\n      <p class=\"lead\">Welcome {{username}}!</p>\n    </div>\n  </div>\n  <div class=\"jumbotron text-center\" style=\"background: url(../../../assets/path.jpg) no-repeat center bottom fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; -background-size: cover;\">\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1100,7 +1045,7 @@ var LoginComponent = (function () {
                 cssClass: 'alert-success',
                 timeout: 5000
             });
-            _this.router.navigate(['dashboard']);
+            _this.router.navigate(['']);
         }, function (err) {
             _this.flashMessage.show(err.json().message, {
                 cssClass: 'alert-danger',
@@ -1146,7 +1091,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default\">\n      <div class=\"container\">\n        <div class=\"navbar-header\">\n          <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n          </button>\n          <a class=\"navbar-brand\" href=\"#\">FIUBER Business Users</a>\n        </div>\n        \n        <div id=\"navbar\" class=\"collapse navbar-collapse\">\n          <ul class=\"nav navbar-nav navbar-left\">\n            <li [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\"><a [routerLink]=\"['/']\">Home</a></li>\n          </ul>\n          \n          <ul class=\"nav navbar-nav navbar-right\">\n            <li *ngIf=\"!authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\"><a [routerLink]=\"['/login']\">Login</a></li>\n            <li *ngIf=\"authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\"><a [routerLink]=\"['/dashboard']\">Dashboard</a></li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Profile <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/profile']\">My information</a></li>\n              <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/profile/edit']\">Edit information</a></li>\n            </ul>\n            </li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('admin') || authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Business Users <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/register']\">Register business user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/list']\">Business users list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/delete']\">Delete business user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/update']\">Modify business user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/information']\">Information of a business user</a></li>\n            </ul>\n            </li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('manager') || authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Users <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/list']\">Application users list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/information']\">Information of an application user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/delete']\">Delete application user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/cars/list']\">Application user cars list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/cars/information']\">Information of an application user car</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/transactions/list']\">Application user transactions list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/trips/list']\">Application user trips list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/cars/delete']\">Delete user car</a></li>\n            </ul>\n            </li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('manager') || authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Servers <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/list']\">Servers list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/information']\">Server information</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/register']\">Register server</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/update']\">Update server</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/reset-token']\">Reset server token</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/delete']\">Delete server</a></li>\n            </ul>\n            </li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Trips <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/trips/list']\">Trips list</a></li>\n              <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/trips/information']\">Trip information</a></li>\n            </ul>\n            </li>\n            \n            <li *ngIf=\"authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\"><a [routerLink]=\"['/paymethods']\">Paymethods</a></li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Rules <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/run-all-rules']\">Run set of rules</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/run-individual-rule']\">Run individual rule</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/list']\">Rules list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/information']\">Rule information</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/create']\">Create rule</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/update']\">Update rule</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/delete']\">Delete rule</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/commits/list']\">Commits list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/commits/rule-at-commit']\">Get rule in commit state</a></li>\n            </ul>\n            </li>\n            \n            <li *ngIf=\"authService.loggedIn()\"><a (click)=\"onLogoutClick()\" href=\"#\">Logout</a></li>\n          </ul>\n        </div><!--/.nav-collapse -->\n      </div>\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-default\">\n      <div class=\"container\">\n        <div class=\"navbar-header\">\n          <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n          </button>\n          <a class=\"navbar-brand\" href=\"#\">FIUBER Business Users</a>\n        </div>\n        \n        <div id=\"navbar\" class=\"collapse navbar-collapse\">\n          <ul class=\"nav navbar-nav navbar-left\">\n            <li [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\"><a [routerLink]=\"['/']\">Home</a></li>\n          </ul>\n          \n          <ul class=\"nav navbar-nav navbar-right\">\n            <li *ngIf=\"!authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\"><a [routerLink]=\"['/login']\">Login</a></li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Profile <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/profile']\">My information</a></li>\n              <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/profile/edit']\">Edit information</a></li>\n            </ul>\n            </li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('admin') || authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Business Users <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/register']\">Register business user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/list']\">Business users list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/delete']\">Delete business user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/update']\">Modify business user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/business-users/information']\">Information of a business user</a></li>\n            </ul>\n            </li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('manager') || authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Users <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/list']\">Application users list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/information']\">Information of an application user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/delete']\">Delete application user</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/cars/list']\">Application user cars list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/cars/information']\">Information of an application user car</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/transactions/list']\">Application user transactions list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/trips/list']\">Application user trips list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/users/cars/delete']\">Delete user car</a></li>\n            </ul>\n            </li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('manager') || authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Servers <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/list']\">Servers list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/information']\">Server information</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/register']\">Register server</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/update']\">Update server</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/reset-token']\">Reset server token</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/delete']\">Delete server</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/servers/current-state']\">Current state</a></li>\n            </ul>\n            </li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Trips <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/trips/list']\">Trips list</a></li>\n              <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/trips/information']\">Trip information</a></li>\n            </ul>\n            </li>\n            \n            <li *ngIf=\"authService.roleLoggedIn('user')\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\"><a [routerLink]=\"['/paymethods']\">Paymethods</a></li>\n            \n            <li class=\"nav-item dropdown\" *ngIf=\"authService.loggedIn()\" [routerLinkActive]=\"['active']\" [routerLinkActiveOptions] = \"{exact:true}\" dropdown>\n            <a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" dropdownToggle>Rules <span class=\"caret\"></span>\n            </a>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/run-all-rules']\">Run set of rules</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('admin')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/run-individual-rule']\">Run individual rule</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/list']\">Rules list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('user')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/information']\">Rule information</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/create']\">Create rule</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/update']\">Update rule</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/delete']\">Delete rule</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/commits/list']\">Commits list</a></li>\n              <li *ngIf=\"authService.roleLoggedIn('manager')\" role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/rules/commits/rule-at-commit']\">Get rule in commit state</a></li>\n            </ul>\n            </li>\n            \n            <li *ngIf=\"authService.loggedIn()\"><a (click)=\"onLogoutClick()\" href=\"#\">Logout</a></li>\n          </ul>\n        </div><!--/.nav-collapse -->\n      </div>\n</nav>\n"
 
 /***/ }),
 
@@ -1959,7 +1904,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/rules/run-all-rules/run-all-rules.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n  <h2 class=\"page-header\">Run selected rules and facts </h2>\n  <form (submit)=\"onRunSubmit()\">\n    <div class=\"form-group\">\n      <label>Rules id separated by one space</label>\n      <input type=\"text\" [(ngModel)]=\"rules\" name=\"rules\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Facts separated by '#'</label>\n      <textarea rows=\"5\" [(ngModel)]=\"facts\" name=\"facts\" class=\"form-control\"></textarea>\n    </div>\n    <input type=\"submit\" class=\"btn btn-primary\" value=\"Run\">\n  </form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Results </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Facts: {{result}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onRunClick()\">Run different set of rules and facts</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n  <h2 class=\"page-header\">Run selected rules and facts </h2>\n  <form (submit)=\"onRunSubmit()\">\n    <div class=\"form-group\">\n      <label>Rules id separated by one space</label>\n      <input type=\"text\" [(ngModel)]=\"rules\" name=\"rules\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Facts separated by '#'</label>\n      <textarea rows=\"5\" [(ngModel)]=\"facts\" name=\"facts\" class=\"form-control\"></textarea>\n    </div>\n    <input type=\"submit\" class=\"btn btn-primary\" value=\"Run\">\n  </form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Results </h2>\n  <ul class=\"list-group\">\n    <li *ngFor=\"let fact of result\" class=\"list-group-item\">{{fact}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onRunClick()\">Run different set of rules and facts</a>\n</div>\n"
 
 /***/ }),
 
@@ -1997,10 +1942,8 @@ var RunAllRulesComponent = (function () {
             rules: this.rules.split(" "),
             facts: this.facts.split("#")
         };
-        //console.log(JSON.parse(body.facts[0]).language)
-        console.log(body.facts[0]);
         this.authService.runAllRules(body).subscribe(function (data) {
-            _this.result = data.facts.map(function (fact) { return JSON.stringify(fact, undefined, 2); }).join(", ");
+            _this.result = data.facts.map(function (fact) { return JSON.stringify(fact, undefined, 2); });
         }, function (err) {
             _this.flashMessage.show(err.json().message, {
                 cssClass: 'alert-danger',
@@ -2053,7 +1996,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/rules/run-individual-rule/run-individual-rule.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  run-individual-rule works!\n</p>\n"
+module.exports = "<div *ngIf=\"!result\">\n  <h2 class=\"page-header\">Run selected rule and facts </h2>\n  <form (submit)=\"onRunSubmit()\">\n    <div class=\"form-group\">\n      <label>Rule id </label>\n      <input type=\"text\" [(ngModel)]=\"ruleId\" name=\"ruleId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Facts separated by '#'</label>\n      <textarea rows=\"5\" [(ngModel)]=\"facts\" name=\"facts\" class=\"form-control\"></textarea>\n    </div>\n    <input type=\"submit\" class=\"btn btn-primary\" value=\"Run\">\n  </form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Results </h2>\n  <ul class=\"list-group\">\n    <li *ngFor=\"let fact of result\" class=\"list-group-item\">{{fact}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onRunClick()\">Run different facts with another rule</a>\n</div>\n"
 
 /***/ }),
 
@@ -2063,6 +2006,9 @@ module.exports = "<p>\n  run-individual-rule works!\n</p>\n"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RunIndividualRuleComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__ = __webpack_require__("../../../../angular2-flash-messages/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2073,10 +2019,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var RunIndividualRuleComponent = (function () {
-    function RunIndividualRuleComponent() {
+    function RunIndividualRuleComponent(authService, flashMessage) {
+        this.authService = authService;
+        this.flashMessage = flashMessage;
     }
     RunIndividualRuleComponent.prototype.ngOnInit = function () {
+    };
+    RunIndividualRuleComponent.prototype.onRunSubmit = function () {
+        var _this = this;
+        var body = {
+            facts: this.facts.split("#")
+        };
+        this.authService.runIndividualRule(this.ruleId, body).subscribe(function (data) {
+            _this.result = data.facts.map(function (fact) { return JSON.stringify(fact, undefined, 2); });
+        }, function (err) {
+            _this.flashMessage.show(err.json().message, {
+                cssClass: 'alert-danger',
+                timeout: 5000
+            });
+        });
+    };
+    RunIndividualRuleComponent.prototype.clearForm = function () {
+        this.ruleId = null;
+        this.facts = null;
+        this.result = null;
+    };
+    RunIndividualRuleComponent.prototype.onRunClick = function () {
+        this.clearForm();
     };
     return RunIndividualRuleComponent;
 }());
@@ -2086,9 +2058,10 @@ RunIndividualRuleComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/components/rules/run-individual-rule/run-individual-rule.component.html"),
         styles: [__webpack_require__("../../../../../src/app/components/rules/run-individual-rule/run-individual-rule.component.css")]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__["FlashMessagesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__["FlashMessagesService"]) === "function" && _b || Object])
 ], RunIndividualRuleComponent);
 
+var _a, _b;
 //# sourceMappingURL=run-individual-rule.component.js.map
 
 /***/ }),
@@ -2203,6 +2176,119 @@ UpdateRuleComponent = __decorate([
 
 var _a, _b;
 //# sourceMappingURL=update-rule.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/servers/current-state/current-state.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/servers/current-state/current-state.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Current state of servers </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered servers at the moment. <span class=\"glyphicon glyphicon-globe\"></span></p>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('lastConnection')\">Last connection\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'lastConnection'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('currentState')\">Current state\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'currentState'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let server of serversList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{server.id}}</td>\n      <td>{{server.lastConnection}}</td>\n      <td>{{getServerStatus(server.lastConnection)}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/servers/current-state/current-state.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CurrentStateComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var CurrentStateComponent = (function () {
+    function CurrentStateComponent(authService) {
+        this.authService = authService;
+        this.key = 'id';
+        this.reverse = false;
+        this.p = 1;
+    }
+    CurrentStateComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.authService.getServersList().subscribe(function (list) {
+            _this.serversList = list.servers;
+            _this.total = list.metadata.total;
+        }, function (err) {
+            console.log(err);
+            return false;
+        });
+    };
+    CurrentStateComponent.prototype.sort = function (key) {
+        this.key = key;
+        this.reverse = !this.reverse;
+    };
+    CurrentStateComponent.prototype.getServerStatus = function (lastConnection) {
+        if (lastConnection == null) {
+            return "Inactive";
+        }
+        var connectionDate = new Date(lastConnection);
+        var currentDate = new Date();
+        var connectionDay = connectionDate.getUTCDate();
+        var currentDay = currentDate.getUTCDate();
+        var connectionMonth = connectionDate.getUTCMonth();
+        var currentMonth = currentDate.getUTCMonth();
+        var connectionYear = connectionDate.getUTCFullYear();
+        var currentYear = currentDate.getUTCFullYear();
+        var connectionHour = connectionDate.getUTCHours();
+        var currentHour = currentDate.getUTCHours();
+        var connectionMinute = connectionDate.getUTCMinutes();
+        var currentMinute = currentDate.getUTCMinutes();
+        if (connectionYear != currentYear) {
+            return (currentYear - connectionYear) + " year/s inactive";
+        }
+        if (connectionMonth != currentMonth) {
+            return (currentMonth - connectionMonth) + " month/s inactive";
+        }
+        if (connectionDay != currentDay) {
+            return (currentDay - connectionDay) + " day/s inactive";
+        }
+        if (connectionHour != currentHour) {
+            return (currentHour - connectionHour) + " hour/s inactive";
+        }
+        if (currentMinute - connectionMinute > 10) {
+            return (currentMinute - connectionMinute) + " minutes inactive";
+        }
+        return "Active";
+    };
+    return CurrentStateComponent;
+}());
+CurrentStateComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-current-state',
+        template: __webpack_require__("../../../../../src/app/components/servers/current-state/current-state.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/components/servers/current-state/current-state.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */]) === "function" && _a || Object])
+], CurrentStateComponent);
+
+var _a;
+//# sourceMappingURL=current-state.component.js.map
 
 /***/ }),
 
@@ -3758,6 +3844,52 @@ var _a;
 
 /***/ }),
 
+/***/ "../../../../../src/app/guards/admin-auth.guard.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AdminAuthGuard; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var AdminAuthGuard = (function () {
+    function AdminAuthGuard(authService, router) {
+        this.authService = authService;
+        this.router = router;
+    }
+    AdminAuthGuard.prototype.canActivate = function () {
+        if (this.authService.roleLoggedIn('admin')) {
+            return true;
+        }
+        else {
+            this.router.navigate(['/']);
+            return false;
+        }
+    };
+    return AdminAuthGuard;
+}());
+AdminAuthGuard = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _b || Object])
+], AdminAuthGuard);
+
+var _a, _b;
+//# sourceMappingURL=admin-auth.guard.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/guards/auth.guard.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3801,6 +3933,98 @@ AuthGuard = __decorate([
 
 var _a, _b;
 //# sourceMappingURL=auth.guard.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/guards/manager-auth.guard.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ManagerAuthGuard; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var ManagerAuthGuard = (function () {
+    function ManagerAuthGuard(authService, router) {
+        this.authService = authService;
+        this.router = router;
+    }
+    ManagerAuthGuard.prototype.canActivate = function () {
+        if (this.authService.roleLoggedIn('manager')) {
+            return true;
+        }
+        else {
+            this.router.navigate(['/']);
+            return false;
+        }
+    };
+    return ManagerAuthGuard;
+}());
+ManagerAuthGuard = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _b || Object])
+], ManagerAuthGuard);
+
+var _a, _b;
+//# sourceMappingURL=manager-auth.guard.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/guards/user-auth.guard.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserAuthGuard; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var UserAuthGuard = (function () {
+    function UserAuthGuard(authService, router) {
+        this.authService = authService;
+        this.router = router;
+    }
+    UserAuthGuard.prototype.canActivate = function () {
+        if (this.authService.roleLoggedIn('user')) {
+            return true;
+        }
+        else {
+            this.router.navigate(['/']);
+            return false;
+        }
+    };
+    return UserAuthGuard;
+}());
+UserAuthGuard = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _b || Object])
+], UserAuthGuard);
+
+var _a, _b;
+//# sourceMappingURL=user-auth.guard.js.map
 
 /***/ }),
 
@@ -4056,6 +4280,14 @@ var AuthService = (function () {
     };
     AuthService.prototype.runAllRules = function (data) {
         var uri = 'api/rules/run';
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]();
+        this.loadToken();
+        headers.append('Content-Type', 'application/json');
+        return this.http.post(uri + '?token=' + this.authToken, data, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
+    AuthService.prototype.runIndividualRule = function (id, data) {
+        var uri = 'api/rules/' + id + '/run';
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]();
         this.loadToken();
         headers.append('Content-Type', 'application/json');
