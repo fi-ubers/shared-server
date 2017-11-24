@@ -1,6 +1,7 @@
 const logger = require('./../logger');
 const request = require('request');
 var rp = require('request-promise');
+var statsTable = 'statistics';
 
 const paymentAPI = require('../../config/paymentAPI');
 const tokenController = require('./tokenController');
@@ -25,6 +26,9 @@ module.exports = {
 				json: true
 			};
 			rp(options).then(function(paymethods) {
+				if (!req.user.roles) {
+					queryController.increment(statsTable, 'requests', {id: req.user.id});
+				}
 				responseController.sendPaymethods(res, paymethods.items.length, paymethods.items.length, paymethods.items);
 			}).catch(function(error) {
 				logger.error(request + ': API request failed');

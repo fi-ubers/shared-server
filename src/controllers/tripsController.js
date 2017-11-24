@@ -5,6 +5,7 @@ var Rules = require('../services/rulesService');
 var serialize = require('serialize-javascript');
 var deserialize = str => eval('(' + str + ')');
 var tripTable = 'trips';
+var statsTable = 'statistics';
 var transactionTable = 'transactions';
 var ruleTable = 'rules';
 var userTable = 'application_users';
@@ -190,7 +191,9 @@ module.exports = {
 					paymethod: paymethod
 				}, visibleTripFields)
 				.then(function(trip) {
-			
+					queryController.increment(statsTable, 'requests', {id: req.user.id});
+					queryController.increment(statsTable, 'tripCreate', {id: req.user.id});
+					
 					logger.info("Creating transactions for passenger and driver");
 					var tripId = trip[0].id;
 			
@@ -310,6 +313,7 @@ module.exports = {
 				if (estimatedCost == -1) {
 					errorController.negativeBalance(res, request);
 				} else {
+					queryController.increment(statsTable, 'requests', {id: req.user.id});
 					responseController.sendEstimation(res, { currency: "ARS", value: estimatedCost });
 				}
 			})
@@ -328,6 +332,9 @@ module.exports = {
 		queryController.selectOneWhere(tripTable, {id: tripId}, visibleTripFields)
 		.then(function(trip) {
 			if (trip) {
+				if (!req.user.roles) {
+					queryController.increment(statsTable, 'requests', {id: req.user.id});
+				}
 				responseController.sendTrip(res, 200, trip);
 			} else {
 				errorController.nonExistentResource(res, "trip", request);

@@ -502,7 +502,7 @@ describe('API users routes', function() {
 	describe('GET /api/users/:id', function() {
 		it('Get user by id with code 200', function(done) {
 			chai.request(server)
-			.get('/api/users/3?token=' + userToken)
+			.get('/api/users/3?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(200);
 				res.should.be.json;
@@ -541,7 +541,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/7?token=' + appToken)
+			.get('/api/users/7?token=' + userToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -756,7 +756,7 @@ describe('API users routes', function() {
 	describe('GET /api/users/:userId/cars', function() {
 		it('Get cars of user by id with code 200', function(done) {
 			chai.request(server)
-			.get('/api/users/5/cars?token=' + userToken)
+			.get('/api/users/5/cars?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(200);
 				res.should.be.json;
@@ -898,7 +898,7 @@ describe('API users routes', function() {
 	describe('GET /api/users/:userId/cars/:carId', function() {
 		it('Get user car by id with code 200', function(done) {
 			chai.request(server)
-			.get('/api/users/3/cars/3?token=' + userToken)
+			.get('/api/users/3/cars/3?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(200);
 				res.should.be.json;
@@ -919,7 +919,7 @@ describe('API users routes', function() {
 	
 		it('Get user car by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/8/cars/3?token=' + appToken)
+			.get('/api/users/8/cars/3?token=' + userToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -1053,7 +1053,7 @@ describe('API users routes', function() {
 	describe('GET /api/users/:id/transactions', function() {
 		it('Get user transactions by userId with code 200', function(done) {
 			chai.request(server)
-			.get('/api/users/1/transactions?token=' + userToken)
+			.get('/api/users/1/transactions?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(200);
 				res.should.be.json;
@@ -1094,7 +1094,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/8/transactions?token=' + appToken)
+			.get('/api/users/8/transactions?token=' + userToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;
@@ -1140,7 +1140,7 @@ describe('API users routes', function() {
 	describe('GET /api/users/:id/trips', function() {
 		it('Get user trips by userId with code 200', function(done) {
 			chai.request(server)
-			.get('/api/users/2/trips?token=' + userToken)
+			.get('/api/users/2/trips?token=' + appToken)
 			.end(function(err, res) {
 				res.should.have.status(200);
 				res.should.be.json;
@@ -1183,7 +1183,7 @@ describe('API users routes', function() {
 	
 		it('Get user by id with code 404', function(done) {
 			chai.request(server)
-			.get('/api/users/8/trips?token=' + appToken)
+			.get('/api/users/8/trips?token=' + userToken)
 			.end(function(err, res) {
 				res.should.have.status(404);
 				res.should.be.json;

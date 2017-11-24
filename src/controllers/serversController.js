@@ -4,6 +4,7 @@ var uuidv4 = require('uuid/v4');
 var knex = require('../db/knex');
 var appTable = 'app_servers';
 var tokenTable = 'app_tokens';
+var statsTable = 'statistics';
 
 var tokenController = require('./tokenController');
 var errorController = require('./errorController');
@@ -46,7 +47,7 @@ module.exports = {
 				queryController.insert(tokenTable, {id: server[0].id, token: token})
 				.then(function() {
 					logger.info("Registering application server");
-					
+					queryController.insert(statsTable, {id: server[0].id}).then();
 					responseController.sendServerCreation(res, server[0], tokenController.expiration, token);
 				})
 			})
@@ -80,6 +81,7 @@ module.exports = {
 					var newToken = tokenController.createApplicationToken({id: id});
 					queryController.updateWhere(tokenTable, {id: id}, {token: newToken})
 					.then(function() {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
 						responseController.sendPing(res, server, tokenController.expiration, newToken);
 					});
 				});

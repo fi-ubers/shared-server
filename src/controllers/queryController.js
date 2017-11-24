@@ -35,7 +35,14 @@ module.exports = {
 	/** Inserts in the table the given data without return the result. */
 	insertWithoutReturn : (function(table, data) {
 		return knex(table)
-			.insert(data);
+			.insert(data).then();
+	}),
+	
+	/** Increments by one only rows of 'column' that meet the condition. */
+	increment : (function(table, column, condition) {
+		return knex(table)
+			.increment(column)
+			.where(condition).then();
 	}),
 	
 	/** Receives a table and selects the rows that meet the conditions. */
