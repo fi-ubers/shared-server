@@ -18,7 +18,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a [routerLink]="['/login']">Login</a></li>
             
-            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown>
+            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown [autoClose]="true">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>Profile <span class="caret"></span>
             </a>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
@@ -27,7 +27,7 @@
             </ul>
             </li>
             
-            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('admin') || authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown>
+            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('admin') || authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown [autoClose]="true">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>Business Users <span class="caret"></span>
             </a>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
@@ -39,7 +39,7 @@
             </ul>
             </li>
             
-            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('manager') || authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown>
+            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('manager') || authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown [autoClose]="true">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>Users <span class="caret"></span>
             </a>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
@@ -54,7 +54,7 @@
             </ul>
             </li>
             
-            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('manager') || authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown>
+            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('manager') || authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown [autoClose]="true">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>Servers <span class="caret"></span>
             </a>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
@@ -68,7 +68,7 @@
             </ul>
             </li>
             
-            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown>
+            <li class="nav-item dropdown" *ngIf="authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown [autoClose]="true">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>Trips <span class="caret"></span>
             </a>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
@@ -79,7 +79,7 @@
             
             <li *ngIf="authService.roleLoggedIn('user')" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a [routerLink]="['/paymethods']">Paymethods</a></li>
             
-            <li class="nav-item dropdown" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown>
+            <li class="nav-item dropdown" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}" dropdown [autoClose]="true">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>Rules <span class="caret"></span>
             </a>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
