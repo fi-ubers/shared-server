@@ -20,6 +20,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { Ng2OrderModule } from 'ng2-order-pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { RegisterComponent } from './components/business-users/register/register.component';
 import { ListComponent } from './components/business-users/list/list.component';
 import { DeleteComponent } from './components/business-users/delete/delete.component';
@@ -146,7 +147,8 @@ const appRoutes: Routes = [
     BsDropdownModule.forRoot(appRoutes),
     Ng2SearchPipeModule,
     Ng2OrderModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ChartsModule
   ],
   providers: [AuthService, AuthGuard, AdminAuthGuard, ManagerAuthGuard, UserAuthGuard],
   bootstrap: [AppComponent]
