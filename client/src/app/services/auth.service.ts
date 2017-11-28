@@ -12,7 +12,8 @@ export class AuthService {
   constructor(private http:Http) { }
   
   authenticateUser(user) {
-    let uri = 'api/token';
+    //let uri = 'api/token';
+    let uri = 'http://localhost:5000/api/token';
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.post(uri, user, {headers: headers})
@@ -37,7 +38,8 @@ export class AuthService {
   }
   
   registerBusinessUser(user) {
-    let uri = 'api/business-users/';
+    //let uri = 'api/business-users/';
+    let uri = 'http://localhost:5000/api/business-users/';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -46,7 +48,8 @@ export class AuthService {
   }
   
   deleteBusinessUser(id) {
-    let uri = 'api/business-users/' + id;
+    //let uri = 'api/business-users/' + id;
+    let uri = 'http://localhost:5000/api/business-users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -55,7 +58,8 @@ export class AuthService {
   }
   
   updateBusinessUser(id, user) {
-    let uri = 'api/business-users/' + id;
+    //let uri = 'api/business-users/' + id;
+    let uri = 'http://localhost:5000/api/business-users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -64,7 +68,8 @@ export class AuthService {
   }
   
   getBusinessUser(id) {
-    let uri = 'api/business-users/' + id;
+    //let uri = 'api/business-users/' + id;
+    let uri = 'http://localhost:5000/api/business-users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -73,7 +78,8 @@ export class AuthService {
   }
   
   getUser(id) {
-    let uri = 'api/users/' + id;
+    //let uri = 'api/users/' + id;
+    let uri = 'http://localhost:5000/api/users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -82,7 +88,8 @@ export class AuthService {
   }
   
   deleteUser(id) {
-    let uri = 'api/users/' + id;
+    //let uri = 'api/users/' + id;
+    let uri = 'http://localhost:5000/api/users/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -91,7 +98,8 @@ export class AuthService {
   }
   
   getCar(userId, carId) {
-    let uri = 'api/users/' + userId + '/cars/' + carId;
+    //let uri = 'api/users/' + userId + '/cars/' + carId;
+    let uri = 'http://localhost:5000/api/users/' + userId + '/cars/' + carId;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -100,7 +108,8 @@ export class AuthService {
   }
   
   deleteCar(userId, carId) {
-    let uri = 'api/users/' + userId + '/cars/' + carId;
+    //let uri = 'api/users/' + userId + '/cars/' + carId;
+    let uri = 'http://localhost:5000/api/users/' + userId + '/cars/' + carId;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -109,7 +118,8 @@ export class AuthService {
   }
   
   getProfile() {
-    let uri = 'api/business-users/me';
+    //let uri = 'api/business-users/me';
+    let uri = 'http://localhost:5000/api/business-users/me';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -118,7 +128,8 @@ export class AuthService {
   }
   
   editMyInformation(user) {
-    let uri = 'api/business-users/me';
+    //let uri = 'api/business-users/me';
+    let uri = 'http://localhost:5000/api/business-users/me';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -127,7 +138,8 @@ export class AuthService {
   }
   
   getBusinessUsersList() {
-    let uri = 'api/business-users/';
+    //let uri = 'api/business-users/';
+    let uri = 'http://localhost:5000/api/business-users/';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -136,7 +148,8 @@ export class AuthService {
   }
   
   getUsersList() {
-    let uri = 'api/users/';
+    //let uri = 'api/users/';
+    let uri = 'http://localhost:5000/api/users/';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -145,7 +158,8 @@ export class AuthService {
   }
   
   getUserCarsList(id) {
-    let uri = 'api/users/' + id + '/cars';
+    //let uri = 'api/users/' + id + '/cars';
+    let uri = 'http://localhost:5000/api/users/' + id + '/cars';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -154,7 +168,8 @@ export class AuthService {
   }
   
   getUserTransactionsList(id) {
-    let uri = 'api/users/' + id + '/transactions';
+    //let uri = 'api/users/' + id + '/transactions';
+    let uri = 'http://localhost:5000/api/users/' + id + '/transactions';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -163,7 +178,8 @@ export class AuthService {
   }
   
   getUserTripsList(id) {
-    let uri = 'api/users/' + id + '/trips';
+    //let uri = 'api/users/' + id + '/trips';
+    let uri = 'http://localhost:5000/api/users/' + id + '/trips';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -172,7 +188,8 @@ export class AuthService {
   }
   
   getServersList() {
-    let uri = 'api/servers';
+    //let uri = 'api/servers';
+    let uri = 'http://localhost:5000/api/servers';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -181,7 +198,8 @@ export class AuthService {
   }
   
   getServer(id) {
-    let uri = 'api/servers/' + id;
+    //let uri = 'api/servers/' + id;
+    let uri = 'http://localhost:5000/api/servers/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -190,7 +208,8 @@ export class AuthService {
   }
   
   registerServer(server) {
-    let uri = 'api/servers/';
+    //let uri = 'api/servers/';
+    let uri = 'http://localhost:5000/api/servers/';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -199,7 +218,8 @@ export class AuthService {
   }
   
   updateServer(id, server) {
-    let uri = 'api/servers/' + id;
+    //let uri = 'api/servers/' + id;
+    let uri = 'http://localhost:5000/api/servers/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -208,7 +228,8 @@ export class AuthService {
   }
   
   deleteServer(id) {
-    let uri = 'api/servers/' + id;
+    //let uri = 'api/servers/' + id;
+    let uri = 'http://localhost:5000/api/servers/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -217,7 +238,8 @@ export class AuthService {
   }
   
   resetServerToken(id) {
-    let uri = 'api/servers/' + id;
+    //let uri = 'api/servers/' + id;
+    let uri = 'http://localhost:5000/api/servers/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -225,8 +247,18 @@ export class AuthService {
       .map(res => res.json());
   }
   
+  getStatistics() {
+    //let uri = 'api/statistics/';
+    let uri = 'http://localhost:5000/api/statistics/';
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(uri, {headers: headers})
+      .map(res => res.json());
+  }
+  
   getRulesList() {
-    let uri = 'api/rules';
+    //let uri = 'api/rules';
+    let uri = 'http://localhost:5000/api/rules';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -235,7 +267,8 @@ export class AuthService {
   }
   
   createRule(rule) {
-    let uri = 'api/rules/';
+    //let uri = 'api/rules/';
+    let uri = 'http://localhost:5000/api/rules/';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -244,7 +277,8 @@ export class AuthService {
   }
   
   updateRule(id, rule) {
-    let uri = 'api/rules/' + id;
+    //let uri = 'api/rules/' + id;
+    let uri = 'http://localhost:5000/api/rules/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -253,7 +287,8 @@ export class AuthService {
   }
   
   deleteRule(id) {
-    let uri = 'api/rules/' + id;
+    //let uri = 'api/rules/' + id;
+    let uri = 'http://localhost:5000/api/rules/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -262,7 +297,8 @@ export class AuthService {
   }
   
   runAllRules(data) {
-    let uri = 'api/rules/run';
+    //let uri = 'api/rules/run';
+    let uri = 'http://localhost:5000/api/rules/run';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -271,7 +307,8 @@ export class AuthService {
   }
   
   runIndividualRule(id, data) {
-    let uri = 'api/rules/' + id +'/run';
+    //let uri = 'api/rules/' + id +'/run';
+    let uri = 'http://localhost:5000/api/rules/' + id +'/run';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -280,7 +317,8 @@ export class AuthService {
   }
   
   getRule(id) {
-    let uri = 'api/rules/' + id;
+    //let uri = 'api/rules/' + id;
+    let uri = 'http://localhost:5000/api/rules/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -289,7 +327,8 @@ export class AuthService {
   }
   
   getCommitsList(id) {
-    let uri = 'api/rules/' + id + '/commits';
+    //let uri = 'api/rules/' + id + '/commits';
+    let uri = 'http://localhost:5000/api/rules/' + id + '/commits';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -298,7 +337,8 @@ export class AuthService {
   }
   
   getRuleAtCommit(ruleId, commitId) {
-    let uri = 'api/rules/' + ruleId + '/commits/' + commitId;
+    //let uri = 'api/rules/' + ruleId + '/commits/' + commitId;
+    let uri = 'http://localhost:5000/api/rules/' + ruleId + '/commits/' + commitId;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -307,7 +347,8 @@ export class AuthService {
   }
   
   getTripsList() {
-    let uri = 'api/trips';
+    //let uri = 'api/trips';
+    let uri = 'http://localhost:5000/api/trips';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -316,7 +357,8 @@ export class AuthService {
   }
   
   getTrip(id) {
-    let uri = 'api/trips/' + id;
+    //let uri = 'api/trips/' + id;
+    let uri = 'http://localhost:5000/api/trips/' + id;
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');
@@ -325,7 +367,8 @@ export class AuthService {
   }
   
   getPaymethodsList() {
-    let uri = 'api/paymethods';
+    //let uri = 'api/paymethods';
+    let uri = 'http://localhost:5000/api/paymethods';
     let headers = new Headers();
     this.loadToken();
     headers.append('Content-Type', 'application/json');

@@ -65,6 +65,7 @@
               <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/reset-token']">Reset server token</a></li>
               <li *ngIf="authService.roleLoggedIn('manager')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/delete']">Delete server</a></li>
               <li *ngIf="authService.roleLoggedIn('user')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/current-state']">Current state</a></li>
+              <li *ngIf="authService.roleLoggedIn('user')" role="menuitem"><a class="dropdown-item" [routerLink]="['/servers/statistics']">Statistics</a></li>
             </ul>
             </li>
             

@@ -53,6 +53,7 @@ import { UpdateRuleComponent } from './components/rules/update-rule/update-rule.
 import { CommitsListComponent } from './components/rules/commits-list/commits-list.component';
 import { RuleAtCommitComponent } from './components/rules/rule-at-commit/rule-at-commit.component';
 import { CurrentStateComponent } from './components/servers/current-state/current-state.component';
+import { StatisticsComponent } from './components/servers/statistics/statistics.component';
 
 const appRoutes: Routes = [
 	{path: '', component: HomeComponent},
@@ -72,6 +73,7 @@ const appRoutes: Routes = [
 	{path: 'users/trips/list', component: UserTripsListComponent, canActivate:[UserAuthGuard]},
 	{path: 'servers/list', component: ServersListComponent, canActivate:[UserAuthGuard]},
 	{path: 'servers/current-state', component: CurrentStateComponent, canActivate:[UserAuthGuard]},
+	{path: 'servers/statistics', component: StatisticsComponent, canActivate:[ManagerAuthGuard]},
 	{path: 'servers/information', component: ServerInformationComponent, canActivate:[UserAuthGuard]},
 	{path: 'servers/register', component: RegisterServerComponent, canActivate:[ManagerAuthGuard]},
 	{path: 'servers/update', component: UpdateServerComponent, canActivate:[ManagerAuthGuard]},
@@ -132,7 +134,8 @@ const appRoutes: Routes = [
     UpdateRuleComponent,
     CommitsListComponent,
     RuleAtCommitComponent,
-    CurrentStateComponent
+    CurrentStateComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,
