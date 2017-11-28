@@ -187,5 +187,13 @@ module.exports = {
 		response.metadata = entityMetadata;
 		response.facts = facts;
 		res.status(200).send(response);
+	}),
+	
+	/** Sends json with metadata and statistics with code 200. */
+	sendStats : (function(res, count, total, statsList) {
+		var response = {};
+		response.metadata = collectionMetadata(count, total);
+		response.stats = statsList;
+		res.status(200).send(response);
 	})
 }

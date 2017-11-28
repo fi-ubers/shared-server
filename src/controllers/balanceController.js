@@ -29,7 +29,7 @@ module.exports = {
 			if (count == balance.length) {
 				balance.push({ currency: cost.currency, value: valueAux })
 			}
-			queryController.updateWhere(usersTable, { id: userId }, { balance: balance })-then();
+			queryController.updateWhere(usersTable, { id: userId }, { balance: balance }).then();
 		})
 	})
 }
