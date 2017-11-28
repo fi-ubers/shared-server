@@ -1,3 +1,4 @@
+<div *ngIf="table">
 <div class="row">
   <div class="col-md-6">
     <h2 class="page-header">Statistics list </h2>
@@ -53,4 +54,65 @@
     </tr>
   </tbody>
   <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <a class="btn btn-primary" (click)="onChartClick()">Go to the chart!</a>
 </table>
+</div>
+
+<div *ngIf="!table">
+  <div class="col-md-12">
+    <h2 class="page-header">Statistics </h2>
+  </div>
+  <div class="col-md-6">
+    <h3 class="page-header">Requests </h3>
+  </div>
+  <div style="display: block">
+    <canvas baseChart
+      [data]="doughnutChartData"
+      [labels]="doughnutChartLabels"
+      [chartType]="doughnutChartType"
+      (chartHover)="chartHovered($event)"
+      (chartClick)="chartClicked($event)"></canvas>
+  </div>
+  <div class="col-md-6">
+    <h3 class="page-header">Users </h3>
+  </div>
+  <div style="display: block">
+    <canvas baseChart
+      [datasets]="barChart1Data"
+      [labels]="barChart1Labels"
+      [options]="barChartOptions"
+      [legend]="barChartLegend"
+      [chartType]="barChartType"
+      (chartHover)="chartHovered($event)"
+      (chartClick)="chartClicked($event)"></canvas>
+  </div>
+  <div class="col-md-6">
+    <h3 class="page-header">Cars </h3>
+  </div>
+  <div style="display: block">
+    <canvas baseChart
+      [datasets]="barChart2Data"
+      [labels]="barChart2Labels"
+      [options]="barChartOptions"
+      [legend]="barChartLegend"
+      [chartType]="barChartType"
+      (chartHover)="chartHovered($event)"
+      (chartClick)="chartClicked($event)"></canvas>
+  </div>
+  <div class="col-md-6">
+    <h3 class="page-header">Trips </h3>
+  </div>
+  <div style="display: block">
+    <canvas baseChart
+      [datasets]="barChart3Data"
+      [labels]="barChart3Labels"
+      [options]="barChartOptions"
+      [legend]="barChartLegend"
+      [chartType]="barChartType"
+      (chartHover)="chartHovered($event)"
+      (chartClick)="chartClicked($event)"></canvas>
+  </div>
+  <a class="btn btn-primary" (click)="onTableClick()">Go to the table!</a>
+</div>
+
+
