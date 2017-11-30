@@ -13,6 +13,14 @@ Connect to... [https://fiuber-shared-server.herokuapp.com/](https://fiuber-share
 
 ## Para correr el servidor
 
+Primero se debe instalar [NodeJS y npm](https://nodejs.org/en/download/) junto con [PostgreSQL](https://www.postgresql.org/download/).
+
+Luego, se debe crear un archivo `.env` dentro del root directory del proyecto con el siguiente contenido:
++ DATABASE_URL=postgres://udivnwonhaaoem:5c055f1fa9f8d5f9273904625f1126865902047ae46a4bb0841200bd6d3c3d72@ec2-107-20-193-89.compute-1.amazonaws.com:5432/dfdidieplcj3ne
++ BUSINESS_USER_KEY=fiuber-shared-server-secret-business-user
++ APP_KEY=fiuber-shared-server-secret-app
++ LOG_LEVEL='debug'
+
 Primero descargar todas las dependencias con `npm install`. Las dependencias descargadas se guardarán en la carpeta node_modules (incluida en el .gitignore).
 
 Los paquetes necesarios para correr se especifican en el tag _dependencies_ del archivo _package.json_. Agregar ahí las dependencias nuevas preferentemente usando `npm install _pkgname_ --save` para que el paquete se instale y automáticamente se guarde en el .json.
@@ -20,6 +28,12 @@ Los paquetes necesarios para correr se especifican en el tag _dependencies_ del 
 ### Levantar el servidor localmente
 
 Para levantar localmente el servidor simplemente se puede usar `node ./src/index.js` o `npm start`. Para conectarse al servidor local usar _localhost_:5000 (o el puerto que se defina en index.js).
+
+Para ejecutar los tests usar `npm test`.
+
+Para correr el server se utiliza una base de datos local para development y otra para test. 
++ Base de datos usada para development: usuario y contraseña igual a *postgres*, siendo *shared_server* el nombre de la base de datos.
++ Base de datos usada para test: usuario igual a *postgres*, siendo *shared_server_test* el nombre de la base de datos.
 
 ### Levantar el servidor en Heroku
 
