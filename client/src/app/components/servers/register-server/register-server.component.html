@@ -1,0 +1,37 @@
+<div *ngIf="!result">
+  <h2 class="page-header">Register server </h2>
+  <form (submit)="onRegisterSubmit()">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" [(ngModel)]="name" name="name" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Created by</label>
+      <input type="text" [(ngModel)]="createdBy" name="createdBy" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Created time</label>
+      <input type="text" [(ngModel)]="createdTime" name="createdTime" class="form-control">
+    </div>
+    <input type="submit" class="btn btn-primary" value="Submit">
+  </form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Registered server </h2>
+  <h3 class="page-header"> Server </h3>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.server.id}}</li>
+    <li class="list-group-item">_ref: {{result.server._ref}}</li>
+    <li class="list-group-item">Created by: {{result.server.createdBy}}</li>
+    <li class="list-group-item">Created time: {{result.server.createdTime}}</li>
+    <li class="list-group-item">Name: {{result.server.name}}</li>
+    <li class="list-group-item">Last connection: {{result.server.lastConnection}}</li>
+  </ul>
+  <h3 class="page-header"> Token </h3>
+  <ul class="list-group">
+    <li class="list-group-item">Expires at: {{result.token.expiresAt}}</li>
+    <li class="list-group-item">Token: {{result.token.token}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onRegisterClick()">Register another server</a>
+</div>

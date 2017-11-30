@@ -1,0 +1,33 @@
+<div *ngIf="!result">
+<h2 class="page-header">Trip information</h2>
+<form (submit)="onGetInfoSubmit()">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label>Trip id</label>
+      <input type="number" min="1" [(ngModel)]="id" name="id" class="form-control">
+    </div>
+  </div>
+  <div class="col-md-12">
+  <input type="submit" class="btn btn-primary" value="Get information">
+  </div>
+</form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Trip {{id}} information </h2>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.id}}</li>
+    <li class="list-group-item">Application owner: {{result.applicationOwner}}</li>
+    <li class="list-group-item">Driver: {{result.driver}}</li>
+    <li class="list-group-item">Passenger: {{result.passenger}}</li>
+    <li class="list-group-item">Start: [ {{getTripStart(result.start)}} ]</li>
+    <li class="list-group-item">End: [ {{getTripEnd(result.end)}} ]</li>
+    <li class="list-group-item">Total time: {{result.totalTime}}</li>
+    <li class="list-group-item">Wait time: {{result.waitTime}}</li>
+    <li class="list-group-item">Travel time: {{result.travelTime}}</li>
+    <li class="list-group-item">Distance: {{result.distance}}</li>
+    <li class="list-group-item">Route: [ {{getTripRoute(result.route)}} ]</li>
+    <li class="list-group-item">Cost: {{getTripCost(result.cost)}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onGetInfoClick()">Get information about another trip</a>
+</div>

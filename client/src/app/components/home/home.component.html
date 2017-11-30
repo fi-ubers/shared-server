@@ -1,7 +1,16 @@
-<div class="jumbotron text-center">
-  <h1> FIUBER Business Users</h1>
-  <p class="lead">Welcome users!</p>
-  <div>
-    <a class="btn btn-primary" [routerLink]="['/login']">Login</a>
+<div>
+  <div class="jumbotron text-center" style="background: url(../../../assets/path.jpg) no-repeat center bottom fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; -background-size: cover;">
+  </div>
+  <div class="jumbotron text-center" >
+    <h1> FIUBER Business Users</h1>
+    <div *ngIf="!authService.loggedIn()">
+      <p class="lead">Welcome users!</p>
+      <a class="btn btn-primary" [routerLink]="['/login']">Login</a>
+    </div>
+    <div *ngIf="authService.loggedIn()">
+      <p class="lead">Welcome {{username}}!</p>
+    </div>
+  </div>
+  <div class="jumbotron text-center" style="background: url(../../../assets/path.jpg) no-repeat center bottom fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; -background-size: cover;">
   </div>
 </div>

@@ -1,0 +1,27 @@
+<div *ngIf="!result">
+<h2 class="page-header">Rule information</h2>
+<form (submit)="onGetInfoSubmit()">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label>Rule id</label>
+      <input type="number" min="1" [(ngModel)]="id" name="id" class="form-control">
+    </div>
+  </div>
+  <div class="col-md-12">
+  <input type="submit" class="btn btn-primary" value="Get information">
+  </div>
+</form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Rule {{id}} information </h2>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.id}}</li>
+    <li class="list-group-item">_ref: {{result._ref}}</li>
+    <li class="list-group-item">Language: {{result.language}}</li>
+    <li class="list-group-item">Last commit: getRuleLastCommit({{result.lastCommit}})</li>
+    <li class="list-group-item">Blob: {{result.blob}}</li>
+    <li class="list-group-item">Active: {{result.active}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onGetInfoClick()">Get information about another rule</a>
+</div>

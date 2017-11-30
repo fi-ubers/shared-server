@@ -508,6 +508,25 @@ describe('API rules routes', function() {
 				done();
 			});
 		});
+		
+		it('Run specific rule with code 404', function(done) {
+			chai.request(server)
+			.post('/api/rules/38/run?token=' + businessToken)
+			.send({
+				facts: [
+					{ language: 'node-rules/javascript', blob: serialize(fact1) },
+					{ language: 'node-rules/javascript', blob: serialize(fact2) }
+				]
+			})
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
 	});
 	
 	describe('POST /api/rules/:ruleId/run', function() {
@@ -598,6 +617,29 @@ describe('API rules routes', function() {
 				res.should.be.json;
 				res.body.should.have.property('code');
 				res.body.code.should.equal(400);
+				res.body.should.have.property('message');
+				done();
+			});
+		});
+		
+		it('Run rules with code 404', function(done) {
+			chai.request(server)
+			.post('/api/rules/run?token=' + businessToken)
+			.send({
+				rules: [
+					'29',
+					'32'
+				],
+				facts: [
+					{ language: 'node-rules/javascript', blob: serialize(fact1) },
+					{ language: 'node-rules/javascript', blob: serialize(fact2) }
+				]
+			})
+			.end(function(err, res) {
+				res.should.have.status(404);
+				res.should.be.json;
+				res.body.should.have.property('code');
+				res.body.code.should.equal(404);
 				res.body.should.have.property('message');
 				done();
 			});

@@ -1,0 +1,39 @@
+<div *ngIf="!result">
+  <h2 class="page-header">Modify rule </h2>
+  <form (submit)="onUpdateSubmit()">
+    <div class="form-group">
+      <label>Id</label>
+      <input type="text" [(ngModel)]="id" name="id" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>_ref</label>
+      <input type="text" [(ngModel)]="_ref" name="_ref" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Language</label>
+      <input type="text" [(ngModel)]="language" name="language" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Blob</label>
+      <textarea rows="5" [(ngModel)]="blob" name="blob" class="form-control"></textarea>
+    </div>
+     <div class="form-check">
+      <label class="form-check-label">
+      <input class="form-check-input" type="checkbox" [(ngModel)]="active" name="active"> Active </label>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Modify rule">
+  </form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Updated rule </h2>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.id}}</li>
+    <li class="list-group-item">_ref: {{result._ref}}</li>
+    <li class="list-group-item">Language: {{result.language}}</li>
+    <li class="list-group-item">Last commit: {{getRuleLastCommit(result.lastCommit)}}</li>
+    <li class="list-group-item">Blob: {{result.blob}}</li>
+    <li class="list-group-item">Active: {{result.active}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onUpdateClick()">Modify another rule</a>
+</div>

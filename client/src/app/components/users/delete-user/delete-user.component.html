@@ -1,0 +1,12 @@
+<h2 class="page-header">Remove application user </h2>
+<form (submit)="onDeleteSubmit()">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label>Application user id</label>
+      <input type="number" min="1" [(ngModel)]="id" name="id" class="form-control">
+    </div>
+  </div>
+  <div class="col-md-12">
+  <input type="submit" class="btn btn-primary" value="Delete">
+  </div>
+</form>

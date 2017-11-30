@@ -1,0 +1,28 @@
+<div *ngIf="!result">
+<h2 class="page-header">Business user information</h2>
+<form (submit)="onGetInfoSubmit()">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label>Business user id</label>
+      <input type="number" min="1" [(ngModel)]="id" name="id" class="form-control">
+    </div>
+  </div>
+  <div class="col-md-12">
+  <input type="submit" class="btn btn-primary" value="Get information">
+  </div>
+</form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Business user {{id}} information </h2>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.id}}</li>
+    <li class="list-group-item">_ref: {{result._ref}}</li>
+    <li class="list-group-item">Username: {{result.username}}</li>
+    <li class="list-group-item">Password: {{result.password}}</li>
+    <li class="list-group-item">Name: {{result.name}}</li>
+    <li class="list-group-item">Surname: {{result.surname}}</li>
+    <li class="list-group-item">Roles: {{result.roles.join(', ')}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onGetInfoClick()">Get information about another business user</a>
+</div>

@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-md-6">
+    <h2 class="page-header">Servers list </h2>
+  </div>
+  <div *ngIf="total > 0" class="col-md-6">
+    <div class="input-group input-group-sm input-group-left">
+      <input type="text" class="form-control" name="search" [(ngModel)]="filter">
+      <span class="input-group-addon">
+        <i class="glyphicon glyphicon-search"></i>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="total == 0">
+  <p class="lead"> Sorry :( <p>
+  <p class="lead"> There are no registered servers at the moment. <span class="glyphicon glyphicon-globe"></span></p>
+</div>
+
+<table *ngIf="total > 0" class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th (click)="sort('id')">Id
+        <span class="glyphicon sort-icon" *ngIf="key == 'id'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+      </th>
+      <th (click)="sort('_ref')">_ref
+        <span class="glyphicon sort-icon" *ngIf="key == '_ref'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+      </th>
+      <th (click)="sort('createdBy')">Created by
+        <span class="glyphicon sort-icon" *ngIf="key == 'createdBy'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+      </th>
+      <th (click)="sort('createdTime')">Created time
+        <span class="glyphicon sort-icon" *ngIf="key == 'createdTime'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+      </th>
+      <th (click)="sort('name')">Name
+        <span class="glyphicon sort-icon" *ngIf="key == 'name'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+      </th>
+      <th (click)="sort('lastConnection')">Last connection
+        <span class="glyphicon sort-icon" *ngIf="key == 'lastConnection'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let server of serversList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }">
+      <td>{{server.id}}</td>
+      <td>{{server._ref}}</td>
+      <td>{{server.createdBy}}</td>
+      <td>{{server.createdTime}}</td>
+      <td>{{server.name}}</td>
+      <td>{{server.lastConnection}}</td>
+    </tr>
+  </tbody>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</table>

@@ -1,5 +1,6 @@
 var usersTable = 'application_users';
 var queryController = require('./queryController');
+var uuidv4 = require('uuid/v4');
 
 /** @module balanceController */
 module.exports = {
@@ -29,7 +30,7 @@ module.exports = {
 			if (count == balance.length) {
 				balance.push({ currency: cost.currency, value: valueAux })
 			}
-			queryController.updateWhere(usersTable, { id: userId }, { balance: balance });
+			queryController.updateWhere(usersTable, { id: userId }, { _ref: uuidv4(), balance: balance }).then();
 		})
 	})
 }

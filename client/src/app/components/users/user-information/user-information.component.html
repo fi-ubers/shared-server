@@ -1,0 +1,34 @@
+<div *ngIf="!result">
+<h2 class="page-header">Application user information</h2>
+<form (submit)="onGetInfoSubmit()">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label>Application user id</label>
+      <input type="number" min="1" [(ngModel)]="id" name="id" class="form-control">
+    </div>
+  </div>
+  <div class="col-md-12">
+  <input type="submit" class="btn btn-primary" value="Get information">
+  </div>
+</form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Application user {{id}} information </h2>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.id}}</li>
+    <li class="list-group-item">_ref: {{result._ref}}</li>
+    <li class="list-group-item">Application owner: {{result.applicationOwner}}</li>
+    <li class="list-group-item">Type: {{result.type}}</li>
+    <li class="list-group-item">Cars: [ {{getUserCars(result.cars)}} ]</li>
+    <li class="list-group-item">Username: {{result.username}}</li>
+    <li class="list-group-item">Name: {{result.name}}</li>
+    <li class="list-group-item">Surname: {{result.surname}}</li>
+    <li class="list-group-item">Country: {{result.country}}</li>
+    <li class="list-group-item">Email: {{result.email}}</li>
+    <li class="list-group-item">Birthdate: {{result.birthdate}}</li>
+    <li class="list-group-item">Images: [ {{result.images.join(', ')}} ]</li>
+    <li class="list-group-item">Balance: [ {{getUserBalance(result.balance)}} ]</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onGetInfoClick()">Get information about another application user</a>
+</div>

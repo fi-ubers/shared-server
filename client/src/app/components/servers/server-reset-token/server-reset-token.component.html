@@ -1,0 +1,33 @@
+<div *ngIf="!result">
+<h2 class="page-header">Reset application server token</h2>
+<form (submit)="onGetInfoSubmit()">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label>Application server id</label>
+      <input type="number" min="1" [(ngModel)]="id" name="id" class="form-control">
+    </div>
+  </div>
+  <div class="col-md-12">
+  <input type="submit" class="btn btn-primary" value="Get information">
+  </div>
+</form>
+</div>
+
+<div *ngIf="result">
+  <h2 class="page-header"> Application server {{id}}: new token </h2>
+  <h3 class="page-header"> Server </h3>
+  <ul class="list-group">
+    <li class="list-group-item">Id: {{result.server.id}}</li>
+    <li class="list-group-item">_ref: {{result.server._ref}}</li>
+    <li class="list-group-item">Created by: {{result.server.createdBy}}</li>
+    <li class="list-group-item">Created time: {{result.server.createdTime}}</li>
+    <li class="list-group-item">Name: {{result.server.name}}</li>
+    <li class="list-group-item">Last connection: {{result.server.lastConnection}}</li>
+  </ul>
+  <h3 class="page-header"> Token </h3>
+  <ul class="list-group">
+    <li class="list-group-item">Expires at: {{result.token.expiresAt}}</li>
+    <li class="list-group-item">Token: {{result.token.token}}</li>
+  </ul>
+  <a class="btn btn-primary" (click)="onGetInfoClick()">Reset another application server token</a>
+</div>

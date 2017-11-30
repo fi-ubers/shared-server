@@ -410,7 +410,7 @@ describe('API trips routes', function() {
 		});
 	});
 	
-	describe('POST /api/trips', function() {
+	describe('POST /api/trips/estimate', function() {
 
 		it('Estimate trip with code 200', function(done) {
 			chai.request(server)

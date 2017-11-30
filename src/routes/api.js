@@ -16,6 +16,7 @@ var serverController = require('./../controllers/serversController');
 var ruleController = require('./../controllers/rulesController');
 var paymethodsController = require('./../controllers/paymethodsController');
 var tokenController = require('./../controllers/tokenController');
+var statsController = require('./../controllers/statsController');
 
 // Middlewares
 var verifyToken = require('./../middlewares/verifyToken');
@@ -392,6 +393,8 @@ router.get('/rules/:ruleId/commits/:commitId', verifyToken.businessVerify, authC
  */
 router.post('/token', tokenController.generateToken);
 
+
+router.get('/statistics', statsController.list);
 
 /** Express router providing API routes
  * @module router

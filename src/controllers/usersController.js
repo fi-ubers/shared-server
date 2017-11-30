@@ -3,6 +3,7 @@ var uuidv4 = require('uuid/v4');
 var knex = require('../db/knex');
 var userTable = 'application_users';
 var carTable = 'cars';
+var statsTable = 'statistics';
 var transactionTable = 'transactions';
 var tripTable = 'trips';
 var visibleUserFields = ['id', '_ref', 'applicationOwner', 'type', 'cars', 'username', 'name', 'surname', 'country', 'email', 'birthdate', 'images', 'balance'];
@@ -31,6 +32,9 @@ module.exports = {
 				for (var i = 0; i < cars.length; i++) {
 					userId = cars[i].owner - 1;
 					users[userId].cars.push(cars[i]);
+				}
+				if (!req.user.roles) {
+					queryController.increment(statsTable, 'requests', {id: req.user.id});
 				}
 				responseController.sendUsers(res, users.length, users.length, users);
 			})
@@ -76,6 +80,8 @@ module.exports = {
 							images: images,
 							balance: []}, visibleUserFields)
 			.then(function(user) {
+				queryController.increment(statsTable, 'requests', {id: req.user.id});
+				queryController.increment(statsTable, 'userCreate', {id: req.user.id});
 				responseController.sendUser(res, 201, user[0]);	
 			})
 			.catch(function(error) {
@@ -101,6 +107,8 @@ module.exports = {
 					logger.info("Validation success");
 					queryController.selectAllWhere(carTable, {owner: user.id})
 					.then(function(userCars) {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
+			
 						user.cars = userCars;
 						responseController.sendUser(res, 200, user);
 					})
@@ -127,7 +135,11 @@ module.exports = {
 			if (user) {
 				logger.info("Deleting user " + userId);
 				queryController.deleteWhere(userTable, {id: userId})
-				.then( function() { 
+				.then( function() {
+					if (!req.user.roles) {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
+						queryController.increment(statsTable, 'userDelete', {id: req.user.id});
+					}
 					logger.debug("Correct removal: user " + userId);
 					res.status(204).send();
 				});
@@ -152,6 +164,9 @@ module.exports = {
 			if (user) {
 				queryController.selectAllWhere(carTable, {owner: userId})
 				.then(function(userCars) {
+					if (!req.user.roles) {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
+					}
 					user.cars = userCars;
 					responseController.sendUser(res, 200, user);
 				})
@@ -214,6 +229,8 @@ module.exports = {
 				if (updatedUser) {
 					queryController.selectAllWhere(carTable, {owner: userId})
 					.then(function(userCars) {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
+						
 						updatedUser[0].cars = userCars;
 						responseController.sendUser(res, 200, updatedUser[0]);
 					})
@@ -231,10 +248,24 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/cars";
 		
 		logger.info(request);
-		queryController.selectAllWhere(carTable, {owner: userId})
-		.then(function(cars) {
-			logger.info("Showing cars list");
-			responseController.sendCars(res, cars.length, cars.length, cars);
+		queryController.selectOneWhere(userTable, {id: userId})
+		.then(function(user) {
+			if (user) {
+				queryController.selectAllWhere(carTable, {owner: userId})
+				.then(function(cars) {
+					if (!req.user.roles) {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
+					}
+					
+					logger.info("Showing cars list");
+					responseController.sendCars(res, cars.length, cars.length, cars);
+				})
+				.catch(function(error) {
+					errorController.unexpectedError(res, error, request);
+				})
+			} else {
+				errorController.nonExistentResource(res, "user", request);
+			}
 		})
 		.catch(function(error) {
 			errorController.unexpectedError(res, error, request);
@@ -256,6 +287,8 @@ module.exports = {
 								owner: userId,
 								properties: properties})
 			.then(function(cars) {
+				queryController.increment(statsTable, 'requests', {id: req.user.id});
+				queryController.increment(statsTable, 'carCreate', {id: req.user.id});
 				responseController.sendCar(res, 201, cars[0]);	
 			})
 			.catch(function(error) {
@@ -276,7 +309,11 @@ module.exports = {
 			if (car) {
 				logger.info("Deleting car " + carId + " of user " + userId);
 				queryController.deleteWhere(carTable, {id: carId, owner: userId})
-				.then( function() { 
+				.then( function() {
+					if (!req.user.roles) {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
+						queryController.increment(statsTable, 'carDelete', {id: req.user.id});
+					}
 					logger.debug("Correct removal: car " + carId + "of user " + userId);
 					res.status(204).send();
 				});
@@ -299,6 +336,9 @@ module.exports = {
 		queryController.selectOneWhere(carTable, {id: carId, owner: userId})
 		.then(function(car) {
 			if (car) {
+				if (!req.user.roles) {
+					queryController.increment(statsTable, 'requests', {id: req.user.id});
+				}
 				responseController.sendCar(res, 200, car);
 			} else {
 				errorController.nonExistentResource(res, "car", request);
@@ -338,6 +378,7 @@ module.exports = {
 			})
 			.then(function(updatedCar) {
 				if (updatedCar) {
+					queryController.increment(statsTable, 'requests', {id: req.user.id});
 					responseController.sendCar(res, 200, updatedCar[0]);
 				}
 			})
@@ -353,11 +394,20 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/transactions";
 		
 		logger.info(request);
-		queryController.selectAllWhere(transactionTable, {user: userId}, visibleTransactionFields)
-		.then(function(transactions) {
-			if (transactions.length > 0) {
-				logger.info("Showing transactions list");
-				responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+		queryController.selectOneWhere(userTable, {id: userId})
+		.then(function(user) {
+			if (user) {
+				queryController.selectAllWhere(transactionTable, {user: userId}, visibleTransactionFields)
+				.then(function(transactions) {
+					if (!req.user.roles) {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
+					}
+					logger.info("Showing transactions list");
+					responseController.sendTransactions(res, transactions.length, transactions.length, transactions);
+				})
+				.catch(function(error) {
+					errorController.unexpectedError(res, error, request);
+				})
 			} else {
 				errorController.nonExistentResource(res, "user", request);
 			}
@@ -402,6 +452,7 @@ module.exports = {
 				balanceController.manageBalance(userId, cost, 'positive');	
 				queryController.insertAndReturnSome(transactionTable, transaction, visibleTransactionFields)
 				.then(function(transaction) {
+					queryController.increment(statsTable, 'requests', {id: req.user.id});
 					responseController.sendTransaction(res, 200, transaction[0]);
 				})
 			})
@@ -416,11 +467,17 @@ module.exports = {
 		var request = "GET at /api/users/" + userId + "/trips";
 		
 		logger.info(request);
-		queryController.selectAllWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, visibleTripFields)
-		.then(function(trips) {
-			if (trips.length > 0) {
-				logger.info("Showing trips list");
-				responseController.sendTrips(res, trips.length, trips.length, trips);
+		queryController.selectOneWhere(userTable, {id: userId})
+		.then(function(user) {
+			if (user) {
+				queryController.selectAllWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, visibleTripFields)
+				.then(function(trips) {
+					if (!req.user.roles) {
+						queryController.increment(statsTable, 'requests', {id: req.user.id});
+					}
+					logger.info("Showing trips list");
+					responseController.sendTrips(res, trips.length, trips.length, trips);
+				})
 			} else {
 				errorController.nonExistentResource(res, "user", request);
 			}
