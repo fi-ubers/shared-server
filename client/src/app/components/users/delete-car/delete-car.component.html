@@ -3,11 +3,11 @@
   <div class="col-md-4">
     <div class="form-group">
       <label>Application user id</label>
-      <input type="text" [(ngModel)]="userId" name="userId" class="form-control">
+      <input type="number" min="1" [(ngModel)]="userId" name="userId" class="form-control">
     </div>
     <div class="form-group">
       <label>Application user car id</label>
-      <input type="text" [(ngModel)]="carId" name="carId" class="form-control">
+      <input type="number" min="1" [(ngModel)]="carId" name="carId" class="form-control">
     </div>
   </div>
   <div class="col-md-12">

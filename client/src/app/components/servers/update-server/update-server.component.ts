@@ -8,7 +8,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
   styleUrls: ['./update-server.component.css']
 })
 export class UpdateServerComponent implements OnInit {
-  id: number;
+  id;
   _ref: String;
   name: String;
   result: Object;
@@ -26,6 +26,7 @@ export class UpdateServerComponent implements OnInit {
       _ref: this._ref,
       name: this.name
     }
+    this.id = parseInt(this.id);
     
     if (!this.id) {
       this.flashMessage.show('Missing parameters', {

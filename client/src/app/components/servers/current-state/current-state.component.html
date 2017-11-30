@@ -1,3 +1,4 @@
+<div *ngIf="table">
 <div class="row">
   <div class="col-md-6">
     <h2 class="page-header">Current state of servers </h2>
@@ -39,4 +40,24 @@
     </tr>
   </tbody>
   <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <a class="btn btn-primary" (click)="onChartClick()">Go to the chart!</a>
 </table>
+</div>
+
+<div *ngIf="!table">
+  <div class="col-md-12">
+    <h2 class="page-header">Current state of servers </h2>
+  </div>
+  <div class="col-md-6">
+    <h3 class="page-header">Active vs Inactive </h3>
+  </div>
+  <div style="display: block">
+    <canvas baseChart
+      [data]="pieChartData"
+      [labels]="pieChartLabels"
+      [chartType]="pieChartType"
+      (chartHover)="chartHovered($event)"
+      (chartClick)="chartClicked($event)"></canvas>
+  </div>
+  <a class="btn btn-primary" (click)="onTableClick()">Go to the table!</a>
+</div>

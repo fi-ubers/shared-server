@@ -2,12 +2,14 @@
   <h2 class="page-header">Run selected rules and facts </h2>
   <form (submit)="onRunSubmit()">
     <div class="form-group">
-      <label>Rules id separated by one space</label>
+      <label>Rules id</label>
       <input type="text" [(ngModel)]="rules" name="rules" class="form-control">
+      <p class="help-block">Separate each id by a space</p>
     </div>
     <div class="form-group">
-      <label>Facts separated by '#'</label>
+      <label>Facts</label>
       <textarea rows="5" [(ngModel)]="facts" name="facts" class="form-control"></textarea>
+      <p class="help-block">Separate each fact by a '#'. A fact is a json with attributes: language and blob.</p>
     </div>
     <input type="submit" class="btn btn-primary" value="Run">
   </form>

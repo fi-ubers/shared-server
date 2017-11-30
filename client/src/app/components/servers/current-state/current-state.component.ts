@@ -7,11 +7,16 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./current-state.component.css']
 })
 export class CurrentStateComponent implements OnInit {
-  serversList: Array<Object>;
+  serversList;
   key: String = 'id';
   reverse: boolean = false;
   p: number = 1;
   total: number;
+  active: number = 0;
+  table: boolean = true;
+  public pieChartType:string = 'pie';
+  public pieChartLabels:string[];
+  public pieChartData:number[];
   
   constructor(
     private authService:AuthService
@@ -21,6 +26,8 @@ export class CurrentStateComponent implements OnInit {
     this.authService.getServersList().subscribe(list => {
       this.serversList = list.servers;
       this.total = list.metadata.total;
+      
+      this.getData();
     },
     err => {
       console.log(err);
@@ -66,8 +73,34 @@ export class CurrentStateComponent implements OnInit {
       return (currentMinute - connectionMinute) + " minutes inactive";
     }
     
+    this.active++;
     return "Active";
     
+  }
+  
+  getData() {
+    this.pieChartLabels = ["Active", "Inactive"];
+    this.pieChartData = [];
+    
+    this.pieChartData.push(this.active);
+    this.pieChartData.push(this.total - this.active);
+  }
+  
+  // events
+  public chartClicked(e:any):void {
+    console.log(e);
+  }
+  
+  public chartHovered(e:any):void {
+    console.log(e);
+  }
+  
+  onChartClick() {
+    this.table = false;
+  }
+  
+  onTableClick() {
+    this.table = true;
   }
 
 }

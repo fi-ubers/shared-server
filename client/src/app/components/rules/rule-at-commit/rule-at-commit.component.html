@@ -4,11 +4,11 @@
   <div class="col-md-4">
     <div class="form-group">
       <label>Rule id</label>
-      <input type="text" [(ngModel)]="ruleId" name="ruleId" class="form-control">
+      <input type="number" min="1" [(ngModel)]="ruleId" name="ruleId" class="form-control">
     </div>
     <div class="form-group">
       <label>Commit id</label>
-      <input type="text" [(ngModel)]="commitId" name="commitId" class="form-control">
+      <input type="number" min="1" [(ngModel)]="commitId" name="commitId" class="form-control">
     </div>
   </div>
   <div class="col-md-12">

@@ -6,8 +6,9 @@
       <input type="text" [(ngModel)]="ruleId" name="ruleId" class="form-control">
     </div>
     <div class="form-group">
-      <label>Facts separated by '#'</label>
+      <label>Facts </label>
       <textarea rows="5" [(ngModel)]="facts" name="facts" class="form-control"></textarea>
+      <p class="help-block">Separate each fact by a '#'. A fact is a json with attributes: language and blob.</p>
     </div>
     <input type="submit" class="btn btn-primary" value="Run">
   </form>

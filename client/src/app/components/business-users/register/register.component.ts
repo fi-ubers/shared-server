@@ -51,19 +51,25 @@ export class RegisterComponent implements OnInit {
       roles: this.createRolesArray()
     }
     
-    this.authService.registerBusinessUser(businessUser).subscribe(data => {
-      this.flashMessage.show('Business user registered!', {
-        cssClass: 'alert-success',
-        timeout: 5000
-      });
+    if (!this.manager && !this.admin && !this.user) {
+      this.flashMessage.show('Missing parameters', {
+          cssClass: 'alert-danger',
+          timeout: 5000});
+    } else {
+      this.authService.registerBusinessUser(businessUser).subscribe(data => {
+        this.flashMessage.show('Business user registered!', {
+          cssClass: 'alert-success',
+          timeout: 5000
+        });
       
-      this.result = data.businessUser;
-    },
-    err => {
-      this.flashMessage.show(err.json().message, {
-        cssClass: 'alert-danger',
-        timeout: 5000});
-    });
+        this.result = data.businessUser;
+      },
+      err => {
+        this.flashMessage.show(err.json().message, {
+          cssClass: 'alert-danger',
+          timeout: 5000});
+      });
+    }
   }
   
   clearForm() {

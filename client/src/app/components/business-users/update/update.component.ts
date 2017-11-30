@@ -8,7 +8,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
   styleUrls: ['./update.component.css']
 })
 export class UpdateComponent implements OnInit {
-  id: number;
+  id;
   _ref: String;
   username: String;
   password: String;
@@ -53,8 +53,9 @@ export class UpdateComponent implements OnInit {
       surname: this.surname,
       roles: this.createRolesArray()
     }
+    this.id = parseInt(this.id);
     
-    if (!this.id) {
+    if (!this.id || (!this.manager && !this.admin && !this.user)) {
       this.flashMessage.show('Missing parameters', {
           cssClass: 'alert-danger',
           timeout: 5000});

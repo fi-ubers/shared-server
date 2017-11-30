@@ -21,17 +21,24 @@ export class RunIndividualRuleComponent implements OnInit {
   }
   
   onRunSubmit() {
-    const body = {
-      facts: this.facts.split("#")
+    if (!this.ruleId || !this.facts) {
+      this.flashMessage.show('Missing parameters', {
+          cssClass: 'alert-danger',
+          timeout: 5000});
+    } else {
+      const body = {
+        facts: this.facts.split("#")
+      }
+      this.authService.runIndividualRule(this.ruleId, body).subscribe(data => {
+        this.result = data.facts.map(fact => JSON.stringify(fact, undefined, 2));
+        console.log(this.result)
+      },
+      err => {
+        this.flashMessage.show(err.json().message, {
+          cssClass: 'alert-danger',
+          timeout: 5000});
+      });
     }
-    this.authService.runIndividualRule(this.ruleId, body).subscribe(data => {
-      this.result = data.facts.map(fact => JSON.stringify(fact, undefined, 2));
-    },
-    err => {
-      this.flashMessage.show(err.json().message, {
-        cssClass: 'alert-danger',
-        timeout: 5000});
-    });
   }
   
   clearForm() {
