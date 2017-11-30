@@ -18,7 +18,7 @@ var paymentController = require('./paymentController');
 var tokenController = require('./tokenController');
 var balanceController = require('./balanceController');
 
-function calculateCost(userId, tripData) {
+function calculateCost(userId, tripData, appId) {
 	// Run 'active' rules
 	return queryController.selectAllWhere(ruleTable, {active: true})
 	.then(function(selectedRules) {
@@ -32,6 +32,7 @@ function calculateCost(userId, tripData) {
 					trips: trips,
 					userTrip: tripData,
 					user: userData,
+					appServer: appId,
 					cost: 0,
 					discounts: [],
 					surcharges: [],
@@ -79,7 +80,7 @@ function calculateCost(userId, tripData) {
 	})
 }
 
-function calculateGain(userId, tripData) {
+function calculateGain(userId, tripData, appId) {
 	// Run 'active' rules
 	return queryController.selectAllWhere(ruleTable, {active: true})
 	.then(function(selectedRules) {
@@ -90,7 +91,8 @@ function calculateGain(userId, tripData) {
 				rules = selectedRules.map(rule => deserialize(rule.blob));
 				var fact = {
 					trips: trips,
-					userTrip: tripData,
+					userTrip: tripData,	
+					appServer: appId,
 					user: userData,
 					gain: 0,
 					benefits: []
@@ -142,7 +144,7 @@ module.exports = {
 		})
 	},
 	
-	/** Registers a trip. */
+	/** Registers a trip and makes the corresponding payment. */
 	register : function(req, res) {
 		var request = "POST at /api/trips";
 		var driver = req.body.trip.driver;
@@ -163,8 +165,10 @@ module.exports = {
 			logger.info("Using the rules engine to calculate the cost of the trip");
 			
 			var promises = [];
-			promises.push(calculateCost(passenger, req.body.trip));
-			promises.push(calculateGain(driver, req.body.trip));
+			var tripData = req.body.trip;
+			tripData.paymethod = req.body.paymethod;
+			promises.push(calculateCost(passenger, tripData, req.user.id));
+			promises.push(calculateGain(driver, tripData, req.user.id));
 			Promise.all(promises)
 			.then(function(calculatedValues) {
 				var costValue = calculatedValues[0];
@@ -308,7 +312,7 @@ module.exports = {
 				route: req.body.route
 			};
 			
-			calculateCost(passenger, tripData)
+			calculateCost(passenger, tripData, req.user.id)
 			.then(function (estimatedCost) {
 				if (estimatedCost == -1) {
 					errorController.negativeBalance(res, request);
