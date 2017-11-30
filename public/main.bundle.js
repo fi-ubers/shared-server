@@ -327,7 +327,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/business-users/delete/delete.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2 class=\"page-header\">Remove business user </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Business user id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n\n"
+module.exports = "<h2 class=\"page-header\">Remove business user </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Business user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n\n"
 
 /***/ }),
 
@@ -418,7 +418,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/business-users/information/information.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Business user information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Business user id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Business user {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Username: {{result.username}}</li>\n    <li class=\"list-group-item\">Password: {{result.password}}</li>\n    <li class=\"list-group-item\">Name: {{result.name}}</li>\n    <li class=\"list-group-item\">Surname: {{result.surname}}</li>\n    <li class=\"list-group-item\">Roles: {{result.roles.join(', ')}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another business user</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Business user information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Business user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Business user {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Username: {{result.username}}</li>\n    <li class=\"list-group-item\">Password: {{result.password}}</li>\n    <li class=\"list-group-item\">Name: {{result.name}}</li>\n    <li class=\"list-group-item\">Surname: {{result.surname}}</li>\n    <li class=\"list-group-item\">Roles: {{result.roles.join(', ')}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another business user</a>\n</div>\n"
 
 /***/ }),
 
@@ -644,18 +644,26 @@ var RegisterComponent = (function () {
             surname: this.surname,
             roles: this.createRolesArray()
         };
-        this.authService.registerBusinessUser(businessUser).subscribe(function (data) {
-            _this.flashMessage.show('Business user registered!', {
-                cssClass: 'alert-success',
-                timeout: 5000
-            });
-            _this.result = data.businessUser;
-        }, function (err) {
-            _this.flashMessage.show(err.json().message, {
+        if (!this.manager && !this.admin && !this.user) {
+            this.flashMessage.show('Missing parameters', {
                 cssClass: 'alert-danger',
                 timeout: 5000
             });
-        });
+        }
+        else {
+            this.authService.registerBusinessUser(businessUser).subscribe(function (data) {
+                _this.flashMessage.show('Business user registered!', {
+                    cssClass: 'alert-success',
+                    timeout: 5000
+                });
+                _this.result = data.businessUser;
+            }, function (err) {
+                _this.flashMessage.show(err.json().message, {
+                    cssClass: 'alert-danger',
+                    timeout: 5000
+                });
+            });
+        }
     };
     RegisterComponent.prototype.clearForm = function () {
         this.username = null;
@@ -762,7 +770,8 @@ var UpdateComponent = (function () {
             surname: this.surname,
             roles: this.createRolesArray()
         };
-        if (!this.id) {
+        this.id = parseInt(this.id);
+        if (!this.id || (!this.manager && !this.admin && !this.user)) {
             this.flashMessage.show('Missing parameters', {
                 cssClass: 'alert-danger',
                 timeout: 5000
@@ -1346,7 +1355,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/rules/commits-list/commits-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!commitsList\">\n<h2 class=\"page-header\">List commits of rule</h2>\n<form (submit)=\"onGetListSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Rule id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get list of commits\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"commitsList\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Rule {{id}} commits list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered commits at the moment. <span class=\"glyphicon glyphicon-folder-open\"></span></p>\n  <a class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult commits of another rule</a>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('author')\">Author\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'author'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('message')\">Message\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'message'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('timestamp')\">Timestamp\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'timestamp'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let commit of commitsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{commit.id}}</td>\n      <td>{{getCommitAuthor(commit.author)}}</td>\n      <td>{{commit.message}}</td>\n      <td>{{commit.timestamp}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n<a *ngIf=\"total > 0\" class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult commits of another rule</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!commitsList\">\n<h2 class=\"page-header\">List commits of rule</h2>\n<form (submit)=\"onGetListSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Rule id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get list of commits\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"commitsList\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Rule {{id}} commits list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered commits at the moment. <span class=\"glyphicon glyphicon-folder-open\"></span></p>\n  <a class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult commits of another rule</a>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('author')\">Author\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'author'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('message')\">Message\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'message'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('timestamp')\">Timestamp\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'timestamp'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let commit of commitsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{commit.id}}</td>\n      <td>{{getCommitAuthor(commit.author)}}</td>\n      <td>{{commit.message}}</td>\n      <td>{{commit.timestamp}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n<a *ngIf=\"total > 0\" class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult commits of another rule</a>\n</div>\n"
 
 /***/ }),
 
@@ -1555,7 +1564,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/rules/delete-rule/delete-rule.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2 class=\"page-header\">Remove rule </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Rule id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n\n"
+module.exports = "<h2 class=\"page-header\">Remove rule </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Rule id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n\n"
 
 /***/ }),
 
@@ -1646,7 +1655,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/rules/rule-at-commit/rule-at-commit.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Rule information in commit state</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Rule id</label>\n      <input type=\"text\" [(ngModel)]=\"ruleId\" name=\"ruleId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Commit id</label>\n      <input type=\"text\" [(ngModel)]=\"commitId\" name=\"commitId\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get rule information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Rule {{ruleId}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Language: {{result.language}}</li>\n    <li class=\"list-group-item\">Last commit: getRuleLastCommit({{result.lastCommit}})</li>\n    <li class=\"list-group-item\">Blob: {{result.blob}}</li>\n    <li class=\"list-group-item\">Active: {{result.active}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another rule</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Rule information in commit state</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Rule id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"ruleId\" name=\"ruleId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Commit id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"commitId\" name=\"commitId\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get rule information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Rule {{ruleId}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Language: {{result.language}}</li>\n    <li class=\"list-group-item\">Last commit: getRuleLastCommit({{result.lastCommit}})</li>\n    <li class=\"list-group-item\">Blob: {{result.blob}}</li>\n    <li class=\"list-group-item\">Active: {{result.active}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another rule</a>\n</div>\n"
 
 /***/ }),
 
@@ -1742,7 +1751,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/rules/rule-information/rule-information.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Rule information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Rule id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Rule {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Language: {{result.language}}</li>\n    <li class=\"list-group-item\">Last commit: getRuleLastCommit({{result.lastCommit}})</li>\n    <li class=\"list-group-item\">Blob: {{result.blob}}</li>\n    <li class=\"list-group-item\">Active: {{result.active}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another rule</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Rule information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Rule id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Rule {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Language: {{result.language}}</li>\n    <li class=\"list-group-item\">Last commit: getRuleLastCommit({{result.lastCommit}})</li>\n    <li class=\"list-group-item\">Blob: {{result.blob}}</li>\n    <li class=\"list-group-item\">Active: {{result.active}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another rule</a>\n</div>\n"
 
 /***/ }),
 
@@ -1920,7 +1929,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/rules/run-all-rules/run-all-rules.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n  <h2 class=\"page-header\">Run selected rules and facts </h2>\n  <form (submit)=\"onRunSubmit()\">\n    <div class=\"form-group\">\n      <label>Rules id separated by one space</label>\n      <input type=\"text\" [(ngModel)]=\"rules\" name=\"rules\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Facts separated by '#'</label>\n      <textarea rows=\"5\" [(ngModel)]=\"facts\" name=\"facts\" class=\"form-control\"></textarea>\n    </div>\n    <input type=\"submit\" class=\"btn btn-primary\" value=\"Run\">\n  </form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Results </h2>\n  <ul class=\"list-group\">\n    <li *ngFor=\"let fact of result\" class=\"list-group-item\">{{fact}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onRunClick()\">Run different set of rules and facts</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n  <h2 class=\"page-header\">Run selected rules and facts </h2>\n  <form (submit)=\"onRunSubmit()\">\n    <div class=\"form-group\">\n      <label>Rules id</label>\n      <input type=\"text\" [(ngModel)]=\"rules\" name=\"rules\" class=\"form-control\">\n      <p class=\"help-block\">Separate each id by a space</p>\n    </div>\n    <div class=\"form-group\">\n      <label>Facts</label>\n      <textarea rows=\"5\" [(ngModel)]=\"facts\" name=\"facts\" class=\"form-control\"></textarea>\n      <p class=\"help-block\">Separate each fact by a '#'. A fact is a json with attributes: language and blob.</p>\n    </div>\n    <input type=\"submit\" class=\"btn btn-primary\" value=\"Run\">\n  </form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Results </h2>\n  <ul class=\"list-group\">\n    <li *ngFor=\"let fact of result\" class=\"list-group-item\">{{fact}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onRunClick()\">Run different set of rules and facts</a>\n</div>\n"
 
 /***/ }),
 
@@ -1954,18 +1963,26 @@ var RunAllRulesComponent = (function () {
     };
     RunAllRulesComponent.prototype.onRunSubmit = function () {
         var _this = this;
-        var body = {
-            rules: this.rules.split(" "),
-            facts: this.facts.split("#")
-        };
-        this.authService.runAllRules(body).subscribe(function (data) {
-            _this.result = data.facts.map(function (fact) { return JSON.stringify(fact, undefined, 2); });
-        }, function (err) {
-            _this.flashMessage.show(err.json().message, {
+        if (!this.rules || !this.facts) {
+            this.flashMessage.show('Missing parameters', {
                 cssClass: 'alert-danger',
                 timeout: 5000
             });
-        });
+        }
+        else {
+            var body = {
+                rules: this.rules.split(" "),
+                facts: this.facts.split("#")
+            };
+            this.authService.runAllRules(body).subscribe(function (data) {
+                _this.result = data.facts.map(function (fact) { return JSON.stringify(fact, undefined, 2); });
+            }, function (err) {
+                _this.flashMessage.show(err.json().message, {
+                    cssClass: 'alert-danger',
+                    timeout: 5000
+                });
+            });
+        }
     };
     RunAllRulesComponent.prototype.clearForm = function () {
         this.rules = null;
@@ -2012,7 +2029,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/rules/run-individual-rule/run-individual-rule.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n  <h2 class=\"page-header\">Run selected rule and facts </h2>\n  <form (submit)=\"onRunSubmit()\">\n    <div class=\"form-group\">\n      <label>Rule id </label>\n      <input type=\"text\" [(ngModel)]=\"ruleId\" name=\"ruleId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Facts separated by '#'</label>\n      <textarea rows=\"5\" [(ngModel)]=\"facts\" name=\"facts\" class=\"form-control\"></textarea>\n    </div>\n    <input type=\"submit\" class=\"btn btn-primary\" value=\"Run\">\n  </form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Results </h2>\n  <ul class=\"list-group\">\n    <li *ngFor=\"let fact of result\" class=\"list-group-item\">{{fact}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onRunClick()\">Run different facts with another rule</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n  <h2 class=\"page-header\">Run selected rule and facts </h2>\n  <form (submit)=\"onRunSubmit()\">\n    <div class=\"form-group\">\n      <label>Rule id </label>\n      <input type=\"text\" [(ngModel)]=\"ruleId\" name=\"ruleId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Facts </label>\n      <textarea rows=\"5\" [(ngModel)]=\"facts\" name=\"facts\" class=\"form-control\"></textarea>\n      <p class=\"help-block\">Separate each fact by a '#'. A fact is a json with attributes: language and blob.</p>\n    </div>\n    <input type=\"submit\" class=\"btn btn-primary\" value=\"Run\">\n  </form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Results </h2>\n  <ul class=\"list-group\">\n    <li *ngFor=\"let fact of result\" class=\"list-group-item\">{{fact}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onRunClick()\">Run different facts with another rule</a>\n</div>\n"
 
 /***/ }),
 
@@ -2046,17 +2063,26 @@ var RunIndividualRuleComponent = (function () {
     };
     RunIndividualRuleComponent.prototype.onRunSubmit = function () {
         var _this = this;
-        var body = {
-            facts: this.facts.split("#")
-        };
-        this.authService.runIndividualRule(this.ruleId, body).subscribe(function (data) {
-            _this.result = data.facts.map(function (fact) { return JSON.stringify(fact, undefined, 2); });
-        }, function (err) {
-            _this.flashMessage.show(err.json().message, {
+        if (!this.ruleId || !this.facts) {
+            this.flashMessage.show('Missing parameters', {
                 cssClass: 'alert-danger',
                 timeout: 5000
             });
-        });
+        }
+        else {
+            var body = {
+                facts: this.facts.split("#")
+            };
+            this.authService.runIndividualRule(this.ruleId, body).subscribe(function (data) {
+                _this.result = data.facts.map(function (fact) { return JSON.stringify(fact, undefined, 2); });
+                console.log(_this.result);
+            }, function (err) {
+                _this.flashMessage.show(err.json().message, {
+                    cssClass: 'alert-danger',
+                    timeout: 5000
+                });
+            });
+        }
     };
     RunIndividualRuleComponent.prototype.clearForm = function () {
         this.ruleId = null;
@@ -2216,7 +2242,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/servers/current-state/current-state.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Current state of servers </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered servers at the moment. <span class=\"glyphicon glyphicon-globe\"></span></p>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('lastConnection')\">Last connection\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'lastConnection'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('currentState')\">Current state\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'currentState'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let server of serversList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{server.id}}</td>\n      <td>{{server.lastConnection}}</td>\n      <td>{{getServerStatus(server.lastConnection)}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n"
+module.exports = "<div *ngIf=\"table\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Current state of servers </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered servers at the moment. <span class=\"glyphicon glyphicon-globe\"></span></p>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('lastConnection')\">Last connection\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'lastConnection'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('currentState')\">Current state\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'currentState'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let server of serversList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{server.id}}</td>\n      <td>{{server.lastConnection}}</td>\n      <td>{{getServerStatus(server.lastConnection)}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n  <a class=\"btn btn-primary\" (click)=\"onChartClick()\">Go to the chart!</a>\n</table>\n</div>\n\n<div *ngIf=\"!table\">\n  <div class=\"col-md-12\">\n    <h2 class=\"page-header\">Current state of servers </h2>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Active vs Inactive </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [data]=\"pieChartData\"\n      [labels]=\"pieChartLabels\"\n      [chartType]=\"pieChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <a class=\"btn btn-primary\" (click)=\"onTableClick()\">Go to the table!</a>\n</div>\n"
 
 /***/ }),
 
@@ -2244,12 +2270,16 @@ var CurrentStateComponent = (function () {
         this.key = 'id';
         this.reverse = false;
         this.p = 1;
+        this.active = 0;
+        this.table = true;
+        this.pieChartType = 'pie';
     }
     CurrentStateComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.authService.getServersList().subscribe(function (list) {
             _this.serversList = list.servers;
             _this.total = list.metadata.total;
+            _this.getData();
         }, function (err) {
             console.log(err);
             return false;
@@ -2290,7 +2320,27 @@ var CurrentStateComponent = (function () {
         if (currentMinute - connectionMinute > 10) {
             return (currentMinute - connectionMinute) + " minutes inactive";
         }
+        this.active++;
         return "Active";
+    };
+    CurrentStateComponent.prototype.getData = function () {
+        this.pieChartLabels = ["Active", "Inactive"];
+        this.pieChartData = [];
+        this.pieChartData.push(this.active);
+        this.pieChartData.push(this.total - this.active);
+    };
+    // events
+    CurrentStateComponent.prototype.chartClicked = function (e) {
+        console.log(e);
+    };
+    CurrentStateComponent.prototype.chartHovered = function (e) {
+        console.log(e);
+    };
+    CurrentStateComponent.prototype.onChartClick = function () {
+        this.table = false;
+    };
+    CurrentStateComponent.prototype.onTableClick = function () {
+        this.table = true;
     };
     return CurrentStateComponent;
 }());
@@ -2329,7 +2379,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/servers/delete-server/delete-server.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2 class=\"page-header\">Remove server </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Server id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n\n"
+module.exports = "<h2 class=\"page-header\">Remove server </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Server id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n\n"
 
 /***/ }),
 
@@ -2434,6 +2484,8 @@ module.exports = "<div *ngIf=\"!result\">\n  <h2 class=\"page-header\">Register 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_flash_messages__ = __webpack_require__("../../../../angular2-flash-messages/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_flash_messages___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_angular2_flash_messages__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_moment__ = __webpack_require__("../../../../moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_moment__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2443,6 +2495,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -2462,18 +2515,33 @@ var RegisterServerComponent = (function () {
             createdTime: this.createdTime,
             name: this.name
         };
-        this.authService.registerServer(server).subscribe(function (data) {
-            _this.flashMessage.show('Server registered!', {
-                cssClass: 'alert-success',
-                timeout: 5000
-            });
-            _this.result = data.server;
-        }, function (err) {
-            _this.flashMessage.show(err.json().message, {
+        this.createdBy = parseInt(this.createdBy);
+        if (!this.createdBy) {
+            this.flashMessage.show('Created by must be a number', {
                 cssClass: 'alert-danger',
                 timeout: 5000
             });
-        });
+        }
+        else if (!__WEBPACK_IMPORTED_MODULE_4_moment__(this.createdTime, __WEBPACK_IMPORTED_MODULE_4_moment__["ISO_8601"], true).isValid()) {
+            this.flashMessage.show("Invalid timestamp: Please use format 'YYYY-MM-DDTHH:mm:ss'", {
+                cssClass: 'alert-danger',
+                timeout: 5000
+            });
+        }
+        else {
+            this.authService.registerServer(server).subscribe(function (data) {
+                _this.flashMessage.show('Server registered!', {
+                    cssClass: 'alert-success',
+                    timeout: 5000
+                });
+                _this.result = data.server;
+            }, function (err) {
+                _this.flashMessage.show(err.json().message, {
+                    cssClass: 'alert-danger',
+                    timeout: 5000
+                });
+            });
+        }
     };
     RegisterServerComponent.prototype.clearForm = function () {
         this.createdBy = null;
@@ -2521,7 +2589,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/servers/server-information/server-information.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Server information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Server id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Server {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Created by: {{result.createdBy}}</li>\n    <li class=\"list-group-item\">Created time: {{result.createdTime}}</li>\n    <li class=\"list-group-item\">Name: {{result.name}}</li>\n    <li class=\"list-group-item\">Last connection: {{result.lastConnection}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another server</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Server information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Server id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Server {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Created by: {{result.createdBy}}</li>\n    <li class=\"list-group-item\">Created time: {{result.createdTime}}</li>\n    <li class=\"list-group-item\">Name: {{result.name}}</li>\n    <li class=\"list-group-item\">Last connection: {{result.lastConnection}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another server</a>\n</div>\n"
 
 /***/ }),
 
@@ -2613,7 +2681,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/servers/server-reset-token/server-reset-token.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Reset application server token</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application server id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Application server {{id}}: new token </h2>\n  <h3 class=\"page-header\"> Server </h3>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.server.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result.server._ref}}</li>\n    <li class=\"list-group-item\">Created by: {{result.server.createdBy}}</li>\n    <li class=\"list-group-item\">Created time: {{result.server.createdTime}}</li>\n    <li class=\"list-group-item\">Name: {{result.server.name}}</li>\n    <li class=\"list-group-item\">Last connection: {{result.server.lastConnection}}</li>\n  </ul>\n  <h3 class=\"page-header\"> Token </h3>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Expires at: {{result.token.expiresAt}}</li>\n    <li class=\"list-group-item\">Token: {{result.token.token}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Reset another application server token</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Reset application server token</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application server id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Application server {{id}}: new token </h2>\n  <h3 class=\"page-header\"> Server </h3>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.server.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result.server._ref}}</li>\n    <li class=\"list-group-item\">Created by: {{result.server.createdBy}}</li>\n    <li class=\"list-group-item\">Created time: {{result.server.createdTime}}</li>\n    <li class=\"list-group-item\">Name: {{result.server.name}}</li>\n    <li class=\"list-group-item\">Last connection: {{result.server.lastConnection}}</li>\n  </ul>\n  <h3 class=\"page-header\"> Token </h3>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Expires at: {{result.token.expiresAt}}</li>\n    <li class=\"list-group-item\">Token: {{result.token.token}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Reset another application server token</a>\n</div>\n"
 
 /***/ }),
 
@@ -2785,7 +2853,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/servers/statistics/statistics.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"table\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Statistics list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<p *ngIf=\"total == 0\" class=\"lead\"> Sorry :( <p>\n<p *ngIf=\"total == 0\" class=\"lead\"> There are no statistics at the moment. <span class=\"glyphicon glyphicon-stats\"></span></p>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Server id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('requests')\">Requests\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'requests'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('userCreate')\">Created users\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'userCreate'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('userDelete')\">Deleted users\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'userDelete'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('carCreate')\">Created cars\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'carCreate'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('carDelete')\">Deleted cars\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'carDelete'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('tripCreate')\">Created trips\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'tripCreate'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let stats of statisticsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{stats.id}}</td>\n      <td>{{stats.requests}}</td>\n      <td>{{stats.userCreate}}</td>\n      <td>{{stats.userDelete}}</td>\n      <td>{{stats.carCreate}}</td>\n      <td>{{stats.carDelete}}</td>\n      <td>{{stats.tripCreate}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n  <a class=\"btn btn-primary\" (click)=\"onChartClick()\">Go to the chart!</a>\n</table>\n</div>\n\n<div *ngIf=\"!table\">\n  <div class=\"col-md-12\">\n    <h2 class=\"page-header\">Statistics </h2>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Requests </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [data]=\"doughnutChartData\"\n      [labels]=\"doughnutChartLabels\"\n      [chartType]=\"doughnutChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Users </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [datasets]=\"barChart1Data\"\n      [labels]=\"barChart1Labels\"\n      [options]=\"barChartOptions\"\n      [legend]=\"barChartLegend\"\n      [chartType]=\"barChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Cars </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [datasets]=\"barChart2Data\"\n      [labels]=\"barChart2Labels\"\n      [options]=\"barChartOptions\"\n      [legend]=\"barChartLegend\"\n      [chartType]=\"barChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Trips </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [datasets]=\"barChart3Data\"\n      [labels]=\"barChart3Labels\"\n      [options]=\"barChartOptions\"\n      [legend]=\"barChartLegend\"\n      [chartType]=\"barChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <a class=\"btn btn-primary\" (click)=\"onTableClick()\">Go to the table!</a>\n</div>\n\n\n"
+module.exports = "<div *ngIf=\"table\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Statistics list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<p *ngIf=\"total == 0\" class=\"lead\"> Sorry :( <p>\n<p *ngIf=\"total == 0\" class=\"lead\"> There are no statistics at the moment. <span class=\"glyphicon glyphicon-stats\"></span></p>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Server id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('requests')\">Requests\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'requests'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('userCreate')\">Created users\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'userCreate'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('userDelete')\">Deleted users\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'userDelete'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('carCreate')\">Created cars\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'carCreate'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('carDelete')\">Deleted cars\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'carDelete'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('tripCreate')\">Created trips\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'tripCreate'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let stats of statisticsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{stats.id}}</td>\n      <td>{{stats.requests}}</td>\n      <td>{{stats.userCreate}}</td>\n      <td>{{stats.userDelete}}</td>\n      <td>{{stats.carCreate}}</td>\n      <td>{{stats.carDelete}}</td>\n      <td>{{stats.tripCreate}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n  <a class=\"btn btn-primary\" (click)=\"onChartClick()\">Go to charts!</a>\n</table>\n</div>\n\n<div *ngIf=\"!table\">\n  <div class=\"col-md-12\">\n    <h2 class=\"page-header\">Statistics </h2>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Requests </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [data]=\"doughnutChartData\"\n      [labels]=\"doughnutChartLabels\"\n      [chartType]=\"doughnutChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Users </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [datasets]=\"barChart1Data\"\n      [labels]=\"barChart1Labels\"\n      [options]=\"barChartOptions\"\n      [legend]=\"barChartLegend\"\n      [chartType]=\"barChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Cars </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [datasets]=\"barChart2Data\"\n      [labels]=\"barChart2Labels\"\n      [options]=\"barChartOptions\"\n      [legend]=\"barChartLegend\"\n      [chartType]=\"barChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <div class=\"col-md-6\">\n    <h3 class=\"page-header\">Trips </h3>\n  </div>\n  <div style=\"display: block\">\n    <canvas baseChart\n      [datasets]=\"barChart3Data\"\n      [labels]=\"barChart3Labels\"\n      [options]=\"barChartOptions\"\n      [legend]=\"barChartLegend\"\n      [chartType]=\"barChartType\"\n      (chartHover)=\"chartHovered($event)\"\n      (chartClick)=\"chartClicked($event)\"></canvas>\n  </div>\n  <a class=\"btn btn-primary\" (click)=\"onTableClick()\">Go to the table!</a>\n</div>\n\n\n"
 
 /***/ }),
 
@@ -2944,6 +3012,7 @@ var UpdateServerComponent = (function () {
             _ref: this._ref,
             name: this.name
         };
+        this.id = parseInt(this.id);
         if (!this.id) {
             this.flashMessage.show('Missing parameters', {
                 cssClass: 'alert-danger',
@@ -3011,7 +3080,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/trips/trip-information/trip-information.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Trip information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Trip id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Trip {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">Application owner: {{result.applicationOwner}}</li>\n    <li class=\"list-group-item\">Driver: {{result.driver}}</li>\n    <li class=\"list-group-item\">Passenger: {{result.passenger}}</li>\n    <li class=\"list-group-item\">Start: [ {{getTripStart(result.start)}} ]</li>\n    <li class=\"list-group-item\">End: [ {{getTripEnd(result.end)}} ]</li>\n    <li class=\"list-group-item\">Total time: {{result.totalTime}}</li>\n    <li class=\"list-group-item\">Wait time: {{result.waitTime}}</li>\n    <li class=\"list-group-item\">Travel time: {{result.travelTime}}</li>\n    <li class=\"list-group-item\">Distance: {{result.distance}}</li>\n    <li class=\"list-group-item\">Route: [ {{getTripRoute(result.route)}} ]</li>\n    <li class=\"list-group-item\">Cost: {{getTripCost(result.cost)}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another trip</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Trip information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Trip id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Trip {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">Application owner: {{result.applicationOwner}}</li>\n    <li class=\"list-group-item\">Driver: {{result.driver}}</li>\n    <li class=\"list-group-item\">Passenger: {{result.passenger}}</li>\n    <li class=\"list-group-item\">Start: [ {{getTripStart(result.start)}} ]</li>\n    <li class=\"list-group-item\">End: [ {{getTripEnd(result.end)}} ]</li>\n    <li class=\"list-group-item\">Total time: {{result.totalTime}}</li>\n    <li class=\"list-group-item\">Wait time: {{result.waitTime}}</li>\n    <li class=\"list-group-item\">Travel time: {{result.travelTime}}</li>\n    <li class=\"list-group-item\">Distance: {{result.distance}}</li>\n    <li class=\"list-group-item\">Route: [ {{getTripRoute(result.route)}} ]</li>\n    <li class=\"list-group-item\">Cost: {{getTripCost(result.cost)}}</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another trip</a>\n</div>\n"
 
 /***/ }),
 
@@ -3207,7 +3276,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/users/cars-information/cars-information.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Application user car information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"text\" [(ngModel)]=\"userId\" name=\"userId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Application user car id</label>\n      <input type=\"text\" [(ngModel)]=\"carId\" name=\"carId\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get car information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Car {{carId}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Owner: {{result.owner}}</li>\n    <li class=\"list-group-item\">Cars: [ {{getCarProperties(result.properties)}} ]</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another car</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Application user car information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"userId\" name=\"userId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Application user car id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"carId\" name=\"carId\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get car information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Car {{carId}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Owner: {{result.owner}}</li>\n    <li class=\"list-group-item\">Cars: [ {{getCarProperties(result.properties)}} ]</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another car</a>\n</div>\n"
 
 /***/ }),
 
@@ -3303,7 +3372,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/users/cars-list/cars-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!carsList\">\n<h2 class=\"page-header\">List cars of application user</h2>\n<form (submit)=\"onGetListSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get list of cars\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"carsList\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Application user {{id}} cars list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered cars for user {{id}} at the moment. <span class=\"glyphicon glyphicon-shopping-cart\"></span> <span class=\"glyphicon glyphicon-road\"></span></p>\n  <a class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult cars of another application user</a>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('_ref')\">_ref\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == '_ref'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('owner')\">Owner\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'owner'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('properties')\">Properties\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'properties'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let car of carsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{car.id}}</td>\n      <td>{{car._ref}}</td>\n      <td>{{car.owner}}</td>\n      <td>[ {{getCarProperties(car.properties)}} ]</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n<a *ngIf=\"total > 0\" class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult cars of another application user</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!carsList\">\n<h2 class=\"page-header\">List cars of application user</h2>\n<form (submit)=\"onGetListSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get list of cars\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"carsList\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Application user {{id}} cars list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered cars for user {{id}} at the moment. <span class=\"glyphicon glyphicon-shopping-cart\"></span> <span class=\"glyphicon glyphicon-road\"></span></p>\n  <a class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult cars of another application user</a>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('_ref')\">_ref\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == '_ref'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('owner')\">Owner\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'owner'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('properties')\">Properties\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'properties'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let car of carsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{car.id}}</td>\n      <td>{{car._ref}}</td>\n      <td>{{car.owner}}</td>\n      <td>[ {{getCarProperties(car.properties)}} ]</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n<a *ngIf=\"total > 0\" class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult cars of another application user</a>\n</div>\n"
 
 /***/ }),
 
@@ -3410,7 +3479,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/users/delete-car/delete-car.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2 class=\"page-header\">Remove car of application user </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"text\" [(ngModel)]=\"userId\" name=\"userId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Application user car id</label>\n      <input type=\"text\" [(ngModel)]=\"carId\" name=\"carId\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n"
+module.exports = "<h2 class=\"page-header\">Remove car of application user </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"userId\" name=\"userId\" class=\"form-control\">\n    </div>\n    <div class=\"form-group\">\n      <label>Application user car id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"carId\" name=\"carId\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n"
 
 /***/ }),
 
@@ -3501,7 +3570,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/users/delete-user/delete-user.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2 class=\"page-header\">Remove application user </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n"
+module.exports = "<h2 class=\"page-header\">Remove application user </h2>\n<form (submit)=\"onDeleteSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Delete\">\n  </div>\n</form>\n"
 
 /***/ }),
 
@@ -3592,7 +3661,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/users/transactions-list/transactions-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!transactionsList\">\n<h2 class=\"page-header\">List transactions of application user</h2>\n<form (submit)=\"onGetListSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get list of transactions\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"transactionsList\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Application user {{id}} transactions list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered transactions for user {{id}} at the moment. <span class=\"glyphicon glyphicon-piggy-bank\"></span></p>\n  <a class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult transactions of another application user</a>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('trip')\">Trip\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'trip'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('timestamp')\">Timestamp\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'timestamp'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('cost')\">Cost\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'cost'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('description')\">Description\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'description'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('data')\">Data\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'data'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let transaction of transactionsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{transaction.id}}</td>\n      <td>{{transaction.trip}}</td>\n      <td>{{transaction.timestamp}}</td>\n      <td>{{getTransactionCost(transaction.cost)}}</td>\n      <td>{{transaction.description}}</td>\n      <td>{{getTransactionData(transaction.data)}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n<a *ngIf=\"total > 0\" class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult transactions of another application user</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!transactionsList\">\n<h2 class=\"page-header\">List transactions of application user</h2>\n<form (submit)=\"onGetListSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get list of transactions\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"transactionsList\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Application user {{id}} transactions list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered transactions for user {{id}} at the moment. <span class=\"glyphicon glyphicon-piggy-bank\"></span></p>\n  <a class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult transactions of another application user</a>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('trip')\">Trip\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'trip'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('timestamp')\">Timestamp\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'timestamp'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('cost')\">Cost\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'cost'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('description')\">Description\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'description'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('data')\">Data\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'data'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let transaction of transactionsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{transaction.id}}</td>\n      <td>{{transaction.trip}}</td>\n      <td>{{transaction.timestamp}}</td>\n      <td>{{getTransactionCost(transaction.cost)}}</td>\n      <td>{{transaction.description}}</td>\n      <td>{{getTransactionData(transaction.data)}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n<a *ngIf=\"total > 0\" class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult transactions of another application user</a>\n</div>\n"
 
 /***/ }),
 
@@ -3702,7 +3771,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/users/user-information/user-information.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Application user information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Application user {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Application owner: {{result.applicationOwner}}</li>\n    <li class=\"list-group-item\">Type: {{result.type}}</li>\n    <li class=\"list-group-item\">Cars: [ {{getUserCars(result.cars)}} ]</li>\n    <li class=\"list-group-item\">Username: {{result.username}}</li>\n    <li class=\"list-group-item\">Name: {{result.name}}</li>\n    <li class=\"list-group-item\">Surname: {{result.surname}}</li>\n    <li class=\"list-group-item\">Country: {{result.country}}</li>\n    <li class=\"list-group-item\">Email: {{result.email}}</li>\n    <li class=\"list-group-item\">Birthdate: {{result.birthdate}}</li>\n    <li class=\"list-group-item\">Images: [ {{result.images.join(', ')}} ]</li>\n    <li class=\"list-group-item\">Balance: [ {{getUserBalance(result.balance)}} ]</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another application user</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!result\">\n<h2 class=\"page-header\">Application user information</h2>\n<form (submit)=\"onGetInfoSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get information\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"result\">\n  <h2 class=\"page-header\"> Application user {{id}} information </h2>\n  <ul class=\"list-group\">\n    <li class=\"list-group-item\">Id: {{result.id}}</li>\n    <li class=\"list-group-item\">_ref: {{result._ref}}</li>\n    <li class=\"list-group-item\">Application owner: {{result.applicationOwner}}</li>\n    <li class=\"list-group-item\">Type: {{result.type}}</li>\n    <li class=\"list-group-item\">Cars: [ {{getUserCars(result.cars)}} ]</li>\n    <li class=\"list-group-item\">Username: {{result.username}}</li>\n    <li class=\"list-group-item\">Name: {{result.name}}</li>\n    <li class=\"list-group-item\">Surname: {{result.surname}}</li>\n    <li class=\"list-group-item\">Country: {{result.country}}</li>\n    <li class=\"list-group-item\">Email: {{result.email}}</li>\n    <li class=\"list-group-item\">Birthdate: {{result.birthdate}}</li>\n    <li class=\"list-group-item\">Images: [ {{result.images.join(', ')}} ]</li>\n    <li class=\"list-group-item\">Balance: [ {{getUserBalance(result.balance)}} ]</li>\n  </ul>\n  <a class=\"btn btn-primary\" (click)=\"onGetInfoClick()\">Get information about another application user</a>\n</div>\n"
 
 /***/ }),
 
@@ -3800,7 +3869,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/users/user-trips-list/user-trips-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!tripsList\">\n<h2 class=\"page-header\">List trips of application user</h2>\n<form (submit)=\"onGetListSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"text\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get list of trips\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"tripsList\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Application user {{id}} trips list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered trips for user {{id}} at the moment. <span class=\"glyphicon glyphicon-road\"></span></p>\n  <a class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult trips of another application user</a>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('applicationOwner')\">Application owner\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'applicationOwner'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('driver')\">Driver\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'driver'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('passenger')\">Passenger\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'passenger'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('start')\">Start\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'start'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('end')\">End\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'end'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('totalTime')\">Total time\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'totalTime'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('waitTime')\">Wait time\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'waitTime'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('travelTime')\">Travel time\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'travelTime'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('distance')\">Distance\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'distance'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('route')\">Route\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'route'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('cost')\">Cost\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'cost'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let trip of tripsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{trip.id}}</td>\n      <td>{{trip.applicationOwner}}</td>\n      <td>{{trip.driver}}</td>\n      <td>{{trip.passenger}}</td>\n      <td>{{getTripStart(trip.start)}}</td>\n      <td>{{getTripEnd(trip.end)}}</td>\n      <td>{{trip.totalTime}}</td>\n      <td>{{trip.waitTime}}</td>\n      <td>{{trip.travelTime}}</td>\n      <td>{{trip.distance}}</td>\n      <td>{{getTripRoute(trip.route)}}</td>\n      <td>{{getTripCost(trip.cost)}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n<a *ngIf=\"total > 0\" class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult trips of another application user</a>\n</div>\n"
+module.exports = "<div *ngIf=\"!tripsList\">\n<h2 class=\"page-header\">List trips of application user</h2>\n<form (submit)=\"onGetListSubmit()\">\n  <div class=\"col-md-4\">\n    <div class=\"form-group\">\n      <label>Application user id</label>\n      <input type=\"number\" min=\"1\" [(ngModel)]=\"id\" name=\"id\" class=\"form-control\">\n    </div>\n  </div>\n  <div class=\"col-md-12\">\n  <input type=\"submit\" class=\"btn btn-primary\" value=\"Get list of trips\">\n  </div>\n</form>\n</div>\n\n<div *ngIf=\"tripsList\">\n<div class=\"row\">\n  <div class=\"col-md-6\">\n    <h2 class=\"page-header\">Application user {{id}} trips list </h2>\n  </div>\n  <div *ngIf=\"total > 0\" class=\"col-md-6\">\n    <div class=\"input-group input-group-sm input-group-left\">\n      <input type=\"text\" class=\"form-control\" name=\"search\" [(ngModel)]=\"filter\">\n      <span class=\"input-group-addon\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </span>\n    </div>\n  </div>\n</div>\n\n<div *ngIf=\"total == 0\">\n  <p class=\"lead\"> Sorry :( <p>\n  <p class=\"lead\"> There are no registered trips for user {{id}} at the moment. <span class=\"glyphicon glyphicon-road\"></span></p>\n  <a class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult trips of another application user</a>\n</div>\n\n<table *ngIf=\"total > 0\" class=\"table table-striped table-hover\">\n  <thead>\n    <tr>\n      <th (click)=\"sort('id')\">Id\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'id'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('applicationOwner')\">Application owner\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'applicationOwner'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('driver')\">Driver\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'driver'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('passenger')\">Passenger\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'passenger'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('start')\">Start\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'start'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('end')\">End\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'end'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('totalTime')\">Total time\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'totalTime'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('waitTime')\">Wait time\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'waitTime'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('travelTime')\">Travel time\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'travelTime'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('distance')\">Distance\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'distance'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('route')\">Route\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'route'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n      <th (click)=\"sort('cost')\">Cost\n        <span class=\"glyphicon sort-icon\" *ngIf=\"key == 'cost'\" [ngClass]=\"{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}\"></span>\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let trip of tripsList | orderBy: key : reverse | filter:filter | paginate: {itemsPerPage: 10, currentPage: p, totalItems: total }\">\n      <td>{{trip.id}}</td>\n      <td>{{trip.applicationOwner}}</td>\n      <td>{{trip.driver}}</td>\n      <td>{{trip.passenger}}</td>\n      <td>{{getTripStart(trip.start)}}</td>\n      <td>{{getTripEnd(trip.end)}}</td>\n      <td>{{trip.totalTime}}</td>\n      <td>{{trip.waitTime}}</td>\n      <td>{{trip.travelTime}}</td>\n      <td>{{trip.distance}}</td>\n      <td>{{getTripRoute(trip.route)}}</td>\n      <td>{{getTripCost(trip.cost)}}</td>\n    </tr>\n  </tbody>\n  <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\n</table>\n<a *ngIf=\"total > 0\" class=\"btn btn-primary\" (click)=\"onGetListClick()\">Consult trips of another application user</a>\n</div>\n"
 
 /***/ }),
 
@@ -4556,6 +4625,259 @@ Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
+/***/ "../../../../chart.js/node_modules/moment/locale recursive ^\\.\\/.*$":
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./af": "../../../../chart.js/node_modules/moment/locale/af.js",
+	"./af.js": "../../../../chart.js/node_modules/moment/locale/af.js",
+	"./ar": "../../../../chart.js/node_modules/moment/locale/ar.js",
+	"./ar-dz": "../../../../chart.js/node_modules/moment/locale/ar-dz.js",
+	"./ar-dz.js": "../../../../chart.js/node_modules/moment/locale/ar-dz.js",
+	"./ar-kw": "../../../../chart.js/node_modules/moment/locale/ar-kw.js",
+	"./ar-kw.js": "../../../../chart.js/node_modules/moment/locale/ar-kw.js",
+	"./ar-ly": "../../../../chart.js/node_modules/moment/locale/ar-ly.js",
+	"./ar-ly.js": "../../../../chart.js/node_modules/moment/locale/ar-ly.js",
+	"./ar-ma": "../../../../chart.js/node_modules/moment/locale/ar-ma.js",
+	"./ar-ma.js": "../../../../chart.js/node_modules/moment/locale/ar-ma.js",
+	"./ar-sa": "../../../../chart.js/node_modules/moment/locale/ar-sa.js",
+	"./ar-sa.js": "../../../../chart.js/node_modules/moment/locale/ar-sa.js",
+	"./ar-tn": "../../../../chart.js/node_modules/moment/locale/ar-tn.js",
+	"./ar-tn.js": "../../../../chart.js/node_modules/moment/locale/ar-tn.js",
+	"./ar.js": "../../../../chart.js/node_modules/moment/locale/ar.js",
+	"./az": "../../../../chart.js/node_modules/moment/locale/az.js",
+	"./az.js": "../../../../chart.js/node_modules/moment/locale/az.js",
+	"./be": "../../../../chart.js/node_modules/moment/locale/be.js",
+	"./be.js": "../../../../chart.js/node_modules/moment/locale/be.js",
+	"./bg": "../../../../chart.js/node_modules/moment/locale/bg.js",
+	"./bg.js": "../../../../chart.js/node_modules/moment/locale/bg.js",
+	"./bn": "../../../../chart.js/node_modules/moment/locale/bn.js",
+	"./bn.js": "../../../../chart.js/node_modules/moment/locale/bn.js",
+	"./bo": "../../../../chart.js/node_modules/moment/locale/bo.js",
+	"./bo.js": "../../../../chart.js/node_modules/moment/locale/bo.js",
+	"./br": "../../../../chart.js/node_modules/moment/locale/br.js",
+	"./br.js": "../../../../chart.js/node_modules/moment/locale/br.js",
+	"./bs": "../../../../chart.js/node_modules/moment/locale/bs.js",
+	"./bs.js": "../../../../chart.js/node_modules/moment/locale/bs.js",
+	"./ca": "../../../../chart.js/node_modules/moment/locale/ca.js",
+	"./ca.js": "../../../../chart.js/node_modules/moment/locale/ca.js",
+	"./cs": "../../../../chart.js/node_modules/moment/locale/cs.js",
+	"./cs.js": "../../../../chart.js/node_modules/moment/locale/cs.js",
+	"./cv": "../../../../chart.js/node_modules/moment/locale/cv.js",
+	"./cv.js": "../../../../chart.js/node_modules/moment/locale/cv.js",
+	"./cy": "../../../../chart.js/node_modules/moment/locale/cy.js",
+	"./cy.js": "../../../../chart.js/node_modules/moment/locale/cy.js",
+	"./da": "../../../../chart.js/node_modules/moment/locale/da.js",
+	"./da.js": "../../../../chart.js/node_modules/moment/locale/da.js",
+	"./de": "../../../../chart.js/node_modules/moment/locale/de.js",
+	"./de-at": "../../../../chart.js/node_modules/moment/locale/de-at.js",
+	"./de-at.js": "../../../../chart.js/node_modules/moment/locale/de-at.js",
+	"./de-ch": "../../../../chart.js/node_modules/moment/locale/de-ch.js",
+	"./de-ch.js": "../../../../chart.js/node_modules/moment/locale/de-ch.js",
+	"./de.js": "../../../../chart.js/node_modules/moment/locale/de.js",
+	"./dv": "../../../../chart.js/node_modules/moment/locale/dv.js",
+	"./dv.js": "../../../../chart.js/node_modules/moment/locale/dv.js",
+	"./el": "../../../../chart.js/node_modules/moment/locale/el.js",
+	"./el.js": "../../../../chart.js/node_modules/moment/locale/el.js",
+	"./en-au": "../../../../chart.js/node_modules/moment/locale/en-au.js",
+	"./en-au.js": "../../../../chart.js/node_modules/moment/locale/en-au.js",
+	"./en-ca": "../../../../chart.js/node_modules/moment/locale/en-ca.js",
+	"./en-ca.js": "../../../../chart.js/node_modules/moment/locale/en-ca.js",
+	"./en-gb": "../../../../chart.js/node_modules/moment/locale/en-gb.js",
+	"./en-gb.js": "../../../../chart.js/node_modules/moment/locale/en-gb.js",
+	"./en-ie": "../../../../chart.js/node_modules/moment/locale/en-ie.js",
+	"./en-ie.js": "../../../../chart.js/node_modules/moment/locale/en-ie.js",
+	"./en-nz": "../../../../chart.js/node_modules/moment/locale/en-nz.js",
+	"./en-nz.js": "../../../../chart.js/node_modules/moment/locale/en-nz.js",
+	"./eo": "../../../../chart.js/node_modules/moment/locale/eo.js",
+	"./eo.js": "../../../../chart.js/node_modules/moment/locale/eo.js",
+	"./es": "../../../../chart.js/node_modules/moment/locale/es.js",
+	"./es-do": "../../../../chart.js/node_modules/moment/locale/es-do.js",
+	"./es-do.js": "../../../../chart.js/node_modules/moment/locale/es-do.js",
+	"./es.js": "../../../../chart.js/node_modules/moment/locale/es.js",
+	"./et": "../../../../chart.js/node_modules/moment/locale/et.js",
+	"./et.js": "../../../../chart.js/node_modules/moment/locale/et.js",
+	"./eu": "../../../../chart.js/node_modules/moment/locale/eu.js",
+	"./eu.js": "../../../../chart.js/node_modules/moment/locale/eu.js",
+	"./fa": "../../../../chart.js/node_modules/moment/locale/fa.js",
+	"./fa.js": "../../../../chart.js/node_modules/moment/locale/fa.js",
+	"./fi": "../../../../chart.js/node_modules/moment/locale/fi.js",
+	"./fi.js": "../../../../chart.js/node_modules/moment/locale/fi.js",
+	"./fo": "../../../../chart.js/node_modules/moment/locale/fo.js",
+	"./fo.js": "../../../../chart.js/node_modules/moment/locale/fo.js",
+	"./fr": "../../../../chart.js/node_modules/moment/locale/fr.js",
+	"./fr-ca": "../../../../chart.js/node_modules/moment/locale/fr-ca.js",
+	"./fr-ca.js": "../../../../chart.js/node_modules/moment/locale/fr-ca.js",
+	"./fr-ch": "../../../../chart.js/node_modules/moment/locale/fr-ch.js",
+	"./fr-ch.js": "../../../../chart.js/node_modules/moment/locale/fr-ch.js",
+	"./fr.js": "../../../../chart.js/node_modules/moment/locale/fr.js",
+	"./fy": "../../../../chart.js/node_modules/moment/locale/fy.js",
+	"./fy.js": "../../../../chart.js/node_modules/moment/locale/fy.js",
+	"./gd": "../../../../chart.js/node_modules/moment/locale/gd.js",
+	"./gd.js": "../../../../chart.js/node_modules/moment/locale/gd.js",
+	"./gl": "../../../../chart.js/node_modules/moment/locale/gl.js",
+	"./gl.js": "../../../../chart.js/node_modules/moment/locale/gl.js",
+	"./gom-latn": "../../../../chart.js/node_modules/moment/locale/gom-latn.js",
+	"./gom-latn.js": "../../../../chart.js/node_modules/moment/locale/gom-latn.js",
+	"./he": "../../../../chart.js/node_modules/moment/locale/he.js",
+	"./he.js": "../../../../chart.js/node_modules/moment/locale/he.js",
+	"./hi": "../../../../chart.js/node_modules/moment/locale/hi.js",
+	"./hi.js": "../../../../chart.js/node_modules/moment/locale/hi.js",
+	"./hr": "../../../../chart.js/node_modules/moment/locale/hr.js",
+	"./hr.js": "../../../../chart.js/node_modules/moment/locale/hr.js",
+	"./hu": "../../../../chart.js/node_modules/moment/locale/hu.js",
+	"./hu.js": "../../../../chart.js/node_modules/moment/locale/hu.js",
+	"./hy-am": "../../../../chart.js/node_modules/moment/locale/hy-am.js",
+	"./hy-am.js": "../../../../chart.js/node_modules/moment/locale/hy-am.js",
+	"./id": "../../../../chart.js/node_modules/moment/locale/id.js",
+	"./id.js": "../../../../chart.js/node_modules/moment/locale/id.js",
+	"./is": "../../../../chart.js/node_modules/moment/locale/is.js",
+	"./is.js": "../../../../chart.js/node_modules/moment/locale/is.js",
+	"./it": "../../../../chart.js/node_modules/moment/locale/it.js",
+	"./it.js": "../../../../chart.js/node_modules/moment/locale/it.js",
+	"./ja": "../../../../chart.js/node_modules/moment/locale/ja.js",
+	"./ja.js": "../../../../chart.js/node_modules/moment/locale/ja.js",
+	"./jv": "../../../../chart.js/node_modules/moment/locale/jv.js",
+	"./jv.js": "../../../../chart.js/node_modules/moment/locale/jv.js",
+	"./ka": "../../../../chart.js/node_modules/moment/locale/ka.js",
+	"./ka.js": "../../../../chart.js/node_modules/moment/locale/ka.js",
+	"./kk": "../../../../chart.js/node_modules/moment/locale/kk.js",
+	"./kk.js": "../../../../chart.js/node_modules/moment/locale/kk.js",
+	"./km": "../../../../chart.js/node_modules/moment/locale/km.js",
+	"./km.js": "../../../../chart.js/node_modules/moment/locale/km.js",
+	"./kn": "../../../../chart.js/node_modules/moment/locale/kn.js",
+	"./kn.js": "../../../../chart.js/node_modules/moment/locale/kn.js",
+	"./ko": "../../../../chart.js/node_modules/moment/locale/ko.js",
+	"./ko.js": "../../../../chart.js/node_modules/moment/locale/ko.js",
+	"./ky": "../../../../chart.js/node_modules/moment/locale/ky.js",
+	"./ky.js": "../../../../chart.js/node_modules/moment/locale/ky.js",
+	"./lb": "../../../../chart.js/node_modules/moment/locale/lb.js",
+	"./lb.js": "../../../../chart.js/node_modules/moment/locale/lb.js",
+	"./lo": "../../../../chart.js/node_modules/moment/locale/lo.js",
+	"./lo.js": "../../../../chart.js/node_modules/moment/locale/lo.js",
+	"./lt": "../../../../chart.js/node_modules/moment/locale/lt.js",
+	"./lt.js": "../../../../chart.js/node_modules/moment/locale/lt.js",
+	"./lv": "../../../../chart.js/node_modules/moment/locale/lv.js",
+	"./lv.js": "../../../../chart.js/node_modules/moment/locale/lv.js",
+	"./me": "../../../../chart.js/node_modules/moment/locale/me.js",
+	"./me.js": "../../../../chart.js/node_modules/moment/locale/me.js",
+	"./mi": "../../../../chart.js/node_modules/moment/locale/mi.js",
+	"./mi.js": "../../../../chart.js/node_modules/moment/locale/mi.js",
+	"./mk": "../../../../chart.js/node_modules/moment/locale/mk.js",
+	"./mk.js": "../../../../chart.js/node_modules/moment/locale/mk.js",
+	"./ml": "../../../../chart.js/node_modules/moment/locale/ml.js",
+	"./ml.js": "../../../../chart.js/node_modules/moment/locale/ml.js",
+	"./mr": "../../../../chart.js/node_modules/moment/locale/mr.js",
+	"./mr.js": "../../../../chart.js/node_modules/moment/locale/mr.js",
+	"./ms": "../../../../chart.js/node_modules/moment/locale/ms.js",
+	"./ms-my": "../../../../chart.js/node_modules/moment/locale/ms-my.js",
+	"./ms-my.js": "../../../../chart.js/node_modules/moment/locale/ms-my.js",
+	"./ms.js": "../../../../chart.js/node_modules/moment/locale/ms.js",
+	"./my": "../../../../chart.js/node_modules/moment/locale/my.js",
+	"./my.js": "../../../../chart.js/node_modules/moment/locale/my.js",
+	"./nb": "../../../../chart.js/node_modules/moment/locale/nb.js",
+	"./nb.js": "../../../../chart.js/node_modules/moment/locale/nb.js",
+	"./ne": "../../../../chart.js/node_modules/moment/locale/ne.js",
+	"./ne.js": "../../../../chart.js/node_modules/moment/locale/ne.js",
+	"./nl": "../../../../chart.js/node_modules/moment/locale/nl.js",
+	"./nl-be": "../../../../chart.js/node_modules/moment/locale/nl-be.js",
+	"./nl-be.js": "../../../../chart.js/node_modules/moment/locale/nl-be.js",
+	"./nl.js": "../../../../chart.js/node_modules/moment/locale/nl.js",
+	"./nn": "../../../../chart.js/node_modules/moment/locale/nn.js",
+	"./nn.js": "../../../../chart.js/node_modules/moment/locale/nn.js",
+	"./pa-in": "../../../../chart.js/node_modules/moment/locale/pa-in.js",
+	"./pa-in.js": "../../../../chart.js/node_modules/moment/locale/pa-in.js",
+	"./pl": "../../../../chart.js/node_modules/moment/locale/pl.js",
+	"./pl.js": "../../../../chart.js/node_modules/moment/locale/pl.js",
+	"./pt": "../../../../chart.js/node_modules/moment/locale/pt.js",
+	"./pt-br": "../../../../chart.js/node_modules/moment/locale/pt-br.js",
+	"./pt-br.js": "../../../../chart.js/node_modules/moment/locale/pt-br.js",
+	"./pt.js": "../../../../chart.js/node_modules/moment/locale/pt.js",
+	"./ro": "../../../../chart.js/node_modules/moment/locale/ro.js",
+	"./ro.js": "../../../../chart.js/node_modules/moment/locale/ro.js",
+	"./ru": "../../../../chart.js/node_modules/moment/locale/ru.js",
+	"./ru.js": "../../../../chart.js/node_modules/moment/locale/ru.js",
+	"./sd": "../../../../chart.js/node_modules/moment/locale/sd.js",
+	"./sd.js": "../../../../chart.js/node_modules/moment/locale/sd.js",
+	"./se": "../../../../chart.js/node_modules/moment/locale/se.js",
+	"./se.js": "../../../../chart.js/node_modules/moment/locale/se.js",
+	"./si": "../../../../chart.js/node_modules/moment/locale/si.js",
+	"./si.js": "../../../../chart.js/node_modules/moment/locale/si.js",
+	"./sk": "../../../../chart.js/node_modules/moment/locale/sk.js",
+	"./sk.js": "../../../../chart.js/node_modules/moment/locale/sk.js",
+	"./sl": "../../../../chart.js/node_modules/moment/locale/sl.js",
+	"./sl.js": "../../../../chart.js/node_modules/moment/locale/sl.js",
+	"./sq": "../../../../chart.js/node_modules/moment/locale/sq.js",
+	"./sq.js": "../../../../chart.js/node_modules/moment/locale/sq.js",
+	"./sr": "../../../../chart.js/node_modules/moment/locale/sr.js",
+	"./sr-cyrl": "../../../../chart.js/node_modules/moment/locale/sr-cyrl.js",
+	"./sr-cyrl.js": "../../../../chart.js/node_modules/moment/locale/sr-cyrl.js",
+	"./sr.js": "../../../../chart.js/node_modules/moment/locale/sr.js",
+	"./ss": "../../../../chart.js/node_modules/moment/locale/ss.js",
+	"./ss.js": "../../../../chart.js/node_modules/moment/locale/ss.js",
+	"./sv": "../../../../chart.js/node_modules/moment/locale/sv.js",
+	"./sv.js": "../../../../chart.js/node_modules/moment/locale/sv.js",
+	"./sw": "../../../../chart.js/node_modules/moment/locale/sw.js",
+	"./sw.js": "../../../../chart.js/node_modules/moment/locale/sw.js",
+	"./ta": "../../../../chart.js/node_modules/moment/locale/ta.js",
+	"./ta.js": "../../../../chart.js/node_modules/moment/locale/ta.js",
+	"./te": "../../../../chart.js/node_modules/moment/locale/te.js",
+	"./te.js": "../../../../chart.js/node_modules/moment/locale/te.js",
+	"./tet": "../../../../chart.js/node_modules/moment/locale/tet.js",
+	"./tet.js": "../../../../chart.js/node_modules/moment/locale/tet.js",
+	"./th": "../../../../chart.js/node_modules/moment/locale/th.js",
+	"./th.js": "../../../../chart.js/node_modules/moment/locale/th.js",
+	"./tl-ph": "../../../../chart.js/node_modules/moment/locale/tl-ph.js",
+	"./tl-ph.js": "../../../../chart.js/node_modules/moment/locale/tl-ph.js",
+	"./tlh": "../../../../chart.js/node_modules/moment/locale/tlh.js",
+	"./tlh.js": "../../../../chart.js/node_modules/moment/locale/tlh.js",
+	"./tr": "../../../../chart.js/node_modules/moment/locale/tr.js",
+	"./tr.js": "../../../../chart.js/node_modules/moment/locale/tr.js",
+	"./tzl": "../../../../chart.js/node_modules/moment/locale/tzl.js",
+	"./tzl.js": "../../../../chart.js/node_modules/moment/locale/tzl.js",
+	"./tzm": "../../../../chart.js/node_modules/moment/locale/tzm.js",
+	"./tzm-latn": "../../../../chart.js/node_modules/moment/locale/tzm-latn.js",
+	"./tzm-latn.js": "../../../../chart.js/node_modules/moment/locale/tzm-latn.js",
+	"./tzm.js": "../../../../chart.js/node_modules/moment/locale/tzm.js",
+	"./uk": "../../../../chart.js/node_modules/moment/locale/uk.js",
+	"./uk.js": "../../../../chart.js/node_modules/moment/locale/uk.js",
+	"./ur": "../../../../chart.js/node_modules/moment/locale/ur.js",
+	"./ur.js": "../../../../chart.js/node_modules/moment/locale/ur.js",
+	"./uz": "../../../../chart.js/node_modules/moment/locale/uz.js",
+	"./uz-latn": "../../../../chart.js/node_modules/moment/locale/uz-latn.js",
+	"./uz-latn.js": "../../../../chart.js/node_modules/moment/locale/uz-latn.js",
+	"./uz.js": "../../../../chart.js/node_modules/moment/locale/uz.js",
+	"./vi": "../../../../chart.js/node_modules/moment/locale/vi.js",
+	"./vi.js": "../../../../chart.js/node_modules/moment/locale/vi.js",
+	"./x-pseudo": "../../../../chart.js/node_modules/moment/locale/x-pseudo.js",
+	"./x-pseudo.js": "../../../../chart.js/node_modules/moment/locale/x-pseudo.js",
+	"./yo": "../../../../chart.js/node_modules/moment/locale/yo.js",
+	"./yo.js": "../../../../chart.js/node_modules/moment/locale/yo.js",
+	"./zh-cn": "../../../../chart.js/node_modules/moment/locale/zh-cn.js",
+	"./zh-cn.js": "../../../../chart.js/node_modules/moment/locale/zh-cn.js",
+	"./zh-hk": "../../../../chart.js/node_modules/moment/locale/zh-hk.js",
+	"./zh-hk.js": "../../../../chart.js/node_modules/moment/locale/zh-hk.js",
+	"./zh-tw": "../../../../chart.js/node_modules/moment/locale/zh-tw.js",
+	"./zh-tw.js": "../../../../chart.js/node_modules/moment/locale/zh-tw.js"
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "../../../../chart.js/node_modules/moment/locale recursive ^\\.\\/.*$";
+
+/***/ }),
+
 /***/ "../../../../moment/locale recursive ^\\.\\/.*$":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4582,6 +4904,8 @@ var map = {
 	"./be.js": "../../../../moment/locale/be.js",
 	"./bg": "../../../../moment/locale/bg.js",
 	"./bg.js": "../../../../moment/locale/bg.js",
+	"./bm": "../../../../moment/locale/bm.js",
+	"./bm.js": "../../../../moment/locale/bm.js",
 	"./bn": "../../../../moment/locale/bn.js",
 	"./bn.js": "../../../../moment/locale/bn.js",
 	"./bo": "../../../../moment/locale/bo.js",
@@ -4625,6 +4949,8 @@ var map = {
 	"./es": "../../../../moment/locale/es.js",
 	"./es-do": "../../../../moment/locale/es-do.js",
 	"./es-do.js": "../../../../moment/locale/es-do.js",
+	"./es-us": "../../../../moment/locale/es-us.js",
+	"./es-us.js": "../../../../moment/locale/es-us.js",
 	"./es.js": "../../../../moment/locale/es.js",
 	"./et": "../../../../moment/locale/et.js",
 	"./et.js": "../../../../moment/locale/et.js",
@@ -4650,6 +4976,8 @@ var map = {
 	"./gl.js": "../../../../moment/locale/gl.js",
 	"./gom-latn": "../../../../moment/locale/gom-latn.js",
 	"./gom-latn.js": "../../../../moment/locale/gom-latn.js",
+	"./gu": "../../../../moment/locale/gu.js",
+	"./gu.js": "../../../../moment/locale/gu.js",
 	"./he": "../../../../moment/locale/he.js",
 	"./he.js": "../../../../moment/locale/he.js",
 	"./hi": "../../../../moment/locale/hi.js",
