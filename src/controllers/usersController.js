@@ -30,8 +30,12 @@ module.exports = {
 			queryController.selectAll(carTable)
 			.then(function(cars) {
 				for (var i = 0; i < cars.length; i++) {
-					userId = cars[i].owner - 1;
-					users[userId].cars.push(cars[i]);
+					userId = cars[i].owner;
+					for (var j = 0; j< users.length; j++) {
+						if (users[j].id == userId) {
+							users[j].cars.push(cars[i]);
+						}
+					}
 				}
 				if (!req.user.roles) {
 					queryController.increment(statsTable, 'requests', {id: req.user.id});

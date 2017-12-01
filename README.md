@@ -32,8 +32,8 @@ Para levantar localmente el servidor simplemente se puede usar `node ./src/index
 Para ejecutar los tests usar `npm test`.
 
 Para correr el server se utiliza una base de datos local para development y otra para test. 
-+ Base de datos usada para development: usuario y contraseña igual a *postgres*, siendo *shared_server* el nombre de la base de datos.
-+ Base de datos usada para test: usuario igual a *postgres*, siendo *shared_server_test* el nombre de la base de datos.
++ **Base de datos usada para development:** usuario y contraseña igual a *postgres*, siendo *shared_server* el nombre de la base de datos.
++ **Base de datos usada para test:** usuario igual a *postgres*, siendo *shared_server_test* el nombre de la base de datos.
 
 ### Levantar el servidor en Heroku
 
