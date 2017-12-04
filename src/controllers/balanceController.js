@@ -18,11 +18,10 @@ module.exports = {
 				valueAux = -cost.value;
 			}
 			
-			balance.map(element => {
+			balance.map((element) => {
 				if (element.currency == cost.currency) {
 					element.value += valueAux;
-				}
-				else {
+				} else {
 					count++;
 				}
 			});

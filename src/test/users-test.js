@@ -115,7 +115,7 @@ describe('API users routes', function() {
 				res.body.users[0].images.should.deep.equal(['imageLink', 'anotherImageLink']);
 				res.body.users[0].should.have.property('balance');
 				res.body.users[0].balance.should.deep.equal([{currency: 'ARS', value: 100}]);
-				res.body.users[2].cars.should.deep.equal([{id: 3 , _ref: 'specialRefForTesting', owner: 3, properties: [{ name: 'Chevrolet Spin', value: 'NAF248'}]}]);
+				res.body.users[2].cars.should.deep.equal([{id: 3, _ref: 'specialRefForTesting', owner: 3, properties: [{ name: 'Chevrolet Spin', value: 'NAF248'}]}]);
 				res.body.users[4].cars.should.deep.equal([{id: 1, _ref: 'ref1', owner: 5, properties: [{ name: 'Volkswagen Suran', value: 'AA123BF' }]}, {id: 2, _ref: 'ref2', owner: 5, properties: [{ name: 'Fitito', value: 'GOF226' }]}]);
 				res.body.users[0].should.not.have.property('password');
 				res.body.users[0].should.not.have.property('fb');
@@ -146,7 +146,7 @@ describe('API users routes', function() {
 				res.body.users[2].should.have.property('type');
 				res.body.users[2].type.should.equal('driver');
 				res.body.users[2].should.have.property('cars');
-				res.body.users[2].cars.should.deep.equal([{id: 3 , _ref: 'specialRefForTesting', owner: 3, properties: [{ name: 'Chevrolet Spin', value: 'NAF248'}]}]);
+				res.body.users[2].cars.should.deep.equal([{id: 3, _ref: 'specialRefForTesting', owner: 3, properties: [{ name: 'Chevrolet Spin', value: 'NAF248'}]}]);
 				res.body.users[2].should.have.property('username');
 				res.body.users[2].username.should.equal('iwilldriveu');
 				res.body.users[2].should.have.property('name');

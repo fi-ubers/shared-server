@@ -33,7 +33,6 @@ describe('GET /api/statistics', function() {
 		chai.request(server)
 		.get('/api/statistics')
 		.end(function(err, res) {
-		console.log(res.body.message);
 			res.should.have.status(200);
 			res.should.be.json;
 			res.body.should.be.a('Object');
