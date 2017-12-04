@@ -5,29 +5,28 @@
 
 # shared-server
 
-Aplicación en node.js con API RESTful para el shared-server de FiUber.
-
-Leer los issues para una lista de tareas que realizar.
+Aplicación en node.js con API RESTful para el shared-server de FiUber. Utiliza PostgreSQL como base de datos y Angular para el desarrollo de la aplicación web.
 
 Connect to... [https://fiuber-shared-server.herokuapp.com/](https://fiuber-shared-server.herokuapp.com/)
 
 ## Para correr el servidor
 
-Primero se debe instalar [NodeJS y npm](https://nodejs.org/en/download/) junto con [PostgreSQL](https://www.postgresql.org/download/).
+Primero se debe instalar [Node.js y npm](https://nodejs.org/en/download/) junto con [PostgreSQL](https://www.postgresql.org/download/). 
 
-Luego, se debe crear un archivo `.env` dentro del root directory del proyecto con el siguiente contenido:
-+ DATABASE_URL=postgres://udivnwonhaaoem:5c055f1fa9f8d5f9273904625f1126865902047ae46a4bb0841200bd6d3c3d72@ec2-107-20-193-89.compute-1.amazonaws.com:5432/dfdidieplcj3ne
-+ BUSINESS_USER_KEY=fiuber-shared-server-secret-business-user
-+ APP_KEY=fiuber-shared-server-secret-app
-+ LOG_LEVEL='debug'
+Se debe tener instalado [Git](https://git-scm.com/downloads) y hacer `git clone` del repositorio.
 
-Primero descargar todas las dependencias con `npm install`. Las dependencias descargadas se guardarán en la carpeta node_modules (incluida en el .gitignore).
+Luego se debe crear un archivo `.env` dentro del root directory del proyecto con el siguiente contenido:
++ BUSINESS\_USER\_KEY=fiuber-shared-server-secret-business-user
++ APP\_KEY=fiuber-shared-server-secret-app
++ LOG\_LEVEL='info'
+
+Para descargar todas las dependencias usar `npm install`. Las dependencias descargadas se guardarán en la carpeta node\_modules (incluida en el .gitignore).
 
 Los paquetes necesarios para correr se especifican en el tag _dependencies_ del archivo _package.json_. Agregar ahí las dependencias nuevas preferentemente usando `npm install _pkgname_ --save` para que el paquete se instale y automáticamente se guarde en el .json.
 
 ### Levantar el servidor localmente
 
-Para levantar localmente el servidor simplemente se puede usar `node ./src/index.js` o `npm start`. Para conectarse al servidor local usar _localhost_:5000 (o el puerto que se defina en index.js).
+Para levantar localmente el servidor simplemente se puede usar `node ./src/index.js` o `npm start`. Para conectarse al servidor local usar _localhost_:5000.
 
 Para ejecutar los tests usar `npm test`.
 
@@ -47,7 +46,7 @@ Usar `heroku ps:scale web=1` para crear un _dyno_ y `heroku ps:scale web=0` para
 
 ## Para realizar requests por consolas
 
-Para poder probar los distintos endpoints de la API se puede utilizar un navegador (que realiza request de tipo GET) o bien usar el comando `curl` y hacerlo por consola. En particular la estructura del comando sería:
+Para poder probar los distintos endpoints de la API se puede utilizar un navegador (que realiza request de tipo GET), usar [Postman](https://www.getpostman.com/) o bien usar el comando `curl` y hacerlo por consola. En particular la estructura del comando sería:
 
 `curl -X _tipo_ -d _data_ http://someURL:somePort/someEndpoint`
 
@@ -57,18 +56,22 @@ Donde _tipo_ es POST, GET, etc; _data_ son los datos a mandar en la request (un 
 
 Si se quiere utilizar docker primero debe instalarse [Docker](https://docs.docker.com/engine/installation/) y [Docker compose](https://docs.docker.com/compose/install/). Además se debe configurar para [correrlo sin sudo](https://docs.docker.com/engine/installation/linux/linux-postinstall/).
 
-Para correr el servidor, haciendo build de las imágenes antes de que empiecen los containers, usar `docker-compose up --build shared-server` (ver [docker-compose up](https://docs.docker.com/compose/reference/up/) para más información). Para detener el container de la base de datos, usar `docker stop database`.
+Para correr el servidor usar `docker-compose up --build shared-server` (ver [docker-compose up](https://docs.docker.com/compose/reference/up/) para más información). Se puede detener la ejecución utilizando `Ctrl + C`. Para detener el container de la base de datos, usar `docker stop database`.
 
-Si se quiere correr el servidor en segundo plano usar `docker-compose up -d --build shared-server`. Para detenerlo usar `docker-compose stop` y para iniciarlo nuevamente, `docker-compose start`. Si se quiere detener y eliminar el container usar `docker-compose down`.
+Si se quiere correr el servidor **en segundo plano** usar `docker-compose up -d --build shared-server`. Para detenerlo usar `docker-compose stop` y para iniciarlo nuevamente, `docker-compose start`. Si se quiere detener y eliminar el container usar `docker-compose down`.
 
-Como comandos útiles: para ver únicamente los containers en ejecución usar el comando `docker ps`, mientras que `docker ps -a` muestra todos los containers y `docker images -a` muestra todas las imágenes. Para eliminar todos los containers e imágenes usar `docker rm $(docker ps -a -q)` y `docker rmi $(docker images -q)` respectivamente.
+Como comandos útiles: 
++ Usar el comando `docker ps` para ver únicamente los containers en ejecución.
++ Usar `docker ps -a` para ver todos los containers.
++ Usar `docker images -a` para ver todas las imágenes. 
++ Usar `docker rm $(docker ps -a -q)` y `docker rmi $(docker images -q)` para eliminar todos los containers e imágenes, respectivamente.
 
 ## Para generar la documentación del código fuente
 
 Para generar automáticamente la documentación, simplemente se debe escribir `npm run jsdoc`. Luego de eso, en el directorio docs/ se creará una carpeta 'documentation'. Allí se podrá acceder a index.html para leer la documentación del server.
 
-## Para ejecutar eslint
+## Para ejecutar ESLint
 
-Para ejecutar eslint usar `npm run lint`.
+Para ejecutar ESLint usar `npm run lint`.
 
 
