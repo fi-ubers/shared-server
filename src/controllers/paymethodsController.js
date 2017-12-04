@@ -1,5 +1,4 @@
 const logger = require('./../logger');
-const request = require('request');
 var rp = require('request-promise');
 var statsTable = 'statistics';
 

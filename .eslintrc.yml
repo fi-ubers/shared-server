@@ -11,7 +11,7 @@ rules:
   array-bracket-spacing:
     - error
     - never
-  array-callback-return: error
+  array-callback-return: 'off'
   array-element-newline: 'off'
   arrow-body-style: error
   arrow-parens: error
@@ -112,7 +112,7 @@ rules:
   no-else-return: 'off'
   no-empty-function: error
   no-eq-null: error
-  no-eval: error
+  no-eval: 'off'
   no-extend-native: error
   no-extra-bind: error
   no-extra-label: error
@@ -125,7 +125,7 @@ rules:
   no-inner-declarations:
     - error
     - functions
-  no-invalid-this: error
+  no-invalid-this: 'off'
   no-iterator: error
   no-label-var: error
   no-labels: error
@@ -149,9 +149,9 @@ rules:
   no-new-require: error
   no-new-wrappers: error
   no-octal-escape: error
-  no-param-reassign: error
+  no-param-reassign: 'off'
   no-path-concat: 'off'
-  no-plusplus: error
+  no-plusplus: 'off'
   no-process-env: 'off'
   no-process-exit: error
   no-proto: error
@@ -178,7 +178,7 @@ rules:
   no-throw-literal: error
   no-trailing-spaces: 'off'
   no-undef-init: error
-  no-undefined: error
+  no-undefined: 'off'
   no-underscore-dangle: 'off'
   no-unmodified-loop-condition: error
   no-unneeded-ternary: error
@@ -244,7 +244,7 @@ rules:
   unicode-bom:
     - error
     - never
-  valid-jsdoc: error
+  valid-jsdoc: 'off'
   vars-on-top: 'off'
   wrap-iife: error
   wrap-regex: error

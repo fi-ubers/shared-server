@@ -486,7 +486,7 @@ describe('API trips routes', function() {
 				res.body.metadata.should.have.property('version');
 				res.body.should.have.property('cost');
 				var estimatedDistance = geolib.getDistance({ latitude: -34.616213000, longitude: -58.369527000 }, { latitude: -34.586252120, longitude: -58.398663998 });
-				var cost = estimatedDistance/1000 * 15;
+				var cost = estimatedDistance / 1000 * 15;
 				res.body.cost.should.deep.equal({ currency: "ARS", value: parseFloat(cost.toFixed(2)) });
 				done();
 			});

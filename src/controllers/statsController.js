@@ -1,8 +1,6 @@
 var logger = require('./../logger');
-var knex = require('../db/knex');
 var statsTable = 'statistics';
 
-var tokenController = require('./tokenController');
 var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');

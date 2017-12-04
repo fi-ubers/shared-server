@@ -13,7 +13,6 @@ var visibleTripFields = ['id', 'applicationOwner', 'driver', 'passenger', 'start
 var errorController = require('./errorController');
 var queryController = require('./queryController');
 var responseController = require('./responseController');
-const paymentAPI = require('../../config/paymentAPI');
 var paymentController = require('./paymentController');
 const tokenController = require('./tokenController');
 var balanceController = require('./balanceController');
@@ -30,8 +29,8 @@ module.exports = {
 			queryController.selectAll(carTable)
 			.then(function(cars) {
 				for (var i = 0; i < cars.length; i++) {
-					userId = cars[i].owner;
-					for (var j = 0; j< users.length; j++) {
+					var userId = cars[i].owner;
+					for (var j = 0; j < users.length; j++) {
 						if (users[j].id == userId) {
 							users[j].cars.push(cars[i]);
 						}
@@ -124,7 +123,7 @@ module.exports = {
 				errorController.unexpectedError(res, error, request);
 			});
 		} else {
-			// TODO: fb auth token validation
+			// fb auth token validation
 		}
 	},
 	
@@ -442,7 +441,7 @@ module.exports = {
 		tokenController.generatePaymentToken().then(function(body) {
 			logger.info("Making trip payment");	
 			paymentController.createPayment(body.access_token, paymentData)
-			.then(function(response) {
+			.then(function() {
 				logger.info("Payment success");
 				logger.info("Creating payment transaction");
 				var transaction = {
@@ -474,7 +473,9 @@ module.exports = {
 		queryController.selectOneWhere(userTable, {id: userId})
 		.then(function(user) {
 			if (user) {
-				queryController.selectAllWhere(tripTable, function() { this.where('driver', userId).orWhere('passenger', userId) }, visibleTripFields)
+				queryController.selectAllWhere(tripTable, function() {
+ this.where('driver', userId).orWhere('passenger', userId) 
+}, visibleTripFields)
 				.then(function(trips) {
 					if (!req.user.roles) {
 						queryController.increment(statsTable, 'requests', {id: req.user.id});

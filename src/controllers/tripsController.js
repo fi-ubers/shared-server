@@ -2,8 +2,7 @@ var logger = require('./../logger');
 var knex = require('../db/knex');
 var geolib = require('geolib');
 var Rules = require('../services/rulesService');
-var serialize = require('serialize-javascript');
-var deserialize = str => eval('(' + str + ')');
+var deserialize = (str) => eval('(' + str + ')');
 var tripTable = 'trips';
 var statsTable = 'statistics';
 var transactionTable = 'transactions';
@@ -18,7 +17,7 @@ var paymentController = require('./paymentController');
 var tokenController = require('./tokenController');
 var balanceController = require('./balanceController');
 
-function calculateCost(userId, tripData, appId) {
+function calculateCost(res, request, userId, tripData, appId) {
 	// Run 'active' rules
 	return queryController.selectAllWhere(ruleTable, {active: true})
 	.then(function(selectedRules) {
@@ -26,8 +25,8 @@ function calculateCost(userId, tripData, appId) {
 		.then(function(trips) {
 			return queryController.selectOneWhere(userTable, {id: userId})
 			.then(function(userData) {
-				rules = selectedRules.map(rule => deserialize(rule.blob));
-				var userTrips = trips.filter(trip => trip.passenger == userId);
+				var rules = selectedRules.map((rule) => deserialize(rule.blob));
+				var userTrips = trips.filter((trip) => trip.passenger == userId);
 				var fact = {
 					trips: trips,
 					userTrip: tripData,
@@ -49,13 +48,13 @@ function calculateCost(userId, tripData, appId) {
 						
 					var cost = result.cost;
 					// Apply discounts
-					for(var i = 0; i < result.discounts.length; i++) {
-						cost = cost - (cost * result.discounts[i]);
+					for (var i = 0; i < result.discounts.length; i++) {
+						cost -= (cost * result.discounts[i]);
 					}
 				
 					// Apply surcharges
-					for(var i = 0; i < result.surcharges.length; i++) {
-						cost = cost + (cost * result.surcharges[i]);
+					for (var j = 0; j < result.surcharges.length; j++) {
+						cost += (cost * result.surcharges[j]);
 					}
 				
 					if (result.minCost && (cost < result.minCost))
@@ -80,7 +79,7 @@ function calculateCost(userId, tripData, appId) {
 	})
 }
 
-function calculateGain(userId, tripData, appId) {
+function calculateGain(res, request, userId, tripData, appId) {
 	// Run 'active' rules
 	return queryController.selectAllWhere(ruleTable, {active: true})
 	.then(function(selectedRules) {
@@ -88,7 +87,7 @@ function calculateGain(userId, tripData, appId) {
 		.then(function(trips) {
 			return queryController.selectOneWhere(userTable, {id: userId})
 			.then(function(userData) {
-				rules = selectedRules.map(rule => deserialize(rule.blob));
+				var rules = selectedRules.map((rule) => deserialize(rule.blob));
 				var fact = {
 					trips: trips,
 					userTrip: tripData,	
@@ -102,8 +101,8 @@ function calculateGain(userId, tripData, appId) {
 					var gain = result.gain;
 				
 					// Apply benefits
-					for(var i = 0; i < result.benefits.length; i++) {
-						gain = gain + (gain * result.benefits[i]);
+					for (var i = 0; i < result.benefits.length; i++) {
+						gain += (gain * result.benefits[i]);
 					}
 				
 					if (result.minPayment && (gain < result.minPayment))
@@ -167,8 +166,8 @@ module.exports = {
 			var promises = [];
 			var tripData = req.body.trip;
 			tripData.paymethod = req.body.paymethod;
-			promises.push(calculateCost(passenger, tripData, req.user.id));
-			promises.push(calculateGain(driver, tripData, req.user.id));
+			promises.push(calculateCost(res, request, passenger, tripData, req.user.id));
+			promises.push(calculateGain(res, request, driver, tripData, req.user.id));
 			Promise.all(promises)
 			.then(function(calculatedValues) {
 				var costValue = calculatedValues[0];
@@ -238,7 +237,7 @@ module.exports = {
 							};
 						
 							paymentController.createPayment(body.access_token, paymentData)
-							.then(function(response) {
+							.then(function() {
 								logger.info("Payment success");
 								logger.info("Creating payment transaction");
 								var paymentTransaction = {
@@ -291,6 +290,7 @@ module.exports = {
 		var start = req.body.start;
 		var end = req.body.end;
 		var distance = req.body.distance;
+		var estimatedDistance = null;
 		var request = "POST at /api/trips/estimate";
 		logger.info(request);
 		
@@ -298,7 +298,7 @@ module.exports = {
 			errorController.missingParameters(res, request);
 		} else {
 			if (!distance) {
-				var estimatedDistance = geolib.getDistance({ latitude: start.address.location.lat, longitude: start.address.location.lon }, { latitude: end.address.location.lat, longitude: end.address.location.lon });
+				estimatedDistance = geolib.getDistance({ latitude: start.address.location.lat, longitude: start.address.location.lon }, { latitude: end.address.location.lat, longitude: end.address.location.lon });
 			}
 			var tripData = {
 				passenger: passenger,
@@ -312,7 +312,7 @@ module.exports = {
 				route: req.body.route
 			};
 			
-			calculateCost(passenger, tripData, req.user.id)
+			calculateCost(res, request, passenger, tripData, req.user.id)
 			.then(function (estimatedCost) {
 				if (estimatedCost == -1) {
 					errorController.negativeBalance(res, request);

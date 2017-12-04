@@ -10,18 +10,6 @@ var uuidv4 = require('uuid/v4');
 chai.should();
 chai.use(chaiHttp);
 
-var userJti = uuidv4();
-var businessUser = {
-	id: 16,
-	roles: ['user']
-};
-			
-var userToken = jwt.sign({
-			id: businessUser.id,
-			roles: businessUser.roles,
-			jti: userJti},
-			process.env.BUSINESS_USER_KEY);
-
 var appToken = jwt.sign({
 			id: 1,
 			jti: uuidv4()}, 
@@ -66,10 +54,10 @@ describe('API paymethods routes', function() {
 				res.body.paymethods.should.be.a('array');
 				res.body.paymethods.length.should.equal(2);
 				res.body.paymethods[0].should.have.property('parameters');
-				res.body.paymethods[0].should.have.property('name'); // Cambiar a name?
+				res.body.paymethods[0].should.have.property('name');
 				res.body.paymethods[0].name.should.equal('card');
 				res.body.paymethods[1].should.have.property('parameters');
-				res.body.paymethods[1].should.have.property('name'); // Cambiar a name?
+				res.body.paymethods[1].should.have.property('name');
 				res.body.paymethods[1].name.should.equal('cash');
 				done();
 			});

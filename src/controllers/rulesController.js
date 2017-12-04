@@ -2,8 +2,7 @@ const logger = require('./../logger');
 const moment = require('moment');
 const Rules = require('../services/rulesService');
 const serialize = require('serialize-javascript');
-const knex = require('../db/knex');
-const deserialize = str => eval('(' + str + ')');
+const deserialize = (str) => eval('(' + str + ')');
 const uuidv4 = require('uuid/v4');
 const ruleTable = 'rules';
 const commitTable = 'commits';
@@ -49,7 +48,7 @@ module.exports = {
 						timestamp: moment().format() 
 					};
 					
-					queryController.insert(ruleTable, {_ref: uuidv4(), language: language, lastCommit: lastCommit, blob: blob , active: active})
+					queryController.insert(ruleTable, {_ref: uuidv4(), language: language, lastCommit: lastCommit, blob: blob, active: active})
 					.then(function(rule) {
 						logger.info("Storing new commit of rule " + rule[0].id);
 						queryController.insert(commitTable, {rule: rule[0], ruleId: rule[0].id})
@@ -82,9 +81,9 @@ module.exports = {
 			queryController.selectWhereIn(ruleTable, 'id', rules)
 			.then(function(selectedRules) {
 				if (selectedRules.length > 0) {
-					rules = selectedRules.map(rule => deserialize(rule.blob));
+					rules = selectedRules.map((rule) => deserialize(rule.blob));
 				
-					var factsPromise = facts.map(fact => {
+					var factsPromise = facts.map((fact) => {
 						if (typeof fact == 'string') {
 							fact = deserialize(fact);
 							fact = fact.blob;
@@ -227,7 +226,7 @@ module.exports = {
 				if (rule) {
 					rule = deserialize(rule.blob);
 				
-					var factsPromise = facts.map(fact => {
+					var factsPromise = facts.map((fact) => {
 						if (typeof fact == 'string') {
 							fact = deserialize(fact);
 							fact = fact.blob;
@@ -261,10 +260,10 @@ module.exports = {
 		
 		queryController.selectAllWhere(commitTable, {ruleId: ruleId})
 		.then(function(commits) {
-			commitsResponse = commits.map( commit => { 
-			 	commit.rule.lastCommit.id = commit.id;
-			 	return commit.rule.lastCommit; 
-			 });
+			var commitsResponse = commits.map( (commit) => { 
+				commit.rule.lastCommit.id = commit.id;
+				return commit.rule.lastCommit; 
+			});
 			responseController.sendCommits(res, commitsResponse.length, commitsResponse.length, commitsResponse);
 		})
 		.catch(function(error) {

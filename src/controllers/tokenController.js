@@ -1,7 +1,6 @@
 var logger = require('./../logger');
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
-var request = require('request');
 var uuidv4 = require('uuid/v4');
 var rp = require('request-promise');
 
@@ -87,17 +86,5 @@ module.exports = {
 		};
 		
 		return rp(options);
-		/*
-		return new Promise(function(resolve, reject) {
-			request.post({url: paymentAPI.baseUrl + uri, form: { 
-				client_id: paymentAPI.clientId,
-				client_secret: paymentAPI.clientSecret 
-				}}, function(err, httpResponse, body) {
-				if (!err) {
-					paymentToken = body; 
-					resolve();
-				}
-			})
-		});*/
 	})
 }
