@@ -67,3 +67,8 @@ Como comandos útiles: para ver únicamente los containers en ejecución usar el
 
 Para generar automáticamente la documentación, simplemente se debe escribir `npm run jsdoc`. Luego de eso, en el directorio docs/ se creará una carpeta 'documentation'. Allí se podrá acceder a index.html para leer la documentación del server.
 
+## Para ejecutar eslint
+
+Para ejecutar eslint usar `npm run lint`.
+
+
