@@ -109,4 +109,10 @@ Como también es necesario almacenar la información sobre cada commit y la regl
 
 ## Diseño/Arquitectura
 
-
+Al momento de realizar el proyecto, se pensó en separar el código correspondiente a la interfaz web desarrollada con Angular (ubicado dentro del directorio *client*), y el código perteneciente al server (que se encuentra dentro del directorio *src* junto con los tests, controladores, middlewares utilizados y la definición de los endpoints, entre otras funcionalidades). Se destacan los siguientes módulos/files:
++ *src/index.js*: utiliza *Express* para iniciar el Shared Server, permitiendo que se quede escuchando al puerto indicado. También se indica el middleware y las rutas a usar.
++ *src/logger.js*: se encuentra la configuración del Logger, tanto para los mensajes por consola como para el file que se crea. Lo que se decidió fue crear un archivo de log por día para facilitar la lectura y encontrar fácilmente los errores surgidos. Cada archivo creado tiene su correspondiente fecha.
++ *src/routes/api.js*: utiliza el *Express* router para definir todos los endpoints que permitirán la comunicación con los App Servers, especificados en la API mencionada al inicio del documento. Se definen los métodos HTTP (GET, POST, PUT, DELETE) para cada endpoint y la función que se encargará de realizar lo pedido sobre los usuarios de negocio, usuarios de la aplicación, paymethods, viajes, servers y reglas.
++ *src/middlewares/verifyToken.js*: se encarga de verificar que el Application o Business Token ingresado vía query, como se indica en la API, sea válido. Para poder distinguir entre ambos tipos de token y proporcionar mayor seguridad se decidió que sus claves sean distintas.
++ *src/middlewares/authCheck.js*: se ocupa de determinar si el usuario de negocio que realizó la petición se encuentra autorizado, para ello verifica que tenga el rol requerido.
++ *src/middlewares/revokedTokenCheck.js*: controla que el token ingresado no se encuentre revocado. Para ello utiliza la tabla *blacklist* mencionada en la sección anterior.
