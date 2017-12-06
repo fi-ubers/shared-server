@@ -185,38 +185,38 @@ Se destacan los siguientes módulos/directorios:
 		    "address": {
 		      "street": "string",
 		      "location": {
-		        "lat": number,
-		        "lon": number
+		        "lat": "number",
+		        "lon": "number"
 		      }
 		    },
-		    "timestamp": number
+		    "timestamp": "number"
 		  },
 		  "end": {
 		    "address": {
 		      "street": "string",
 		      "location": {
-		        "lat": number,
-		        "lon": number
+		        "lat": "number",
+		        "lon": "number"
 		      }
 		    },
-		    "timestamp": number
+		    "timestamp": "number"
 		  },
-		  "totalTime": number,
-		  "waitTime": number,
-		  "travelTime": number,
-		  "distance": number,
+		  "totalTime": "number",
+		  "waitTime": "number",
+		  "travelTime": "number",
+		  "distance": "number",
 		  "route": [
 		    {
 		      "location": {
-		        "lat": number,
-		        "lon": number
+		        "lat": "number",
+		        "lon": "number"
 		      },
-		      "timestamp": number
+		      "timestamp": "number"
 		    }
 		  ],
 		  "cost": {
 		    "currency": "string",
-		    "value": number
+		    "value": "number"
 		  }
 		}
 	  ],
@@ -229,45 +229,45 @@ Se destacan los siguientes módulos/directorios:
 		  "address": {
 		    "street": "string",
 		    "location": {
-		      "lat": number,
-		      "lon": number
+		      "lat": "number",
+		      "lon": "number"
 		    }
 		  },
-		  "timestamp": number
+		  "timestamp": "number"
 		},
 		"end": {
 		  "address": {
 		    "street": "string",
 		    "location": {
-		      "lat": number,
-		      "lon": number
+		      "lat": "number",
+		      "lon": "number"
 		    }
 		  },
-		  "timestamp": number
+		  "timestamp": "number"
 		},
-		"totalTime": number,
-		"waitTime": number,
-		"travelTime": number,
-		"distance": number,
+		"totalTime": "number",
+		"waitTime": "number",
+		"travelTime": "number",
+		"distance": "number",
 		"route": [
 		  {
 		    "location": {
-		      "lat": number,
-		      "lon": number
+		      "lat": "number",
+		      "lon": "number"
 		    },
-		    "timestamp": number
+		    "timestamp": "number"
 		  }
 		],
 		"cost": {
 		  "currency": "string",
-		  "value": number
+		  "value": "number"
 		},
 		"paymethod": {
 		  "paymethod": "string",
 		  "parameters": {}
 		}
 	  },
-	  "appServer": number,
+	  "appServer": "number",
 	  "user": {
 		"id": "string",
 		"_ref": "string",
@@ -298,15 +298,15 @@ Se destacan los siguientes módulos/directorios:
 		"balance": [
 		  {
 		    "currency": "string",
-		    "value": number
+		    "value": "number"
 		  }
 		]
 	  },
 	  "cost": 0,
 	  "discounts": [],
 	  "surcharges": [],
-	  "canTravel": boolean,
-	  "firstTrip": boolean
+	  "canTravel": "boolean",
+	  "firstTrip": "boolean"
 	}
 	```
 
@@ -324,38 +324,38 @@ Se destacan los siguientes módulos/directorios:
 		    "address": {
 		      "street": "string",
 		      "location": {
-		        "lat": number,
-		        "lon": number
+		        "lat": "number",
+		        "lon": "number"
 		      }
 		    },
-		    "timestamp": number
+		    "timestamp": "number"
 		  },
 		  "end": {
 		    "address": {
 		      "street": "string",
 		      "location": {
-		        "lat": number,
-		        "lon": number
+		        "lat": "number",
+		        "lon": "number"
 		      }
 		    },
-		    "timestamp": number
+		    "timestamp": "number"
 		  },
-		  "totalTime": number,
-		  "waitTime": number,
-		  "travelTime": number,
-		  "distance": number,
+		  "totalTime": "number",
+		  "waitTime": "number",
+		  "travelTime": "number",
+		  "distance": "number",
 		  "route": [
 		    {
 		      "location": {
-		        "lat": number,
-		        "lon": number
+		        "lat": "number",
+		        "lon": "number"
 		      },
-		      "timestamp": number
+		      "timestamp": "number"
 		    }
 		  ],
 		  "cost": {
 		    "currency": "string",
-		    "value": number
+		    "value": "number"
 		  }
 		}
 	  ],
@@ -368,45 +368,45 @@ Se destacan los siguientes módulos/directorios:
 		  "address": {
 		    "street": "string",
 		    "location": {
-		      "lat": number,
-		      "lon": number
+		      "lat": "number",
+		      "lon": "number"
 		    }
 		  },
-		  "timestamp": number
+		  "timestamp": "number"
 		},
 		"end": {
 		  "address": {
 		    "street": "string",
 		    "location": {
-		      "lat": number,
-		      "lon": number
+		      "lat": "number",
+		      "lon": "number"
 		    }
 		  },
-		  "timestamp": number
+		  "timestamp": "number"
 		},
-		"totalTime": number,
-		"waitTime": number,
-		"travelTime": number,
-		"distance": number,
+		"totalTime": "number",
+		"waitTime": "number",
+		"travelTime": "number",
+		"distance": "number",
 		"route": [
 		  {
 		    "location": {
-		      "lat": number,
-		      "lon": number
+		      "lat": "number",
+		      "lon": "number"
 		    },
-		    "timestamp": number
+		    "timestamp": "number"
 		  }
 		],
 		"cost": {
 		  "currency": "string",
-		  "value": number
+		  "value": "number"
 		},
 		"paymethod": {
 		  "paymethod": "string",
 		  "parameters": {}
 		}
 	  },
-	  "appServer": number,
+	  "appServer": "number",
 	  "user": {
 		"id": "string",
 		"_ref": "string",
@@ -437,7 +437,7 @@ Se destacan los siguientes módulos/directorios:
 		"balance": [
 		  {
 		    "currency": "string",
-		    "value": number
+		    "value": "number"
 		  }
 		]
 	  },
