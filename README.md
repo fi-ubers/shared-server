@@ -12,5 +12,7 @@ Connect to... [https://fiuber-shared-server.herokuapp.com/](https://fiuber-share
 ## Documentación
 
 [Manual de Instalación](https://github.com/fi-ubers/shared-server/blob/master/docs/InstallationManual.md)
+
 [Manual de Diseño](https://github.com/fi-ubers/shared-server/blob/master/docs/DesignManual.md)
+
 [Especificación de la API](https://github.com/fi-ubers/shared-server/blob/master/docs/llevameAPI.yml)
