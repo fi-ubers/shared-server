@@ -3,7 +3,7 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-# shared-server
+# Manual de Instalación - Shared Server
 
 Aplicación en Node.js que utiliza Express para la creación de una API RESTful para el Shared Server de Fiuber App. Utiliza PostgreSQL como base de datos y Angular para el desarrollo de la aplicación web.
 

@@ -174,277 +174,278 @@ Se destacan los siguientes módulos/directorios:
 	El fact utilizado para calcular el costo tiene la siguiente estructura:
 
 	```json
-"fact": {
-  "trips": [
-    {
-      "id": "string",
-      "applicationOwner": "string",
-      "driver": "string",
-      "passenger": "string",
-      "start": {
-        "address": {
-          "street": "string",
-          "location": {
-            "lat": number,
-            "lon": number
-          }
-        },
-        "timestamp": number
-      },
-      "end": {
-        "address": {
-          "street": "string",
-          "location": {
-            "lat": number,
-            "lon": number
-          }
-        },
-        "timestamp": number
-      },
-      "totalTime": number,
-      "waitTime": number,
-      "travelTime": number,
-      "distance": number,
-      "route": [
-        {
-          "location": {
-            "lat": number,
-            "lon": number
-          },
-          "timestamp": number
-        }
-      ],
-      "cost": {
-        "currency": "string",
-        "value": number
-      }
-    }
-  ],
-  "userTrip": {
-    "id": "string",
-    "applicationOwner": "string",
-    "driver": "string",
-    "passenger": "string",
-    "start": {
-      "address": {
-        "street": "string",
-        "location": {
-          "lat": number,
-          "lon": number
-        }
-      },
-      "timestamp": number
-    },
-    "end": {
-      "address": {
-        "street": "string",
-        "location": {
-          "lat": number,
-          "lon": number
-        }
-      },
-      "timestamp": number
-    },
-    "totalTime": number,
-    "waitTime": number,
-    "travelTime": number,
-    "distance": number,
-    "route": [
-      {
-        "location": {
-          "lat": number,
-          "lon": number
-        },
-        "timestamp": number
-      }
-    ],
-    "cost": {
-      "currency": "string",
-      "value": number
-    },
-    "paymethod": {
-      "paymethod": "string",
-      "parameters": {}
-    }
-  },
-  "appServer": number,
-  "user": {
-    "id": "string",
-    "_ref": "string",
-    "applicationOwner": "string",
-    "type": "string",
-    "cars": [
-      {
-        "id": "string",
-        "_ref": "string",
-        "owner": "string",
-        "properties": [
-          {
-            "name": "string",
-            "value": "string"
-          }
-        ]
-      }
-    ],
-    "username": "string",
-    "name": "string",
-    "surname": "string",
-    "country": "string",
-    "email": "string",
-    "birthdate": "string",
-    "images": [
-      "string"
-    ],
-    "balance": [
-      {
-        "currency": "string",
-        "value": number
-      }
-    ]
-  },
-  "cost": 0,
-  "discounts": [],
-  "surcharges": [],
-  "canTravel": boolean,
-  "firstTrip": boolean
-}
-```
+	"fact": {
+	  "trips": [
+		{
+		  "id": "string",
+		  "applicationOwner": "string",
+		  "driver": "string",
+		  "passenger": "string",
+		  "start": {
+		    "address": {
+		      "street": "string",
+		      "location": {
+		        "lat": number,
+		        "lon": number
+		      }
+		    },
+		    "timestamp": number
+		  },
+		  "end": {
+		    "address": {
+		      "street": "string",
+		      "location": {
+		        "lat": number,
+		        "lon": number
+		      }
+		    },
+		    "timestamp": number
+		  },
+		  "totalTime": number,
+		  "waitTime": number,
+		  "travelTime": number,
+		  "distance": number,
+		  "route": [
+		    {
+		      "location": {
+		        "lat": number,
+		        "lon": number
+		      },
+		      "timestamp": number
+		    }
+		  ],
+		  "cost": {
+		    "currency": "string",
+		    "value": number
+		  }
+		}
+	  ],
+	  "userTrip": {
+		"id": "string",
+		"applicationOwner": "string",
+		"driver": "string",
+		"passenger": "string",
+		"start": {
+		  "address": {
+		    "street": "string",
+		    "location": {
+		      "lat": number,
+		      "lon": number
+		    }
+		  },
+		  "timestamp": number
+		},
+		"end": {
+		  "address": {
+		    "street": "string",
+		    "location": {
+		      "lat": number,
+		      "lon": number
+		    }
+		  },
+		  "timestamp": number
+		},
+		"totalTime": number,
+		"waitTime": number,
+		"travelTime": number,
+		"distance": number,
+		"route": [
+		  {
+		    "location": {
+		      "lat": number,
+		      "lon": number
+		    },
+		    "timestamp": number
+		  }
+		],
+		"cost": {
+		  "currency": "string",
+		  "value": number
+		},
+		"paymethod": {
+		  "paymethod": "string",
+		  "parameters": {}
+		}
+	  },
+	  "appServer": number,
+	  "user": {
+		"id": "string",
+		"_ref": "string",
+		"applicationOwner": "string",
+		"type": "string",
+		"cars": [
+		  {
+		    "id": "string",
+		    "_ref": "string",
+		    "owner": "string",
+		    "properties": [
+		      {
+		        "name": "string",
+		        "value": "string"
+		      }
+		    ]
+		  }
+		],
+		"username": "string",
+		"name": "string",
+		"surname": "string",
+		"country": "string",
+		"email": "string",
+		"birthdate": "string",
+		"images": [
+		  "string"
+		],
+		"balance": [
+		  {
+		    "currency": "string",
+		    "value": number
+		  }
+		]
+	  },
+	  "cost": 0,
+	  "discounts": [],
+	  "surcharges": [],
+	  "canTravel": boolean,
+	  "firstTrip": boolean
+	}
+	```
 
 	El fact utilizado para calcular la ganancia tiene la siguiente estructura:
 
 	```json
-"fact": {
-  "trips": [
-    {
-      "id": "string",
-      "applicationOwner": "string",
-      "driver": "string",
-      "passenger": "string",
-      "start": {
-        "address": {
-          "street": "string",
-          "location": {
-            "lat": number,
-            "lon": number
-          }
-        },
-        "timestamp": number
-      },
-      "end": {
-        "address": {
-          "street": "string",
-          "location": {
-            "lat": number,
-            "lon": number
-          }
-        },
-        "timestamp": number
-      },
-      "totalTime": number,
-      "waitTime": number,
-      "travelTime": number,
-      "distance": number,
-      "route": [
-        {
-          "location": {
-            "lat": number,
-            "lon": number
-          },
-          "timestamp": number
-        }
-      ],
-      "cost": {
-        "currency": "string",
-        "value": number
-      }
-    }
-  ],
-  "userTrip": {
-    "id": "string",
-    "applicationOwner": "string",
-    "driver": "string",
-    "passenger": "string",
-    "start": {
-      "address": {
-        "street": "string",
-        "location": {
-          "lat": number,
-          "lon": number
-        }
-      },
-      "timestamp": number
-    },
-    "end": {
-      "address": {
-        "street": "string",
-        "location": {
-          "lat": number,
-          "lon": number
-        }
-      },
-      "timestamp": number
-    },
-    "totalTime": number,
-    "waitTime": number,
-    "travelTime": number,
-    "distance": number,
-    "route": [
-      {
-        "location": {
-          "lat": number,
-          "lon": number
-        },
-        "timestamp": number
-      }
-    ],
-    "cost": {
-      "currency": "string",
-      "value": number
-    },
-    "paymethod": {
-      "paymethod": "string",
-      "parameters": {}
-    }
-  },
-  "appServer": number,
-  "user": {
-    "id": "string",
-    "_ref": "string",
-    "applicationOwner": "string",
-    "type": "string",
-    "cars": [
-      {
-        "id": "string",
-        "_ref": "string",
-        "owner": "string",
-        "properties": [
-          {
-            "name": "string",
-            "value": "string"
-          }
-        ]
-      }
-    ],
-    "username": "string",
-    "name": "string",
-    "surname": "string",
-    "country": "string",
-    "email": "string",
-    "birthdate": "string",
-    "images": [
-      "string"
-    ],
-    "balance": [
-      {
-        "currency": "string",
-        "value": number
-      }
-    ]
-  },
-  "gain": 0,
-  "benefits": []
-}
-```
+	"fact": {
+	  "trips": [
+		{
+		  "id": "string",
+		  "applicationOwner": "string",
+		  "driver": "string",
+		  "passenger": "string",
+		  "start": {
+		    "address": {
+		      "street": "string",
+		      "location": {
+		        "lat": number,
+		        "lon": number
+		      }
+		    },
+		    "timestamp": number
+		  },
+		  "end": {
+		    "address": {
+		      "street": "string",
+		      "location": {
+		        "lat": number,
+		        "lon": number
+		      }
+		    },
+		    "timestamp": number
+		  },
+		  "totalTime": number,
+		  "waitTime": number,
+		  "travelTime": number,
+		  "distance": number,
+		  "route": [
+		    {
+		      "location": {
+		        "lat": number,
+		        "lon": number
+		      },
+		      "timestamp": number
+		    }
+		  ],
+		  "cost": {
+		    "currency": "string",
+		    "value": number
+		  }
+		}
+	  ],
+	  "userTrip": {
+		"id": "string",
+		"applicationOwner": "string",
+		"driver": "string",
+		"passenger": "string",
+		"start": {
+		  "address": {
+		    "street": "string",
+		    "location": {
+		      "lat": number,
+		      "lon": number
+		    }
+		  },
+		  "timestamp": number
+		},
+		"end": {
+		  "address": {
+		    "street": "string",
+		    "location": {
+		      "lat": number,
+		      "lon": number
+		    }
+		  },
+		  "timestamp": number
+		},
+		"totalTime": number,
+		"waitTime": number,
+		"travelTime": number,
+		"distance": number,
+		"route": [
+		  {
+		    "location": {
+		      "lat": number,
+		      "lon": number
+		    },
+		    "timestamp": number
+		  }
+		],
+		"cost": {
+		  "currency": "string",
+		  "value": number
+		},
+		"paymethod": {
+		  "paymethod": "string",
+		  "parameters": {}
+		}
+	  },
+	  "appServer": number,
+	  "user": {
+		"id": "string",
+		"_ref": "string",
+		"applicationOwner": "string",
+		"type": "string",
+		"cars": [
+		  {
+		    "id": "string",
+		    "_ref": "string",
+		    "owner": "string",
+		    "properties": [
+		      {
+		        "name": "string",
+		        "value": "string"
+		      }
+		    ]
+		  }
+		],
+		"username": "string",
+		"name": "string",
+		"surname": "string",
+		"country": "string",
+		"email": "string",
+		"birthdate": "string",
+		"images": [
+		  "string"
+		],
+		"balance": [
+		  {
+		    "currency": "string",
+		    "value": number
+		  }
+		]
+	  },
+	  "gain": 0,
+	  "benefits": []
+	}
+	```
+	
 	Ambos reciben la lista de todos los trips, para que el usuario de negocio que cree la regla tenga la libertad de poder utilizar los viajes en donde el usuario (pasajero o conductor) interviene de alguna manera. Para calcular el costo la información de usuario que se tiene a disposición es la del pasajero, mientras que en el cálculo de la ganancia se puede acceder a la información del conductor.
 
 ##### Front-end
