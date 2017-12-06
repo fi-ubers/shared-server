@@ -504,7 +504,7 @@ Todo el código relevante a las distintas funcionalidades de la aplicación se e
 
 En el directorio *client* se encuentra el código que implementa la interfaz web. La estructura básica se generó mediante *Angular CLI* y luego se fueron incorporando los distintos componentes, guards y servicios.
 
-+ *client/src/app/app.component.html*: define la estructura general de la interfaz gráfica.
++ *client/src/app/app.component.html* : define la estructura general de la interfaz gráfica.
 
 + *client/src/app/app.module.ts* : allí se definen los paths de la aplicación web junto con su componente relacionado y el tipo de *guard* que se utiliza en cada caso. Se tiene un *guard* para cada tipo de rol, que impide que un usuario no logueado, o logueado pero sin ese rol, pueda acceder a la página. Por otro lado se definen todos los módulos importados, además de los componentes, guards y servicios utilizados.
 
@@ -546,22 +546,22 @@ Debido a restricciones temporales, existen algunos aspectos de este proyecto que
 
 + En el Shared Server faltaría una validación de los datos más estricta ya que se hasta el momento se indica cuando hay algún parámetro faltante pero no verifica el tipo, asumiendo que la validación se efectúa en las capas anteriores del sistema. La interfaz web tiene mayor control sobre los datos ingresados a diferencia del server. 
 
-+ La aplicación web permite ejecutar el set de reglas sobre un conjunto de facts pero por falta de tiempo lo que se logró hasta el momento es que los facts se ingresen separados por un símbolo #. No es la solución más elegante pero es lo que se llegó a hacer en el tiempo dado. Ejemplo sencillo para ejecutar dos facts:
++ La aplicación web permite ejecutar el set de reglas sobre un conjunto de facts pero por falta de tiempo lo que se logró hasta el momento es que los facts se ingresen separados por un símbolo #. No es la solución más elegante pero es lo que se llegó a hacer en el tiempo dado. Ejemplo sencillo del formato para ingresar dos facts:
 	
 ```json
 {
     "language": "node-rules/javascript",
     "blob": {
-        name: "Raul",
-        age: 42
+        "name": "Raul",
+        "age": 42
     }
 }
 #
 {
     "language": "node-rules/javascript",
     "blob": {
-        name: "Marta",
-        age: 23
+        "name": "Marta",
+        "age": 23
     }
 }
 ```
