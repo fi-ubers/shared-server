@@ -2,19 +2,31 @@
 
 ## Introducción
 
-FIUBER es una aplicación que permite gestionar viajes. Conecta a personas que necesiten ser transportadas con otras que provean ese servicio. 
+Este proyecto consiste de un servidor Web HTTP accesible a través de una REST API para la aplicación **FIUBER**. **FIUBER** es una aplicación intencionada para conectar a los pasajeros con los conductores de vehículos que ofrecen servicio de transporte particular. Esta aplicación permite a los potenciales pasajeros: obtener estimaciones de costo un viaje antes de realizarlo, elegir al conductor que desean, solicitar al chofer y una vez que terminan el viaje realizar el pago utilizando cualquiera de los medios de pago disponibles. 
 
-La aplicación se compone de tres componentes:
+Este sistema se basa en un diseño de 3 capas que permite el funcionamiento de la aplicación:
 
 + [Cliente](https://github.com/fi-ubers/client) 
 + [App Server](https://github.com/fi-ubers/app-server)
 + **Shared Server**
 
-El Shared Server es el responsable de almacenar y administrar los datos de los usuarios de la aplicación FIUBER (conductores y pasajeros) y de los usuarios de negocio. 
+Este proyecto provee una implementación para la capa de Shared Server del sistema. En el archivo *llevameAPI.yml* puede encontrarse documentación detallada sobre la interfaz provista por el servidor para que los Application Servers puedan comunicarse. 
 
-Se encarga de administrar los application servers y de la cotización de los viajes de la aplicación, además de realizar los cobros y mantener el balance de los usuarios.
+## Relación con el cliente y el *App Server*
 
-Proporciona una aplicación web para que los usuarios de negocio puedan utilizar ciertos servicios de acuerdo a su rol (*user*, *admin* o *manager*). Por otro lado, los Application Servers podrán comunicarse y utilizar endpoints definidos en el Shared Server de acuerdo con la [Restful API](https://github.com/fi-ubers/shared-server/blob/master/docs/llevameAPI.yml) implementada por este último.
+Para implementar esta aplicación se utilizó una arquitectura de 3 capas (3-Tier), donde el *App Server* representa la capa lógica o de negocios. 
+
+La capa de datos es provista por el *Shared Server* y es allí donde se almacenan y administran los datos de los usuarios de la aplicación, tanto conductores como pasajeros, los usuarios de negocio, los viajes y los servidores activos. Se encarga de administrar a los Application Servers y de la cotización de los viajes de la aplicación, además de realizar los cobros y mantener el balance de los usuarios.
+
+Proporciona una aplicación web para que los usuarios de negocio puedan utilizar ciertos servicios de acuerdo a su rol (*user*, *admin* y/o *manager*). Por otro lado, los Application Servers podrán comunicarse y utilizar endpoints definidos en el Shared Server de acuerdo con la [Restful API](https://github.com/fi-ubers/shared-server/blob/master/docs/llevameAPI.yml) implementada por este último.
+
+La aplicación está pensada para permitir la coexistencia de múltiples *App Servers* que utilizan al *Shared Server* como servicio web para almacenar datos y como punto de acceso a la API de pagos, que se provee de forma externa.
+
+Diagrama general de capas:
+
+![alt text](https://github.com/fi-ubers/shared-server/blob/master/docs/ArchDiagram.png)
+
+Por lo tanto, las funcionalidades implementadas estaban en parte limitadas por la API que se provee desde el *Shared Server*. A continuación se detalla el modelo de datos utilizado en el *Shared Server* así como los aspectos clave de la arquitectura y diseño.
 
 ## Modelo de datos
 
@@ -48,7 +60,7 @@ Para cada usuario de negocio se almacenan los siguientes datos en la tabla *busi
 + **Password** : string
 + **Name** : string
 + **Surname** : string
-+ **Roles** : text[]
++ **Roles** : text[] - *Opciones: admin, manager, user*
 
 ### Usuarios de la aplicación
 
@@ -57,10 +69,12 @@ Se almacenan los siguientes datos en la tabla *application_users*, correspondien
 + **_ref** : string
 + **Application owner** : string
 + **Type** : string
-+ **Cars** : json[]
++ **Cars** : json[] - *Información de un auto (ver definición)*
 + **Username** : string - *Único*
 + **Password** : string
 + **Fb** : json
+	+ **User id** : string
+	+ **Auth Token** : string
 + **Name** : string
 + **Surname** : string
 + **Country** : string
@@ -68,12 +82,18 @@ Se almacenan los siguientes datos en la tabla *application_users*, correspondien
 + **Birthdate** : string
 + **Images** : text[]
 + **Balance** : json[]
+	+ **Items**:
+		+ **Currency** : string
+		+ **Value** : integer
 
 Los autos pertenecientes a los conductores de la aplicación se almacenan en otra tabla, *cars*, para que cada uno tenga un identificador único. La tabla mencionada almacena los siguientes datos:
 + **Id** : integer - *Clave primaria*
 + **_ref** : string
 + **Owner** : integer - *Clave foránea que referencia al id en application_users*
 + **Properties** : json[]
+	+ **Items**:
+		+ **Name** : string
+		+ **Value** : string
 
 ### Viajes
 
@@ -83,15 +103,38 @@ Para cada viaje se almacenan los siguientes datos en la tabla *trips*:
 + **Driver** : integer - *Clave foránea que referencia al id en application_users*
 + **Passenger** : integer - *Clave foránea que referencia al id en application_users*
 + **Start** : json
+	+ **Address** : json
+		+ **Street** : string
+		+ **Location** : json
+			+ **Lat** : integer
+			+ **Lon** : integer
+	+ **Timestamp** : timestamp
 + **End** : json
+	+ **Address** : json
+		+ **Street** : string
+		+ **Location** : json
+			+ **Lat** : integer
+			+ **Lon** : integer
+	+ **Timestamp** : timestamp
 + **Total time** : integer
 + **Wait time** : integer
 + **Travel time** : integer
 + **Distance** : integer
 + **Route** : json[]
+	+ **Items**:
+		+ **Address** : json
+			+ **Street** : string
+			+ **Location** : json
+				+ **Lat** : integer
+				+ **Lon** : integer
+		+ **Timestamp** : timestamp
 + **Cost** : json
+	+ **Currency** : string
+	+ **Value** : integer
 + **Paymethod** : json
-
+	+ **Paymethod** : string
+	+ **Parameters** : json
+	
 ### Transacciones
 
 Para cada transacción se almacenan los siguientes datos en la tabla *transactions*:
@@ -99,6 +142,8 @@ Para cada transacción se almacenan los siguientes datos en la tabla *transactio
 + **Trip** : integer
 + **Timestamp** : timestamp
 + **Cost** : json
+	+ **Currency** : string
+	+ **Value** : integer
 + **Description** : string
 + **Data** : json
 + **User** : integer - *Clave foránea que referencia al id en application_users*
@@ -110,17 +155,20 @@ Para cada regla se almacenan los siguientes datos en la tabla *rules*:
 + **_ref** : string
 + **Language** : string
 + **Last commit** : json
+	+ **Author** : json - *Información de un usuario de negocio (ver definición)*
+	+ **Message** : string
+	+ **Timestamp** : timestamp
 + **Blob** : text
 + **Active** : boolean
 
 Como también es necesario almacenar la información sobre cada commit y la regla en el estado del commit efectuado, se guarda lo siguiente en la tabla *commits*:
 + **Id** : integer - *Clave primaria*
-+ **Rule** : json
++ **Rule** : json - *Información de una regla (ver definición)*
 + **Rule id** : integer - *Clave foránea que referencia al id en rules*
 
 ## Diseño/Arquitectura
 
-Al momento de realizar el proyecto se buscó separar el código correspondiente a la interfaz web desarrollada con Angular (ubicado dentro del directorio *client*), y el código perteneciente al server (que se encuentra dentro del directorio *src* junto con los tests, controladores, middlewares utilizados y la definición de los endpoints, entre otras funcionalidades). 
+Al momento de realizar el proyecto se buscó separar el código correspondiente a la interfaz web desarrollada con Angular (ubicado dentro del directorio *client*), y el código perteneciente al server (que se encuentra dentro del directorio *src* junto con los tests, controladores, middlewares utilizados y la definición de los endpoints, entre otras funcionalidades). Los tests realizados se pueden encontrar en *src/test*.
 
 Se destacan los siguientes módulos/directorios:
 
