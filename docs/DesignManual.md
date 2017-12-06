@@ -174,9 +174,9 @@ Se destacan los siguientes módulos/directorios:
 
 ### Back-end
 
-Todo el código relevante a las distintas funcionalidades de la aplicación se encuentran dentro del directorio *src*: incluye la implementación de los controladores de los recursos, middlewares utilizados, pruebas realizadas, configuración y conexión con la base de datos, y la definición de cada endpoint especificado en la API.
+Todo el código relevante a las distintas funcionalidades de la aplicación se encuentra dentro del directorio *src*: incluye la implementación de los controladores de los recursos, middlewares utilizados, pruebas realizadas, configuración y conexión con la base de datos, y la definición de cada endpoint especificado en la API.
 
-+ *src/index.js* : utiliza *Express* para iniciar el Shared Server, y permitir que se mantenga escuchando al puerto indicado. También se indica el middleware y las rutas a usar.
++ *src/index.js* : utiliza *Express* para iniciar el Shared Server, y permitir que se mantenga escuchando al puerto indicado. También se indica el middleware y las rutas a usar (URL paths).
 
 + *src/logger.js* : se encuentra la configuración del Logger, tanto para los mensajes por consola como para el file que se crea. Lo que se decidió fue crear un archivo de log por día para facilitar la lectura y encontrar fácilmente los errores que surgen. Cada archivo creado tiene su correspondiente fecha.
 
@@ -506,11 +506,64 @@ En el directorio *client* se encuentra el código que implementa la interfaz web
 
 + *client/src/app/app.component.html*: define la estructura general de la interfaz gráfica.
 
-+ *client/src/app/app.module.ts*: allí se definen los paths de la aplicación web junto con su componente relacionado y el tipo de *guard* que se utiliza en cada caso. Se tiene un *guard* para cada tipo de rol, que impide que un usuario no logueado, o logueado pero sin ese rol, pueda acceder a la página. Por otro lado se definen todos los módulos importados, además de los componentes, guards y servicios utilizados.
++ *client/src/app/app.module.ts* : allí se definen los paths de la aplicación web junto con su componente relacionado y el tipo de *guard* que se utiliza en cada caso. Se tiene un *guard* para cada tipo de rol, que impide que un usuario no logueado, o logueado pero sin ese rol, pueda acceder a la página. Por otro lado se definen todos los módulos importados, además de los componentes, guards y servicios utilizados.
 
-+ *client/src/app/services/auth.service.ts*: servicio que proporciona métodos para autenticar al usuario al hacer login, almacenar el token y datos del usuario en el local storage y limpiar el local storage al hacer logout. Permite ver si el usuario o un determinado rol está logueado, y realiza peticiones al server utilizando el token del usuario conectado.
++ *client/src/app/services/auth.service.ts* : servicio que proporciona métodos para autenticar al usuario al hacer login, almacenar el token y datos del usuario en el local storage y limpiar el local storage al hacer logout. Permite ver si el usuario o un determinado rol está logueado, y realiza peticiones al server utilizando el token del usuario conectado.
 
-+ *client/src/app/guards*: como se mencionó previamente, se tiene un guard por cada rol (*user*, *admin*, *manager*) y en caso de que el usuario conectado no tenga el rol requerido (o si no se encuentra logueado) se lo redirige al home de la aplicación.
++ *client/src/app/guards* : como se mencionó previamente, se tiene un guard por cada rol (*user*, *admin*, *manager*) y en caso de que el usuario conectado no tenga el rol requerido (o si no se encuentra logueado) se lo redirige al home de la aplicación.
 
-+ *client/src/app/components*: allí se encuentran todos los componentes usados en el desarrollo de la interfaz web. En cada carpeta se encuentran los distintos componentes, cada uno de los cuales posee un archivo *.ts*, que contiene las acciones a realizar cuando se ingresa al path correspondiente al componente o al hacer click en algún lugar determinado y un *.html* que define los elementos a visualizar y en algunos casos los relaciona con atributos del componente, o invoca a sus métodos. Con respecto a las listas, se permite la búsqueda a partir de palabras ingresadas, se puede ordenar la información de acuerdo a la columna seleccionada y cuenta con paginación.
++ *client/src/app/components* : allí se encuentran todos los componentes usados en el desarrollo de la interfaz web. En cada carpeta se encuentran los distintos componentes, cada uno de los cuales posee un archivo *.ts*, que contiene las acciones a realizar cuando se ingresa al path correspondiente al componente o al hacer click en algún lugar determinado y un *.html* que define los elementos a visualizar y en algunos casos los relaciona con atributos del componente, o invoca a sus métodos. Con respecto a las listas, se permite la búsqueda a partir de palabras ingresadas, se puede ordenar la información de acuerdo a la columna seleccionada y cuenta con paginación.
+
+
+## Dependencias y herramientas
+
+
+Esta sección está destinada a mencionar las herramientas, bibliotecas y APIs más relevantes utilizadas en este proyecto. Destacamos que esta no pretende ser una descripción de todas las bibliotecas utilizadas, sino una breve mención de aquellas más relevantes para la funcionalidad de este proyecto.
+
+- **Express**
+
+  Este proyecto consiste en un servidor HTTP creado mediante *Express*, el web framework más popular para *Node.js*. *Express* nos permitió, entre otras cosas, definir todos los endpoints de la API: su URL, su correspondiente método HTTP y la función que maneja esa request; definir el puerto a usar e incluir middlewares. 
+
+- **Taller II Payment API**
+
+  Se utilizó [Taller II Payment API](https://github.com/gfusca/taller-ii-payment-api) para realizar los cobros y almacenar la información de cada pago. Se trata de una API que simula el procesamiento de pagos electrónicos.
+
+- **Docker**
+
+  Para asegurar la flexibilidad y garantizar la compatibilidad en distintas plataformas, se utilizó Docker + Docker Compose. Existen 2 containers principales, uno para la base de datos y otro para la aplicación. Los archivos de configuración de docker pueden encontrarse en el directorio raíz del proyecto. En estos archivos se definen los nombres, puertos y propiedades principales de los containers, así como también las variables de entorno y dependencias de cada uno:
+
+   + *Dockerfile*
+
+   + *docker-compose.yml*
+
+- **PostgreSQL y Knex**
+
+  PostgreSQL es el sistema de base de datos relacional seleccionado para este proyecto. Para manejar la conexión y configuración de las bases de datos se utilizó Knex. Este último es un constructor de consultas SQL para Postgres, que además de facilitar la interacción con la base de datos para las consultas, permitió que fuera rápido y fácil crear las tablas con sus respectivas columnas en la base de datos y llenarlas con información cuando fuera necesario (gracias a la posibilidad de realizar migraciones y seeds). 
+
+## Bugs conocidos y puntos a mejorar
+
+Debido a restricciones temporales, existen algunos aspectos de este proyecto que requieren ser mejorados o concluidos: 
+
++ En el Shared Server faltaría una validación de los datos más estricta ya que se hasta el momento se indica cuando hay algún parámetro faltante pero no verifica el tipo, asumiendo que la validación se efectúa en las capas anteriores del sistema. La interfaz web tiene mayor control sobre los datos ingresados a diferencia del server. 
+
++ La aplicación web permite ejecutar el set de reglas sobre un conjunto de facts pero por falta de tiempo lo que se logró hasta el momento es que los facts se ingresen separados por un símbolo #. No es la solución más elegante pero es lo que se llegó a hacer en el tiempo dado. Ejemplo sencillo para ejecutar dos facts:
+	
+```json
+{
+    "language": "node-rules/javascript",
+    "blob": {
+        name: "Raul",
+        age: 42
+    }
+}
+#
+{
+    "language": "node-rules/javascript",
+    "blob": {
+        name: "Marta",
+        age: 23
+    }
+}
+```
++ Por último, se podría organizar mejor el código y realizar mayor refactoring.
 
