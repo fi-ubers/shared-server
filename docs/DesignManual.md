@@ -6,19 +6,19 @@ Este proyecto consiste de un servidor Web HTTP accesible a través de una REST A
 
 Este sistema se basa en un diseño de 3 capas que permite el funcionamiento de la aplicación:
 
-+ [Cliente](https://github.com/fi-ubers/client) 
-+ [App Server](https://github.com/fi-ubers/app-server)
++ [Cliente Android](https://github.com/fi-ubers/client) 
++ [Application Server](https://github.com/fi-ubers/app-server)
 + **Shared Server**
 
 Este proyecto provee una implementación para la capa de Shared Server del sistema. En el archivo *llevameAPI.yml* puede encontrarse documentación detallada sobre la interfaz provista por el servidor para que los Application Servers puedan comunicarse. 
 
-## Relación con el cliente y el *App Server*
+## Relación con el *Cliente Android* y el *Application Server*
 
 Para implementar esta aplicación se utilizó una arquitectura de 3 capas (3-Tier), donde el *App Server* representa la capa lógica o de negocios. 
 
 La capa de datos es provista por el *Shared Server* y es allí donde se almacenan y administran los datos de los usuarios de la aplicación, tanto conductores como pasajeros, los usuarios de negocio, los viajes y los servidores activos. Se encarga de administrar a los Application Servers y de la cotización de los viajes de la aplicación, además de realizar los cobros y mantener el balance de los usuarios.
 
-Proporciona una aplicación web para que los usuarios de negocio puedan utilizar ciertos servicios de acuerdo a su rol (*user*, *admin* y/o *manager*). Por otro lado, los Application Servers podrán comunicarse y utilizar endpoints definidos en el Shared Server de acuerdo con la [Restful API](https://github.com/fi-ubers/shared-server/blob/master/docs/llevameAPI.yml) implementada por este último.
+Proporciona una aplicación web para que los usuarios de negocio puedan utilizar ciertos servicios de acuerdo a su rol (*user*, *admin* y/o *manager*). Por otro lado, los Application Servers podrán comunicarse y utilizar endpoints definidos en el Shared Server de acuerdo con la [RESTful API](https://github.com/fi-ubers/shared-server/blob/master/docs/llevameAPI.yml) implementada por este último.
 
 La aplicación está pensada para permitir la coexistencia de múltiples *App Servers* que utilizan al *Shared Server* como servicio web para almacenar datos y como punto de acceso a la API de pagos, que se provee de forma externa.
 
@@ -26,13 +26,13 @@ Diagrama general de capas:
 
 ![alt text](https://github.com/fi-ubers/shared-server/blob/master/docs/ArchDiagram.png)
 
-Por lo tanto, las funcionalidades implementadas estaban en parte limitadas por la API que se provee desde el *Shared Server*. A continuación se detalla el modelo de datos utilizado en el *Shared Server* así como los aspectos clave de la arquitectura y diseño.
+A continuación se detalla el modelo de datos utilizado en el *Shared Server* así como los aspectos clave de la arquitectura y diseño.
 
 ## Modelo de datos
 
 Se indican a continuación los datos que se almacenan en cada tabla perteneciente a la base de datos del Shared Server.
 
-Cada tabla tiene su clave primaria y en algunos casos se incluyeron claves foráneas. Se indicó la opción *ON DELETE CASCADE*, en la cual, si se elimina una fila con una clave a la que hacen referencia otras filas existentes en otras tablas, las mismas también serán eliminadas para mantener la consistencia.
+Cada tabla tiene su clave primaria y en algunos casos se incluyeron claves foráneas. Para aquellas claves se indicó la opción *ON DELETE CASCADE*, en la cual, si se elimina una fila con una clave a la que hacen referencia otras filas existentes en otras tablas, las mismas también serán eliminadas para mantener la consistencia.
 
 ### Application servers
 
@@ -54,7 +54,7 @@ Para poder revocar un token se almacenó en otra tabla, *blacklist*, el jti que 
 ### Usuarios de negocio
 
 Para cada usuario de negocio se almacenan los siguientes datos en la tabla *business_users*:
-+ **Id** : integer *Clave primaria*
++ **Id** : integer - *Clave primaria*
 + **_ref** : string
 + **Username** : string - *Único*
 + **Password** : string
@@ -168,35 +168,39 @@ Como también es necesario almacenar la información sobre cada commit y la regl
 
 ## Diseño/Arquitectura
 
-Al momento de realizar el proyecto se buscó separar el código correspondiente a la interfaz web desarrollada con Angular (ubicado dentro del directorio *client*), y el código perteneciente al server (que se encuentra dentro del directorio *src* junto con los tests, controladores, middlewares utilizados y la definición de los endpoints, entre otras funcionalidades). Los tests realizados se pueden encontrar en *src/test*.
+Al momento de realizar el proyecto se buscó separar el código correspondiente a la interfaz web desarrollada con Angular, y el código perteneciente al server. Los tests realizados se pueden encontrar en *src/test*.
 
 Se destacan los siguientes módulos/directorios:
 
-##### Back-end
+### Back-end
 
-+ *src/index.js*: utiliza *Express* para iniciar el Shared Server, permitiendo que se quede escuchando al puerto indicado. También se indica el middleware y las rutas a usar.
+Todo el código relevante a las distintas funcionalidades de la aplicación se encuentran dentro del directorio *src*: incluye la implementación de los controladores de los recursos, middlewares utilizados, pruebas realizadas, configuración y conexión con la base de datos, y la definición de cada endpoint especificado en la API.
 
-+ *src/logger.js*: se encuentra la configuración del Logger, tanto para los mensajes por consola como para el file que se crea. Lo que se decidió fue crear un archivo de log por día para facilitar la lectura y encontrar fácilmente los errores que surgen. Cada archivo creado tiene su correspondiente fecha.
++ *src/index.js* : utiliza *Express* para iniciar el Shared Server, y permitir que se mantenga escuchando al puerto indicado. También se indica el middleware y las rutas a usar.
 
-+ *src/routes/api.js*: utiliza el *Express* router para definir todos los endpoints que permitirán la comunicación con los App Servers, especificados en la API mencionada al inicio del documento. Se definen los métodos HTTP (GET, POST, PUT, DELETE) para cada endpoint y la función que se encargará de realizar lo pedido sobre los usuarios de negocio, usuarios de la aplicación, paymethods, viajes, servers y reglas.
++ *src/logger.js* : se encuentra la configuración del Logger, tanto para los mensajes por consola como para el file que se crea. Lo que se decidió fue crear un archivo de log por día para facilitar la lectura y encontrar fácilmente los errores que surgen. Cada archivo creado tiene su correspondiente fecha.
 
-+ *src/middlewares/verifyToken.js*: se encarga de verificar que el Application o Business Token ingresado vía query, como se indica en la API, sea válido. Para poder distinguir entre ambos tipos de token y proporcionar mayor seguridad se decidió que sus claves sean distintas. Para aquellos endpoints que pueden ser accedidos mediante ambos tipos de token, se verifica primero el Business Token (y que cumpla con el rol requerido) y luego se implementó un middleware que, en caso de que la clave del token no coincida con la esperada, verifica si se trata de un Application Token válido y en ese caso accede a la función que implementa el endpoint. 
++ *src/routes/api.js* : utiliza el *Express* router para definir todos los endpoints que permitirán la comunicación con los App Servers, especificados en la API mencionada al inicio del documento. Se definen los métodos HTTP (GET, POST, PUT, DELETE) para cada endpoint y la función que se encargará de realizar lo pedido sobre los usuarios de negocio, usuarios de la aplicación, paymethods, viajes, servers y reglas.
 
-+ *src/middlewares/authCheck.js*: se ocupa de determinar si el usuario de negocio que realizó la petición se encuentra autorizado, para ello verifica que tenga el rol requerido.
++ *src/middlewares* : se encuentra el código correspondiente a los middlewares que intervienen cuando un application server realiza requests sobre los endpoints.
 
-+ *src/middlewares/revokedTokenCheck.js*: controla que el token ingresado no se encuentre revocado. Para ello utiliza la tabla *blacklist* mencionada en la sección anterior.
+	+ *verifyToken.js* : se encarga de verificar que el Application o Business Token ingresado vía query, como se indica en la API, sea válido. Para poder distinguir entre ambos tipos de token y proporcionar mayor seguridad se decidió que sus claves sean distintas. Para aquellos endpoints que pueden ser accedidos mediante ambos tipos de token, se verifica primero el Business Token (y que cumpla con el rol requerido) y luego se implementó un middleware que, en caso de que la clave del token no coincida con la esperada, verifica si se trata de un Application Token válido y en ese caso accede a la función que implementa el endpoint. 
 
-+ *src/services/rulesService.js*: inicializa el motor de reglas usando las reglas recibidas y luego las aplica sobre el fact para obtener el resultado.
+	+ *authCheck.js* : se ocupa de determinar si el usuario de negocio que realizó la petición se encuentra autorizado, para ello verifica que tenga el rol requerido.
 
-+ *src/db*: dentro del directorio se encuentra la configuración de cada base de datos usada (para test, development y production). 
+	+ *revokedTokenCheck.js* : controla que el token ingresado no se encuentre revocado. Para ello utiliza la tabla *blacklist* mencionada en la sección anterior.
 
-	+ En *knexfile.js* figura el string de conexión de cada base de datos, junto con los directorios para migraciones y seeds. 
++ *src/services/rulesService.js* : inicializa el motor de reglas usando las reglas recibidas y luego las aplica sobre el fact para obtener el resultado.
+
++ *src/db* : dentro del directorio se encuentra la configuración para cada base de datos usada (para test, development y production). 
+
+	+ En *knexfile.js* figura el string de conexión de cada base de datos, el cliente a utilizar (*postgres*), junto con los directorios para migraciones y seeds. 
 	
-	+ Cada archivo en *migrations* contiene las tablas a crear dentro de la database, indicando para cada una de ellas las columnas y el tipo de dato esperado en cada una de ellas. 
+	+ Cada archivo en *migrations* contiene las tablas a crear dentro de la database, indicando para cada una de ellas las columnas y el tipo de dato esperado en las mismas. 
 	
 	+ En *seeds* se encuentran datos para llenar la base de datos. Esto último se utilizó para los tests y para colocar las reglas pedidas en el enunciado del trabajo dentro de la base de datos en Heroku.
 	
-+ *src/controllers*: dentro del directorio se encuentran todos los controladores. 
++ *src/controllers* : dentro del directorio se encuentran todos los controladores: aquellos que actúan sobre los recursos, los efectúan consultas y los que se encargan de enviar la respuesta en el formato especificado por la API. 
 
 	+ Los módulos *businessUsersController*, *paymethodsController*, *rulesController*, *serversController*, *tripsController* y *usersController* implementan las funciones utilizadas por los endpoints definidos en *src/routes/api.js*: crean, eliminan, actualizan el recurso que administran y también listan todos los recursos pedidos, entre otras funcionalidades. 
 	
@@ -496,7 +500,9 @@ Se destacan los siguientes módulos/directorios:
 	
 	Ambos reciben la lista de todos los trips, para que el usuario de negocio que cree la regla tenga la libertad de poder utilizar los viajes en donde el usuario (pasajero o conductor) interviene de alguna manera. Para calcular el costo la información de usuario que se tiene a disposición es la del pasajero, mientras que en el cálculo de la ganancia se puede acceder a la información del conductor.
 
-##### Front-end
+### Front-end
+
+En el directorio *client* se encuentra el código que implementa la interfaz web. La estructura básica se generó mediante *Angular CLI* y luego se fueron incorporando los distintos componentes, guards y servicios.
 
 + *client/src/app/app.component.html*: define la estructura general de la interfaz gráfica.
 
