@@ -204,7 +204,7 @@ Todo el código relevante a las distintas funcionalidades de la aplicación se e
 
 	+ Los módulos *businessUsersController*, *paymethodsController*, *rulesController*, *serversController*, *tripsController* y *usersController* implementan las funciones utilizadas por los endpoints definidos en *src/routes/api.js*: crean, eliminan, actualizan el recurso que administran y también listan todos los recursos pedidos, entre otras funcionalidades. 
 	
-	+ Los mencionados anteriormente dependen de los módulos *queryController*, *responseController*, *errorController*: el primero interactúa con la base de datos, efectúando las consultas necesarias en cada caso; el segundo se ocupa de enviar las respuestas de cada petición realizada con el código y formato indicado en la API; el tercero se ocupa de enviar el JSON con el error correspondiente, incluyendo su código y mensaje. 
+	+ Los mencionados anteriormente dependen de los módulos *queryController*, *responseController*, *errorController*: el primero interactúa con la base de datos, efectuando las consultas necesarias en cada caso; el segundo se ocupa de enviar las respuestas de cada petición realizada con el código y formato indicado en la API; el tercero se ocupa de enviar el JSON con el error correspondiente, incluyendo su código y mensaje. 
 	
 	+ El módulo *tokenController* proporciona funciones para generar Business y Application Tokens, validar las credenciales del usuario de negocio y generar el token para usar la API de Pagos; *paymentController* crea un pago haciendo una request a la API de Pagos; y *balanceController* proporciona una función para manejar el balance del usuario.
 
@@ -548,22 +548,22 @@ Debido a restricciones temporales, existen algunos aspectos de este proyecto que
 
 + La aplicación web permite ejecutar el set de reglas sobre un conjunto de facts pero por falta de tiempo lo que se logró hasta el momento es que los facts se ingresen separados por un símbolo #. No es la solución más elegante pero es lo que se llegó a hacer en el tiempo dado. Ejemplo sencillo del formato para ingresar dos facts:
 	
-```json
-{
-    "language": "node-rules/javascript",
-    "blob": {
-        "name": "Raul",
-        "age": 42
-    }
-}
-#
-{
-    "language": "node-rules/javascript",
-    "blob": {
-        "name": "Marta",
-        "age": 23
-    }
-}
-```
+	```json
+	{
+	    "language": "node-rules/javascript",
+	    "blob": {
+		"name": "Raul",
+		"age": 42
+	    }
+	}
+	#
+	{
+	    "language": "node-rules/javascript",
+	    "blob": {
+		"name": "Marta",
+		"age": 23
+	    }
+	}
+	```
 + Por último, se podría organizar mejor el código y realizar mayor refactoring.
 
